@@ -1,11 +1,11 @@
 all: paper.pdf
 
-paper.tex: paper.lhs
+paper.tex: paper.lagda formalism.tex
 	if [ -f "paper.tex" ]; then chmod +w paper.tex; fi
-	lhs2TeX -o paper.tex paper.lhs
+	lhs2TeX --agda -o paper.tex paper.lagda
 	chmod -w paper.tex
 
-paper.aux: paper.tex
+paper.aux: paper.tex formalism.tex
 	pdflatex paper
 
 paper.bbl: paper.aux paper.bib
