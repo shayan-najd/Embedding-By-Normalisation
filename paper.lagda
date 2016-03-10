@@ -12,6 +12,7 @@
 % \usepackage{stmaryrd}
 % \usepackage{proof}
 \usepackage[
+  hidelinks,
   pdfauthor={Shayan Najd,Sam Lindley,Josef Svenningsson,Philip Wadler},
   pdftitle={Embedding By Normalisation},
   pagebackref=true,pdftex,backref=none]{hyperref}
@@ -231,7 +232,7 @@ svenningsson:combining, Syntactic, scalalms}). However, the genius of
 these techniques in one hand, and the subtle nature of embedding
 process in the other, often causes complications in practice. A key
 cause of such complications is lack of formality, both in the
-programming interface provided by EDSLs, and in the techniques used
+programming interface provided by EDSLs, and in techniques used
 for embedding them.
 
 Unlike stand-alone languages that are often accompanied by a set of
@@ -264,19 +265,19 @@ of well-known general principles (see \citet{Aho}), implementations
 of EDSLs are less principled and techniques vary greatly from one host
 language to another. Even for one particular host language, there are
 many different approaches to embedding, that often are characterised
-based on the unique set of language features they rely on.
+based on a unique set of language features they rely on.
 For instance in Haskell,
 deep embedding technique is when datatypes in host are used for
 representing the syntax of EDSLs, and functions (programs in general)
 over the datatypes for semantics;
 quoted embedding, which is a specific form of deep embedding, is when
 a form of quotations is used to represent syntax, and functions over
-the unquoted representation (often normalised) for semantics.
+the unquoted representation (often normalised) for semantics;
 shallow embedding is when an interface form by a set of functions is
 used to represent the syntax, and implementation of the functions as
 semantics;
 final tagless embedding\citep{Tagless}, which is a specific form of
-shallow embedding, is when type-classesthe is used to define interface
+shallow embedding, is when type-classes are used to define interface
 representing syntax, and instances of the type-classes for semantics.
 
 One key issue with this lack of a principled approach to
@@ -294,8 +295,8 @@ programs since their dawn. One may argue these principles are
 discovered, as opposed to being invented \cite{Wadler-2015}.
 
 For instance, \citet[p. 513]{Tagless} observes that final
-tagless embedding are semantic algebras and are fold-like
-structures. It has been explored further by \citet{Gibbons},
+tagless embeddings are semantic algebras and form fold-like
+structures. This observation has been explored further by \citet{Gibbons},
 where they identify shallow embedding as algebras of folds over syntax
 datatypes in deep embedding.  Decomposing embedding techniques into
 well-know structures such as semantic algebras or folds is liberating:
@@ -309,13 +310,13 @@ In pursuit of a formal foundation for practical embedding techniques,
 this paper proposes Embedding-By-Normalisation, EBN for short, as a
 principled and systematic approach to embedding. EBN is based on a
 direct correspondence between embedding techniques in practice and
-Normalisation-By-Evaluation\citep{MartinLof,Berger} (NBE) techniques
+Normalisation-By-Evaluation \citep{MartinLof,Berger} (NBE) techniques
 in theory.  NBE is a well-studied
 approach (e.g., see \citet{NBE-Cat,NBE-Sum,NBE-Untyped,Lindley05})
 % todo: add even more
 in proof theory and programming semantics, commonly used for deriving
 canonical form of terms with respect to an equational theory.
-Similarly, decomposing embedding techniques into the key structures in
+Decomposing embedding techniques into the key structures in
 NBE is liberating: embedding techniques can be studied independent of
 language features. NBE enjoys clear mathmatical and formal
 description, hence establishing correspondence between embedding and
