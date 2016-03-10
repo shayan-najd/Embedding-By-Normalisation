@@ -35,7 +35,7 @@ L,M,N ::=  ... | ι₁ₜ M | ι₂ₜ N | δₜ L M N
 
 \begin{spec}
 ...
-↓ (A →ₑ B)  V  = λₜ x → reset ⦇ ↓ B (μ ⦇ V (↑ A x) ⦈) ⦈
+↓ (A →ₑ B)  V  = λ x → reset ⦇ ↓ B (μ ⦇ V (↑ A x) ⦈) ⦈
 ↓ (A +ₑ B)  V  = δ V  (λ x → ι₁ₜ (↓ A x))
                       (λ y → ι₂ₜ (↓ B y))
 
