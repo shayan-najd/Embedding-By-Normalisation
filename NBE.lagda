@@ -11,6 +11,9 @@ that only required types of terms to partially evaluate them.
 
 \todo{}{mention reduction-based and reduction free normalisation}
 
+The process of deriving canonical forms is often refered to as
+normalisation, where the canonical forms are refered to as normal
+forms.
 
 Nbe constitutes of four components:
 \begin{description}
@@ -237,9 +240,31 @@ lists \citep{?hugheslists}.
 \subsubsection{Observation}
 \label{sec:ADT}
 For this example, three domains are explicitly discussed: Chars
-syntax, normal list based semantic, and Hughes list based
-semantic. There is also the fourth domain implicit in the discussion:
-the syntactic domain of canonical forms, which is a subset of the
-syntactic domain.
+syntactic domain, semantic domain based on normal lists and semantic
+domain based on Hughes lists.  There is also a fourth domain implicit
+in the discussion: the syntactic domain of canonical forms, which is a
+subset of the syntactic domain. For Chars language, terms in canonical
+form are of the following grammar:
+\begin{spec}
+n ∈ ℕ (set of natural numbers)
+N ∈ CanonicalChars ::= ε₀ | Chr n ∙ N
+\end{spec}
 
-...
+For instance, the example canonical form deriven earlier follows the
+above grammar.
+
+Compared to Chars, the grammar of canonical forms is less flexible but
+more compact: it is easier to program in Chars, but it is also harder
+to analyse programs in Chars. At the cost of implementing a
+normalisation process, like the two NBE algorithms above, one can use
+benefits of the two languages: let programs to be written in the
+syntactic domain, since they are easier to write, then normalise the
+programs and let analysis be done on normalised programs, since they
+are easier to analyse.  It is an important observation, which can be
+generalised to any language possessing canonical forms. Indeed,
+compilers use the same approach by transforming programs written in
+the flexible surface syntax to a more compact internal
+representation. For languages with computational content, such
+transformations often improve the performance of the programs.
+
+Next section puts this observation to work for EDSLs.
