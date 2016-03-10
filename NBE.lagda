@@ -1,12 +1,3 @@
-%if False
-\begin{code}
-open import Relation.Binary.PropositionalEquality
-   using (_≡_;cong;sym;trans;refl;cong₂;subst)
-open import Data.Product
-open import Function
-\end{code}
-%endif
-
 Normalisation-by-Evaluation (NBE) is the process of deriving normal
 form of terms with respect to an equational theory. NBE dates back to
 \citet{MartinLof}, where he used similar technique, although not by its
@@ -14,7 +5,7 @@ current name, for normalising terms in type theory.
 \citet{Berger} introduced NBE as an efficient normalisation technique.
 In the context of proof theory, they observed that the round trip of
 first evaluating terms, and then applying an inverse of the evaluation
-function, results in normalises the terms. Following \citet{Berger},
+function, normalises the terms. Following \citet{Berger},
 \citet{TDPE} used NBE to implement an offline partial evaluator
 that only required types of terms to partially evaluate them.
 
@@ -62,126 +53,193 @@ record NBE : Set₁ where
 
 \end{code}
 
-% --    _≜_  : Syn → Syn → Set
-% --    soundness   : ∀ {a b} → a ≜ b → ↓ ⟦ a ⟧ ≜ b
-% --    canonicity  : ∀ {a} → ↓ ⟦ ↓ ⟦ a ⟧ ⟧ ≡ ↓ ⟦ a ⟧
-% --   infix 4 _≜_
-
 Additionally, above should guarantee that, (a) |normalise| preserves
 the intended meaning of the terms, and (b) |normalise| produces terms
 in a normal form with respect to the intended equational theory.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Chars lists
+%% Chars
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{A First Example}
 \label{sec:CharsLists}
-%if False
-\begin{code}
-module NBEExamle where
- open import Data.Nat
- open import Data.List
- infix 4 _≜c_
-\end{code}
-%endif
+As the first example, consider the "hello world" of NBE, terms of the
+following language:
+\begin{spec}
+n ∈ ℕ (set of natural numbers)
+L,M,N ∈ Chars ::= ε₀ | Chr n | M ∙ N
+\end{spec}
 
-Consider terms of the following grammar:
-\begin{code}
- data Chars : Set where
-    ε₀   : Chars
-    chr  : ℕ     → Chars
-    _∙_  : Chars → Chars → Chars
-\end{code}
+The language, refered to as Chars, consists of an empty string, a
+string containing only one character identified by its Unicode number
+as a natural number, and concatenation of strings.
 
-\todo{}{Explain the intended use of above as regex for lexing and parsing.}
+For example, the terms
+\begin{spec}
+Chr 78 ∙ (Chr 66 ∙ Chr 69)
+\end{spec} and
+\begin{spec}
+(Chr 78 ∙ ε₀) ∙ ((Chr 66 ∙ ε₀) ∙ (Chr 69 ∙ ε₀))
+\end{spec} both represent the string ``NBE".
 
-with the following equational theory:
-%% \begin{code}
-%%  data _≜c_ : Chars → Chars → Set where
-%%     refl≜c          :  ∀ {a}          → a ≜c a
-%%     sym≜c           :  ∀ {a b}        → a ≜c b  → b ≜c a
-%%     trans≜c         :  ∀ {a b c}      → a ≜c b  → b ≜c c → a ≜c c
-%%     cong∙           :  ∀ {a b a' b'}  → a ≜c a' → b ≜c b' → a ∙ b ≜c a' ∙ b'
-%%     idᵣ∙            :  ∀ {a}          → ε₀ ∙ a ≜c a
-%%     idₗ∙            :  ∀ {a}          → a ∙ ε₀ ≜c a
-%%     assoc∙          :  ∀ {a b c}      → (a ∙ b) ∙ c ≜c a ∙ (b ∙ c)
-%% \end{code}
+The intended equational theory for this language is the one of
+free monoids, i.e., congruence over the following equations:
+\begin{center}
+\begin{spec}
+      ε₀ ∙ M  =  M
+     M  ∙ ε₀  =  M
+ (L ∙ M) ∙ N  =  L ∙ (M ∙ N)
+\end{spec}
+\end{center}
+NBE provides a normalisation process to derive a cannonical form for
+the terms with respect to above equational theory. If two terms
+represent the same string, they have an identical canonical form.
+For instance, the two example terms above normalise to the following
+term in canonical form:
+\begin{spec}
+Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ ε₀))
+\end{spec}
 
-%if False
-\begin{code}
- module CharsList where
-
-\end{code}
-%endif
-
-The corresponding NBE is as follows:
-\begin{code}
-  flatten : Chars → List ℕ
-  flatten ε₀         = []
-  flatten (chr x)    = [ x ]
-  flatten (xs ∙ ys)  = flatten xs ++ flatten ys
-
-  roughen : List ℕ → Chars
-  roughen []        = ε₀
-  roughen (n ∷ ns)  = chr n ∙ roughen ns
-
-  nbe-Chars : NBE
-  nbe-Chars  =
-   record
-      { Syn  = Chars;
-        Sem  = List ℕ;
-        ⟦_⟧   = flatten;
-        ↓    = roughen
-      }
-\end{code}
-It is easy to prove that normalisation above respects the two properties:
-
-%if False
-\begin{code}
-  open NBE nbe-Chars
-\end{code}
-%endif
-
-% \begin{code}
-%
-% -- preservation : ∀ {a b : Chars} → a ≜c b → normalise a ≜c b
-% -- preservation p = {!!}
-%
-% -- normalisation : ∀ {a} → normalise (normalise a) ≡ normalise a
-% -- normalisation = {!!}
-% \end{code}
-
-\todo{prove it, but consider taking out of the paper}
+For a specific syntactic domain, in this case the Chars language,
+there are different ways to implement a NBE algorithm, as
+there are different semantic domains to choose from.
+For pedagogical purposes, two distinct NBE algorithims are presented
+for the Chars language based on two distinct semantic domains:
+(1) lists of natural numbers (Unicode numbers), and
+(2) functions over the syntactic domain itself.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Chars Hughes Lists
+%% Chars Lists
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{A Second Example}
+\subsubsection{Lists as Semantic}
+The syntactic domain given to be the Chars language, and semantic
+domain chosen to be a list of natural numbers (Unicode numbers), the next step
+for defining a NBE algorithm is defining an evaluation function:
+
+\begin{spec}
+⟦_⟧ : Chars → List ℕ
+
+⟦ ε₀     ⟧ = []
+⟦ Chr n  ⟧ = [ n ]
+⟦ M ∙ N  ⟧ = ⟦ M ⟧ ++ ⟦ N ⟧
+\end{spec}
+
+Evaluation defined above is a simple mapping from Chars terms to
+lists, where empty string is mapped to empty list, singleton
+string to singleton list, and concatenation of strings to
+concatenation of lists.
+For instance, the two example terms representing ``NBE" earlier are
+evaluated to the list |[78, 66, 69]|.
+
+Above evaluation process is particularly interesting in that it is
+compositional: semantic of a term is constructured from the semantic
+of its subterms. Though compositionality is a highly desired property,
+thanks to the elegant mathmatical properties, the evaluation
+process in NBE is not required to be compositional.
+In fact, some evaluation functions cannot be defined compositionaly.
+Compositionality of a function forces it to be expressible solely by
+folds, and not every function can be defined solely in terms of folds.
+For instance, evaluation that rely on some forms of global
+transformations, sometimes cannot be expressed solely in terms of
+folds.
+
+The next step is to define a reification process:
+
+\begin{spec}
+↓ : List ℕ → Chars
+
+↓ []        = ε₀
+↓ (n ∷ ns)  = Chr n ∙ (↓ ns)
+\end{spec}
+
+Reification defined above is a simple mapping from lists to Chars
+terms, where empty list is mapped to empty strings, cons of list head
+to list tail to concatenation of the corresponding singleton string
+to the reified string of tail.
+For example, the list |[78, 66, 69]| from earlier is reified to the
+following term:
+\begin{spec}
+Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ ε₀))
+\end{spec}
+The reification function is also compositional.
+
+Putting the pieces together normalisation function is defined as
+usual:
+\begin{spec}
+norm : Chars → Chars
+norm M = ↓ ⟦ M ⟧
+\end{spec}
+As expected, above function derives canonical form of Chars terms.
+For instance, we have
+\begin{spec}
+norm (Chr 78 ∙ (Chr 66 ∙ Chr 69))
+  =
+norm ((Chr 78 ∙ ε₀) ∙ ((Chr 66 ∙ ε₀) ∙ (Chr 69 ∙ ε₀)))
+  =
+Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ ε₀))
+\end{spec}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Chars Hughes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Functions as Semantic}
 \label{sec:CharsHughes}
-%if False
-\begin{code}
- module CharsHughes where
+The syntactic domain given to be the Chars language, and semantic
+domain now chosen to be functions over syntactic domain itself, the next step
+for defining a NBE algorithm is defining an evaluation function:
 
-\end{code}
-%endif
+\begin{spec}
+⟦_⟧ : Chars → (Chars → Chars)
 
-%if False
-\begin{code}
-  flatten : Chars → (Chars → Chars)
-  flatten ε₀         = id
-  flatten (chr x)    = λ xs → (chr x) ∙ xs
-  flatten (xs ∙ ys)  = flatten xs ∘ flatten ys
+⟦ ε₀     ⟧ = id
+⟦ Chr n  ⟧ = λ N → (Chr n) ∙ N
+⟦ M ∙ N  ⟧ = ⟦ M ⟧ ∘ ⟦ N ⟧
+\end{spec}
 
-  roughen : (Chars → Chars) → Chars
-  roughen f  = f ε₀
+Evaluation defined above is a simple mapping from Chars terms to
+functions from Chars to Chars, where empty string is mapped to
+identity function, singleton string to a function that concats the
+same singleton string to its input, and concatenation of strings to
+function composition.
+For instance, the two example terms representing ``NBE" earlier are
+evaluated to the function
+\begin{spec}
+λ N → Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ N))
+\end{spec}
+Above evaluation is also compositional.
 
-  nbe-Chars : NBE
-  nbe-Chars  =
-   record
-      { Syn  = Chars;
-        Sem  = Chars → Chars;
-        ⟦_⟧   = flatten;
-        ↓    = roughen
-      }
-\end{code}
-%endif
+The next step is to define a reification process:
+
+\begin{spec}
+↓ : (Chars → Chars) → Chars
+
+↓ f = f ε₀
+\end{spec}
+
+Reification defined above is very simples: it applies semantic
+function to empty string.
+For example, the function
+\begin{spec}
+λ N → Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ N))
+\end{spec}
+from earlier is reified to the following term:
+\begin{spec}
+Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ ε₀))
+\end{spec}
+Reification is also obviousely compositional.
+
+Normalisation function is defined as usual.  However, the
+normalisation process based on function semantics is more efficient
+compared to the one based on list semantics.  Essentially, the
+evaluation process using the semantic domain |Char → Char|, evaluates
+terms using an efficient representation of lists, known as Hughes
+lists \citep{?hugheslists}.
+
+\subsubsection{Observation}
+\label{sec:ADT}
+For this example, three domains are explicitly discussed: Chars
+syntax, normal list based semantic, and Hughes list based
+semantic. There is also the fourth domain implicit in the discussion:
+the syntactic domain of canonical forms, which is a subset of the
+syntactic domain.
+
+...
