@@ -11,6 +11,7 @@
 %format ι₁ₜ = "\underline{ι₁}"
 %format ι₂ₜ = "\underline{ι₂}"
 %format δₜ  = "\underline{δ}"
+%format Mᵢ  = "\overline{M}"
 
 \begin{spec}
 χ ∈ X (set of base types)
