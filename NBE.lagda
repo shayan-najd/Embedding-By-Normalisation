@@ -303,5 +303,7 @@ compilers use the same approach by transforming programs written in
 the flexible surface syntax to a more compact internal
 representation. For languages with computational content, such
 transformations often improve the performance of the programs.
+In this perspective, optimisation of terms can be viewed as
+normalisation of terms.
 
 Next section puts this observation to work for EDSLs.
