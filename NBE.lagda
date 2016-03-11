@@ -68,20 +68,19 @@ in a normal form with respect to the intended equational theory.
 As the first example, consider the "hello world" of NBE, terms of the
 following language:
 \begin{spec}
-n ∈ ℕ (set of natural numbers)
-L,M,N ∈ Chars ::= ε₀ | Chr n | M ∙ N
+c ∈ Char (set of characters)
+L,M,N ∈ Chars ::= ε₀ | Chr c | M ∙ N
 \end{spec}
 
 The language, refered to as Chars, consists of an empty string, a
-string containing only one character identified by its Unicode number
-as a natural number, and concatenation of strings.
+string containing only one character, and concatenation of strings.
 
 For example, the terms
 \begin{spec}
-Chr 78 ∙ (Chr 66 ∙ Chr 69)
+Chr 'N' ∙ (Chr 'B' ∙ Chr 'E')
 \end{spec} and
 \begin{spec}
-(Chr 78 ∙ ε₀) ∙ ((Chr 66 ∙ ε₀) ∙ (Chr 69 ∙ ε₀))
+(Chr 'N' ∙ ε₀) ∙ ((Chr 'B' ∙ ε₀) ∙ (Chr 'E' ∙ ε₀))
 \end{spec} both represent the string ``NBE".
 
 The intended equational theory for this language is the one of
@@ -99,7 +98,7 @@ represent the same string, they have an identical canonical form.
 For instance, the two example terms above normalise to the following
 term in canonical form:
 \begin{spec}
-Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ ε₀))
+Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ ε₀))
 \end{spec}
 
 For a specific syntactic domain, in this case the Chars language,
@@ -107,7 +106,7 @@ there are different ways to implement a NBE algorithm, as
 there are different semantic domains to choose from.
 For pedagogical purposes, two distinct NBE algorithims are presented
 for the Chars language based on two distinct semantic domains:
-(1) lists of natural numbers (Unicode numbers), and
+(1) lists of characters, and
 (2) functions over the syntactic domain itself.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,11 +114,11 @@ for the Chars language based on two distinct semantic domains:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Lists as Semantic}
 The syntactic domain given to be the Chars language, and semantic
-domain chosen to be a list of natural numbers (Unicode numbers), the next step
+domain chosen to be a list of characters, the next step
 for defining a NBE algorithm is defining an evaluation function:
 
 \begin{spec}
-⟦_⟧ : Chars → List ℕ
+⟦_⟧ : Chars → List Char
 
 ⟦ ε₀     ⟧ = []
 ⟦ Chr n  ⟧ = [ n ]
@@ -131,7 +130,7 @@ lists, where empty string is mapped to empty list, singleton
 string to singleton list, and concatenation of strings to
 concatenation of lists.
 For instance, the two example terms representing ``NBE" earlier are
-evaluated to the list |[78, 66, 69]|.
+evaluated to the list |['N', 'B', 'E']|.
 
 Above evaluation process is particularly interesting in that it is
 compositional: semantic of a term is constructured from the semantic
@@ -148,20 +147,20 @@ folds.
 The next step is to define a reification process:
 
 \begin{spec}
-↓ : List ℕ → Chars
+↓ : List Char → Chars
 
 ↓ []        = ε₀
-↓ (n ∷ ns)  = Chr n ∙ (↓ ns)
+↓ (c ∷ cs)  = Chr c ∙ (↓ cs)
 \end{spec}
 
 Reification defined above is a simple mapping from lists to Chars
 terms, where empty list is mapped to empty strings, cons of list head
 to list tail to concatenation of the corresponding singleton string
 to the reified string of tail.
-For example, the list |[78, 66, 69]| from earlier is reified to the
+For example, the list |['N', 'B', 'E']| from earlier is reified to the
 following term:
 \begin{spec}
-Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ ε₀))
+Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ ε₀))
 \end{spec}
 The reification function is also compositional.
 
@@ -174,11 +173,11 @@ norm M = ↓ ⟦ M ⟧
 As expected, above function derives canonical form of Chars terms.
 For instance, we have
 \begin{spec}
-norm (Chr 78 ∙ (Chr 66 ∙ Chr 69))
+norm (Chr 'N' ∙ (Chr 'B' ∙ Chr 'E'))
   =
-norm ((Chr 78 ∙ ε₀) ∙ ((Chr 66 ∙ ε₀) ∙ (Chr 69 ∙ ε₀)))
+norm ((Chr 'N' ∙ ε₀) ∙ ((Chr 'B' ∙ ε₀) ∙ (Chr 'E' ∙ ε₀)))
   =
-Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ ε₀))
+Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ ε₀))
 \end{spec}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -206,7 +205,7 @@ function composition.
 For instance, the two example terms representing ``NBE" earlier are
 evaluated to the function
 \begin{spec}
-λ N → Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ N))
+λ N → Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ N))
 \end{spec}
 Above evaluation is also compositional.
 
@@ -222,11 +221,11 @@ Reification defined above is very simples: it applies semantic
 function to empty string.
 For example, the function
 \begin{spec}
-λ N → Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ N))
+λ N → Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ N))
 \end{spec}
 from earlier is reified to the following term:
 \begin{spec}
-Chr 78 ∙ (Chr 66 ∙ (Chr 69 ∙ ε₀))
+Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ ε₀))
 \end{spec}
 Reification is also obviousely compositional.
 
@@ -246,8 +245,8 @@ in the discussion: the syntactic domain of canonical forms, which is a
 subset of the syntactic domain. For Chars language, terms in canonical
 form are of the following grammar:
 \begin{spec}
-n ∈ ℕ (set of natural numbers)
-N ∈ CanonicalChars ::= ε₀ | Chr n ∙ N
+c ∈ Char (set of characters)
+N ∈ CanonicalChars ::= ε₀ | Chr c ∙ N
 \end{spec}
 
 For instance, the example canonical form deriven earlier follows the
