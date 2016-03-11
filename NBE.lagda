@@ -1,64 +1,102 @@
-Normalisation-by-Evaluation (NBE) is the process of deriving normal
-form of terms with respect to an equational theory. NBE dates back to
-\citet{MartinLof}, where he used similar technique, although not by its
-current name, for normalising terms in type theory.
+Normalisation-by-Evaluation (NBE) is the process of deriving canonical
+form of terms with respect to an equational theory.The process of
+deriving canonical forms is often refered to as normalisation, where
+the canonical forms are refered to as normal forms. NBE dates back to
+\citet{MartinLof}, where he used a similar technique, although not by
+its current name, for normalising terms in type theory.
 \citet{Berger} introduced NBE as an efficient normalisation technique.
 In the context of proof theory, they observed that the round trip of
 first evaluating terms, and then applying an inverse of the evaluation
-function, normalises the terms. Following \citet{Berger},
-\citet{TDPE} used NBE to implement an offline partial evaluator
-that only required types of terms to partially evaluate them.
+function, normalises the terms. Following \citet{Berger}, \citet{TDPE}
+used NBE to implement an offline partial evaluator that only required
+types of terms to partially evaluate them.
 
-\todo{}{mention reduction-based and reduction free normalisation}
+There are different approaches to normalisation.  One popular approach
+to normalisation is reduction-based, where a set of rewrite rules are
+applied exhaustively until they can no longer be applied.  In contrast
+to reduction-based approaches, NBE is defined based on a pair of
+well-known program transformations, instead of rewrite rules. For this
+reason, NBE is categorised as a reduction-free normalisation process.
 
-The process of deriving canonical forms is often refered to as
-normalisation, where the canonical forms are refered to as normal
-forms.
 
 Nbe constitutes of four components:
 \begin{description}
-\item [syntactic domain]
-Abstract syntax of terms.
+\item [Syntactic Domain]
+Syntactic domain is the language of terms to be
+normalised by a NBE algorithm.
 
-\todo{}{...}
+\item [Semantic Domain]
+Semantic domain is another language used in NBE, defining a model for
+evaluting terms in the syntactic domain. Often the semantic domain
+contains parts of the syntactic domain are left uninterpreted. The
+unintepreted parts are refered to as the residual parts, and in their
+presence the semantic model as the residualising model.
 
-\item [semantic domain] ...
+\item [Evaluation]
+Evaluation is the process of mapping terms in the syntactic domain to
+the corresponding elements in the semantic domain. Despite the name,
+the evaluation process in NBE is often quite different from the one in
+the standard evaluators.  Although it is not necessarily required, the
+evaluation process in NBE is often compositional.
+In this paper, following the convention, evaluation functions are
+denoted as |⟦_⟧|. In the typed variant of NBE, same notation is also
+used to denote mapping of types in evaluation.
 
-\todo{}{...}
-
-
-\item [evaluation]:
-The process of mapping terms in the syntactic domain to the
-corresponding elements in the semantic domain. Despite the name,
-the evaluation process in NBE is often quite different from the one in the
-standard evaluators.
-Although it is not necessarily required, the evaluation process in NBE
-is often denotational (compositional).
-
-\item [reification]:
-The process of mapping (back) elements of semantic domain to the
-corresponding terms in the syntactic domain.
+\item [Reification]
+Reification is the process of mapping (back) elements of semantic
+domain to the corresponding terms in the syntactic domain.
+In this paper, following the convention, reification functions are
+denoted as |↓|.
 
 \end{description}
 
-Formally, NBE can be defined as follows:
-\begin{code}
+More formally, an algortihm with NBE structure can be seen as an
+instance of the following (dependent) record:
+\begin{spec}
+NBE = {  Syn  : Type ,
+         Sem  : Type ,
+         ⟦_⟧   : Syn → Sem ,
+         ↓    : Sem → Syn }
+\end{spec}
 
-record NBE : Set₁ where
-   field
-    Syn  :  Set
-    Sem  :  Set
-    ⟦_⟧   :  Syn → Sem
-    ↓    :  Sem → Syn
+As mentioned, normalisation in NBE is the round trip of first
+evaluating terms, and then reifying them back. Therefore,
+normalisation in NBE is a mapping from syntactic domain
+to syntactic domain:
 
-   normalise : Syn → Syn
-   normalise m = ↓ ⟦ m ⟧
+\begin{spec}
+norm : Syn → Syn
+norm M = ↓ ⟦ M ⟧
+\end{spec}
 
-\end{code}
+In a typed setting, it is expected that transformations in NBE to
+preseve types of the terms. More formally, an algortihm with NBE
+structure in a typed setting can be seen as an instance of the
+following (dependent) record, with the following normalisation
+function:
+%format Typeₜ = "\underline{Type}"
+\begin{spec}
+TypedNBE = {  Syn  : Typeₜ → Type ,
+              Sem  : Typeₜ → Type ,
+              ⟦_⟧   : ∀ A. Syn A → Sem A ,
+              ↓    : ∀ A. Sem A → Syn A }
 
-Additionally, above should guarantee that, (a) |normalise| preserves
-the intended meaning of the terms, and (b) |normalise| produces terms
-in a normal form with respect to the intended equational theory.
+norm : ∀ A. Syn A → Syn A
+norm M = ↓ ⟦ M ⟧
+\end{spec}
+
+Above, |Typeₜ| denotes kind of object types. It is underlined to
+contrast it with |Type| which is the kind of types in the metalanguage.
+
+For both mentioned NBE structures to form a valid NBE normalisation
+algorithm, they should guarantee that, (a) normalisation preserves the
+intended meaning of the terms, and (b) normalisation derives canonical
+form of terms up to certain congruence relation.
+
+% Canonicity of NBE,
+% as defined by the mentioned congruence relation, varies from an application
+% to another. In simpler cases, syntactic equality is considered, while for
+% others ...
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Chars
