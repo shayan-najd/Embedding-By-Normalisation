@@ -140,7 +140,7 @@ expressions, and primitives, such as literals and operations on them.
 \keywords
 domain-specific language, DSL,
 embedded domain-specific language, EDSL,
-semantic, normalisation-by-evaluation, NBE,
+semantic, normalisation-By-evaluation, NBE,
 type-directed partial evaluation, TDPE
 
 %if False
@@ -375,15 +375,48 @@ Section \ref{sec:Implementation}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% NBE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Normalisation-by-Evaluation}
+\section{Normalisation-By-Evaluation}
 \label{sec:NBE}
 %include NBE.lagda
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% EBN
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Embedding-by-Normalisation}
+\section{Embedding-By-Normalisation}
 \label{sec:EBN}
+
+The key selling points for embedding DSLs are to reuse the machinery
+available for a host language, from parser to type checker, and to
+integerate with its ecosystem, from run-time system to editors.
+EDSLs and embedding techniques that are proven sucessful in practice,
+go beyond traditional sole reuse of syntactic machinery such as parser
+and type-checker, and employ the evaluation mechanism of the host
+language to optimise the DSL terms
+\citep{axelsson2010feldspar,svensson2011obsidian,?LMS,Mainland:2010}.
+Briefly put, what these techniques provide is
+abstraction-without-guilt: the possibility to define layers of
+abstractions in EDSLs, using features available in the host language,
+without sacrifising the performance of final produced programs.
+As mentioned briefly in the previous section, an optimisation process,
+such as the ones used for achieving abstraction-without-guilt, can be
+viewed as a normalisation process. So essentially, what the mentioned
+embedding techniques do is to perform \emph{normalisation} of embedded
+terms \emph{by} reusing the \emph{evaluation} mechanism of the host
+language. As the words in the previous sentence start to scream, there
+is a correspondence between such embedding techniques and NBE. This
+section starts by investigating the correspondence , by drawing
+parallel between different components of the two sides.  Then, this
+section introduces Embedding-By-Normalisation (EBN) as a general
+approach to structure embedding techniques that reuse evaluation
+mechanism of the host language for normalisation.
+
+Due to its correspondence to NBE, EBN is of mathmatical nature:
+abstract and general. Furthermore, as there are variety of NBE
+algorithms, there are variety of corresponding EBN techniques. The
+generality and variety make it difficult to propose a concrete
+implementation startegy for EBN, therefore, at the end of this
+section, only general implementation strategies based on some of the
+existing implementation techniques are discussed.
 
 \begin{center}
 \begin{tabular}{rcl}
