@@ -501,6 +501,22 @@ Reification      &\ \ <--->\ \ &  Code Extraction
 \todo{}{Go through PC members and makes sure to cite their related
 works, to avoid being snipped at}
 
+The work by \citet{svenningsson:combiningJournal} is perhaps the most
+closely related to what we've presented in this paper. They provide a
+way to embed languages which combines deep and shallow embeddings
+which allows DSLs to be normalised by using evaluation in the host
+language.  Phrased in the framework of Embedding by Normalisation,
+their methodology matches the form of embedding presented in section
+\label{sec:Basic}. Hence, they can use host language functions and
+products for their DSL implementations. Though they cannot deal with
+arbitraty sum types, although they provide tricks for dealing with a
+restricted form of sum type, such as the |Maybe| type in the Haskell
+standard library. Their implementation in Haskell uses a typeclass
+which contains two methods for encoding terms in the host language and
+reifying terms respectively.
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Conclusion
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
