@@ -51,6 +51,7 @@
 \DeclareTextCommandDefault\textxi{\ensuremath{\xi}}
 \DeclareTextCommandDefault\textSigma{\ensuremath{\Sigma}}
 \DeclareTextCommandDefault\textmu{\ensuremath{\mu}}
+\DeclareTextCommandDefault\textalpha{\ensuremath{\alpha}}
 %include formalism.tex
 
 \newcommand{\todo}[2]
