@@ -515,6 +515,9 @@ standard library. Their implementation in Haskell uses a typeclass
 which contains two methods for encoding terms in the host language and
 reifying terms respectively.
 
+Examples of DSLs which use this style of embedding are Feldspar
+\citep{axelsson2010feldspar}, Obsidian \citep{svensson2011obsidian}
+and Nikola \citep{Mainland:2010}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
