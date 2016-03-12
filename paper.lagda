@@ -360,6 +360,9 @@ The contributions of this paper are as follows:
       (Section \ref{sec:RelatedWork})
 \end{itemize}
 
+% capture essence of Feldspar
+% generic account by Σ and Ξ
+
 To steer clear from the mentioned informality prevalent in EDSL
 literature, code in the main body of this paper is presented using
 type theory, as implemented in the proof assistant Agda
@@ -387,36 +390,68 @@ Section \ref{sec:Implementation}.
 
 The key selling points for embedding DSLs are to reuse the machinery
 available for a host language, from parser to type checker, and to
-integerate with its ecosystem, from run-time system to editors.
+integerate with its ecosystem, from editors to run-time system.
 EDSLs and embedding techniques that are proven sucessful in practice,
 go beyond traditional sole reuse of syntactic machinery such as parser
 and type-checker, and employ the evaluation mechanism of the host
 language to optimise the DSL terms
 \citep{axelsson2010feldspar,svensson2011obsidian,?LMS,Mainland:2010}.
+
 Briefly put, what these techniques provide is
 abstraction-without-guilt: the possibility to define layers of
-abstractions in EDSLs, using features available in the host language,
-without sacrifising the performance of final produced programs.
-As mentioned briefly in the previous section, an optimisation process,
-such as the ones used for achieving abstraction-without-guilt, can be
+abstraction in EDSLs, using features available in the host language,
+without sacrifising the performance of final produced code.
+As mentioned in the previous section, an optimisation process,
+such as the ones used in above techniques, can be
 viewed as a normalisation process. So essentially, what the mentioned
-embedding techniques do is to perform \emph{normalisation} of embedded
-terms \emph{by} reusing the \emph{evaluation} mechanism of the host
-language. As the words in the previous sentence start to scream, there
-is a correspondence between such embedding techniques and NBE. This
-section starts by investigating the correspondence , by drawing
-parallel between different components of the two sides.  Then, this
-section introduces Embedding-By-Normalisation (EBN) as a general
-approach to structure embedding techniques that reuse evaluation
-mechanism of the host language for normalisation.
+embedding techniques do is to perform \textbf{normalisation} of embedded
+terms \textbf{by} reusing the \textbf{evaluation} mechanism of the host
+language.
+% As the words in the previous sentence start to scream,
+As the names suggest, there is a correspondence between such embedding
+techniques and NBE begging to be examined:
+\begin{center}
+optimisation of object by evaluation in host\\
+   <--->\\
+normalisation of syntax by evaluation in semantic
+\end{center}
 
-Due to its correspondence to NBE, EBN is of mathmatical nature:
-abstract and general. Furthermore, as there are variety of NBE
-algorithms, there are variety of corresponding EBN techniques. The
-generality and variety make it difficult to propose a concrete
-implementation startegy for EBN, therefore, at the end of this
-section, only general implementation strategies based on some of the
-existing implementation techniques are discussed.
+This section investigates the correspondence, by drawing
+parallel between different components of the two sides.
+But, before doing so, the class of EDSLs under investigation
+should be specified.
+
+Generally speaking, not every EDSL possess computational content,
+e.g., consider DSLs used for data description. On the other hand, a
+large and popular class of EDSLs possess some form of computational
+content. For the latter, as mentioned earlier, embedding techniques
+try to take full advantage of the evaluation process in the host
+language to optimise object terms before extracting code from
+them. The extracted code is passed, as data, to a backend, which
+either interprets the data by directly calling foreign function
+interfaces (e.g., see \citet{?Mejerlinq, accelerate}), or by passing
+it to an external compiler (e.g., see
+\citet{FELDSPAR,sujeeth2013composition}). This class of EDSLs are
+refered to as \emph{normalised EDSLs} in this paper, and they are
+distinguished from other EDSLs by the fact that (a) they possess
+computational content; (b) the object terms are optimised by using
+evaluation in the host language; and (c) they extract code from
+optimised object terms and the code is representable as data.
+
+One way to structure implementations of normalised EDSLs is as follows:
+\begin{itemize}
+\item object language
+\item host language
+\item encoding of object terms as host terms
+\item extraction of object code from the host
+\end{itemize}
+
+Encoding of object terms as host terms are done in a way that
+the resulting values after evaluation of host terms denote optimised
+object terms.
+
+Comparing above with NBE structure explained in Section \ref{sec:NBE},
+the correspondence is evident as follows:
 
 \begin{center}
 \begin{tabular}{rcl}
@@ -428,18 +463,78 @@ Reification      &\ \ <--->\ \ &  Code Extraction
 \end{tabular}
 \end{center}
 
-% General recipie is as follows:
-% \begin{enumerate}
-% \item define the syntax of your DSL formally,
-%       possibly as a variant of typed lambda calculus with a set of primitives
-% \item choose a proper semantic domain,
-% \item define the corresponding evaluation and reification functions,
-% \item write an interpreter / code generator for normal syntactic forms, and
-% \item program in the shallow embedding layer.
-% \end{enumerate}
+Viewing embedding through the lense of NBE, one can observe that many
+of the smart techniques for encoding object terms as host terms
+basically correspond to defining parts of an evaluation process that
+maps object terms to values (as opposed to general terms) in a subset
+of host language. Once one puts the two sides together, the
+correspondence between code extraction and reification in NBE is also
+not surprising. Even the name ``reification" has been used by some
+embedding experts to refer to the code extraction process (see
+\citet{Gill:CACM}).
 
+This paper dubs an embedding process that follows the NBE structure as
+Embedding-By-Normalisation, or EBN for short.
+Embedding-by-normalisation is to be viewed as a general
+theoretical framework to study existing embedding techniques in
+practice, and also as a recipie on how to structure implementation of
+normalised EDSLs.
+EBN builds a bridge between theory and practice: theoretical solutions
+in NBE can be used to solve practical problems in embedding, and vice
+versa.
+There are can be different approaches to perform embedding-by-normalisation.
+For instance, provided a backend to process input code represented as data,
+embedding-by-normalisation follows the steps below:
+\begin{itemize}
+\item The abstract syntax of the code expected by the backend
+      is identified. Such abstract syntax corresponds to the grammar of
+      normal forms.
+\item Semantic domain is identified as a subset of the host language.
+\item Reification is identified as the process that maps terms in the
+      semantic domain to terms in normal form, as usual.
+\item Evaluation is identified as programs in the host language
+      that map object terms to values in the semantic domain.
+\end{itemize}
+
+Above steps can be reordered. However, important
+observation here is that often defining syntax of normal forms and
+semantic domain should be prioritised over defining the interface that
+the end-users program in, i.e., the syntactic domain.  Syntactic
+domain can be seen as the class of host programs that can be
+normalised to terms following the grammar of normal forms.
+% (see presheaf models in \citet{NBE-Cat}).
+
+Due to its correspondence to NBE, EBN is of mathmatical nature:
+abstract and general. Furthermore, as there are variety of NBE
+algorithms, there are variety of corresponding EBN techniques. The
+generality and variety make it difficult to propose a concrete
+encoding startegy for EBN. The remainder of this section discusses
+some general encoding strategies based on the existing techniques including
+deep embedding, quoted embedding, shallow embedding, tagless embedding, and
+the combined method of \citet{svenningsson:combining}.
+
+
+% Then, this
+% section introduces Embedding-By-Normalisation (EBN) as a general
+% approach to structure and study embedding techniques that reuse
+% evaluation mechanism of the host language for normalisation.
+
+
+% todo: mention residualisation helps scalability
+% todo: mention
+% possibly as a variant of typed lambda calculus with a set of primitives
 % todo: mention relation to other embedding techniques
 %       enough to explain HOAS
+
+\subsection{Encoding Strategies}
+\label{sec:EBNImplementation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Type-Constrained Host as Semantic Domain
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Type-Constrained Host as Semantic Domain}
+\label{sec:TypeConstrained}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Basic
@@ -536,7 +631,7 @@ Reification      &\ \ <--->\ \ &  Code Extraction
 works, to avoid being snipped at}
 
 The work by \citet{svenningsson:combiningJournal} is perhaps the most
-closely related to what we've presented in this paper. They provide a
+closely related to what is presented in this paper. They provide a
 way to embed languages which combines deep and shallow embeddings
 which allows DSLs to be normalised by using evaluation in the host
 language.  Phrased in the framework of Embedding by Normalisation,
