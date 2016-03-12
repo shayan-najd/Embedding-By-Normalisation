@@ -88,10 +88,10 @@ norm M = ↓ ⟦ M ⟧
 Above, |Typeₜ| denotes kind of object types. It is underlined to
 contrast it with |Type| which is the kind of types in the metalanguage.
 
-For both mentioned NBE structures to form a valid NBE normalisation
-algorithm, they should guarantee that, (a) normalisation preserves the
-intended meaning of the terms, and (b) normalisation derives canonical
-form of terms up to certain congruence relation.
+A valid NBE normalisation algorithm, both untyped and typed, should
+guarantee that, (a) normalisation preserves the intended meaning of
+the terms, and (b) normalisation derives canonical form of terms up to
+certain congruence relation.
 
 % Canonicity of NBE,
 % as defined by the mentioned congruence relation, varies from an application
@@ -142,7 +142,7 @@ Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ ε₀))
 For a specific syntactic domain, in this case the Chars language,
 there are different ways to implement a NBE algorithm, as
 there are different semantic domains to choose from.
-For pedagogical purposes, two distinct NBE algorithims are presented
+For pedagogical purposes, two distinct NBE algorithms are presented
 for the Chars language based on two distinct semantic domains:
 (1) lists of characters, and
 (2) functions over the syntactic domain itself.
@@ -272,7 +272,7 @@ normalisation process based on function semantics is more efficient
 compared to the one based on list semantics.  Essentially, the
 evaluation process using the semantic domain |Char → Char|, evaluates
 terms using an efficient representation of lists, known as Hughes
-lists \citep{?hugheslists}.
+lists \citep{hughes1986novel}.
 
 \subsubsection{Observation}
 \label{sec:ADT}
