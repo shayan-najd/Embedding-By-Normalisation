@@ -272,7 +272,7 @@ normalisation process based on function semantics is more efficient
 compared to the one based on list semantics.  Essentially, the
 evaluation process using the semantic domain |Char → Char|, evaluates
 terms using an efficient representation of lists, known as Hughes
-lists \citep{?hugheslists}.
+lists \citep{hughes1986novel}.
 
 \subsubsection{Observation}
 \label{sec:ADT}
