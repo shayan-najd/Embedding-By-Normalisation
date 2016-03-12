@@ -142,7 +142,7 @@ Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ ε₀))
 For a specific syntactic domain, in this case the Chars language,
 there are different ways to implement a NBE algorithm, as
 there are different semantic domains to choose from.
-For pedagogical purposes, two distinct NBE algorithims are presented
+For pedagogical purposes, two distinct NBE algorithms are presented
 for the Chars language based on two distinct semantic domains:
 (1) lists of characters, and
 (2) functions over the syntactic domain itself.
