@@ -88,10 +88,10 @@ norm M = ↓ ⟦ M ⟧
 Above, |Typeₜ| denotes kind of object types. It is underlined to
 contrast it with |Type| which is the kind of types in the metalanguage.
 
-For both mentioned NBE structures to form a valid NBE normalisation
-algorithm, they should guarantee that, (a) normalisation preserves the
-intended meaning of the terms, and (b) normalisation derives canonical
-form of terms up to certain congruence relation.
+A valid NBE normalisation algorithm, both untyped and typed, should
+guarantee that, (a) normalisation preserves the intended meaning of
+the terms, and (b) normalisation derives canonical form of terms up to
+certain congruence relation.
 
 % Canonicity of NBE,
 % as defined by the mentioned congruence relation, varies from an application
