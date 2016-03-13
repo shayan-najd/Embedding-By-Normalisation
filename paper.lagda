@@ -622,7 +622,6 @@ the four components of EBN are as follows:
 
 %format class    = "\textbf{class}"
 %format instance = "\textbf{instance}"
-%format :∙d   = ":∙_d:"
 
 For instance, the following is the four components in EBN of Chars
  language with final tagless encoding:
@@ -630,30 +629,30 @@ For instance, the following is the four components in EBN of Chars
 \item \emph{Syntactic domain} is the following type-class declaration:
 \begin{spec}
 class CharsLike chars where
-  epsf  :: chars
-  chrf  :: Char → chars
-  (∙f)  :: chars → chars → chars
+  epsf  : chars
+  chrf  : Char → chars
+  (∙f)  : chars → chars → chars
 \end{spec}
 
-\item \emph{Semantic domain} is the type |[Char]| (list of characters) in Haskell
+\item \emph{Semantic domain} is the type |List Char| in a functional language with type-classes
 \item \emph{Evaluation} is the following type-class instance:
 \begin{spec}
-instance CharsLike [Char] where
+instance CharsLike (List Char) where
   epsf    = []
   chrf c  = [ c ]
   m ∙f n  = m ++ n
 \end{spec}
 \item \emph{Reification} is the following function
 \begin{spec}
-reify :: [Char] → Charsd
+reify : List Char → Charsd
 reify []        = Epsd
-reify (c : cs)  = Chrd c :∙d (reify cs)
+reify (c :: cs) = Chrd c ∙d (reify cs)
 \end{spec}
-where code is defined as
+where code is defined as the following algebraic datatype
 \begin{spec}
 data Charsd  =  Epsd
              |  Chrd c
-             |  Charsd :∙d Charsd
+             |  Charsd ∙d Charsd
 \end{spec}
 \end{itemize}
 
@@ -677,8 +676,6 @@ the four components of EBN are as follows:
 \end{description}
 
 %{
-%format :∙d   = ":∙_d:"
-
 For instance, the following is the four components in EBN of Chars
  language with deep encoding:
 \begin{itemize}
@@ -686,21 +683,22 @@ For instance, the following is the four components in EBN of Chars
 \begin{spec}
 data Charsd  =  Epsd
              |  Chrd c
-             |  Charsd :∙d Charsd
+             |  Charsd ∙d Charsd
 \end{spec}
-\item \emph{Semantic domain} is the type |[Char]| (list of characters) in Haskell
+\item \emph{Semantic domain} is the type |List Char| in a functional language
+                             with algebraic datatypes
 \item \emph{Evaluation} is the following function:
 \begin{spec}
-eval :: Charsd → [Char]
-eval  Epsd        = []
-eval  (Chrd c)    = [ c ]
-eval  (m :∙d: n)  = m ++ n
+eval : Charsd → List Char
+eval  Epsd      = []
+eval  (Chrd c)  = [ c ]
+eval  (m ∙d n)  = m ++ n
 \end{spec}
 \item \emph{Reification} is the following function
 \begin{spec}
-reify :: [Char] → Charsd
+reify : List Char → Charsd
 reify []        = Epsd
-reify (c : cs)  = Chrd c :∙d (reify cs)
+reify (c ∷ cs)  = Chrd c ∙d (reify cs)
 \end{spec}
 \end{itemize}
 
@@ -727,34 +725,28 @@ the four components of EBN are as follows:
 \end{description}
 
 %{
-%format :∙d   = ":∙_d:"
-
 For instance, the following is the four components in EBN of Chars
  language with quoted encoding:
 \begin{itemize}
 \item \emph{Syntactic domain} is |Charsd|, the resulting type of a
-      quasi-quotation denoted as |[c||...||]| for the following grammar:
-\begin{spec}
-c ∈ Char (set of characters)
-N ∈ CanonicalChars ::= ε₀ | Chr c ∙ N
-\end{spec}
-\item \emph{Semantic domain} is the type |[Char]| (list of characters)
+      quasi-quotation denoted as |[c||...||]| for the grammar of Chars language.
+\item \emph{Semantic domain} is the type |List Char|
       in a functional language with quasi-quotation
 \item \emph{Evaluation} is the following function:
 \begin{spec}
-eval :: Charsd → [Char]
+eval : Charsd → List Char
 eval  [c| ε₀       |]  = []
 eval  [c| Chr $c   |]  = [ c ]
 eval  [c| $m ∙ $n  |]  = m ++ n
 \end{spec}
+where |$| denotes anti-quotation \citep{mainland-quoted}.
 \item \emph{Reification} is the following function
 \begin{spec}
-reify :: [Char] → Charsd
+reify : List Char → Charsd
 reify []        = [c| ε₀ |]
-reify (c : cs)  = [c| Chr $c ∙ $(reify cs) |]
+reify (c ∷ cs)  = [c| Chr $c ∙ $(reify cs) |]
 \end{spec}
 \end{itemize}
-
 %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
