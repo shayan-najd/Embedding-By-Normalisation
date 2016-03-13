@@ -231,7 +231,7 @@ for defining a NBE algorithm is defining an evaluation function:
 ⟦_⟧ : Chars → (Chars → Chars)
 
 ⟦ ε₀     ⟧ = id
-⟦ Chr n  ⟧ = λ N → (Chr n) ∙ N
+⟦ Chr c  ⟧ = λ N → (Chr c) ∙ N
 ⟦ M ∙ N  ⟧ = ⟦ M ⟧ ∘ ⟦ N ⟧
 \end{spec}
 

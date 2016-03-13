@@ -27,7 +27,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % lhs2TeX macros
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%format ≜c = "≜_c"
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % latex macros
@@ -409,6 +408,8 @@ parallel between different components of the two sides.
 But, before doing so, the class of EDSLs under investigation
 should be specified.
 
+\subsection{Normalised EDSLs}
+\label{sec:NormalisedEDSLs}
 Generally speaking, not every EDSL possess computational content,
 e.g., consider DSLs used for data description. On the other hand, a
 large and popular class of EDSLs possess some form of computational
@@ -455,28 +456,45 @@ object terms.
 %format ∙d   = "∙_d"
 
 For instance, the following is the four components in an embedding
-off Chars language:
-\begin{description}
-\item [Object Language] \hfill \\
-|L,M,N ∈ Chars ::= ε₀ || Chr c || M ∙ N|
-
-\item [Host Language] is a typed functional language
-\item [Encoding] \hfill \\
-|ε₀| is encoded as the host (nullary) function |epsf = []| \\
-|Chr n| is encoded as the host function |chrf n = [ n ]| \\
+of Chars language:
+\begin{itemize}
+\item \emph{Object language} is of the following grammar:
+\begin{spec}
+c ∈ Char (set of characters)
+L,M,N ∈ Chars ::= ε₀ | Chr c | M ∙ N
+\end{spec}
+\item \emph{Host language} is a typed functional language
+\item \emph{Encoding} is as follows:\\
+|ε₀|    is encoded as the host (nullary) function |epsf = []| \\
+|Chr c| is encoded as the host function |chrf c = [ c ]| \\
 |M ∙ N| is encoded as the host function |M ∙f N = M ++ N|
-\item [Code Extraction] is a function from list values
+\item \emph{code extraction} is a function from list values
 to the datatype (of the $\__d$ indexed constructors) representing
 the extracted code
 \begin{spec}
 ↓ []        = Epsd
-↓ (c ∷ cs)  = Chrd c ∙d (↓ cs)
+↓ (c ∷ cs)  = Chrd c ∙d (reify cs)
 \end{spec}
-\end{description}
+\end{itemize}
 
+Users of Chars EDSL write their programs using $\__f$ indexed
+functions, and the extracted code, the $\__d$ indexed data, is passed
+to back-end of the Chars EDSL.  A simple example of such back-end
+would be a function that takes the code and prints the denoted string:
 
-Comparing above with NBE structure explained in Section \ref{sec:NBE},
-the correspondence is evident as follows:
+%format Charsd = "Chars_d"
+\begin{spec}
+printChars : Charsd → IO ⟨⟩
+printChars Epsd           = printString ""
+printChars (Chrd c ∙d N)  = do  printChar   c
+                                printChars  N
+\end{spec}
+
+\subsection{Correspondence}
+\label{sec:Correspondence}
+Comparing embedding structure, explained in Section \ref{sec:
+NormalisedEDSLs}, with NBE structure, explained in Section
+\ref{sec:NBE}, the correspondence is evident as follows:
 
 \begin{center}
 \begin{tabular}{rcl}
@@ -569,6 +587,9 @@ shallow embedding, the four components of EBN are as follows:
                     corresponds to the grammar of normal forms.
 \end{description}
 
+The Chars example in Section \ref{sec:NormalisedEDSLs} is EBN with
+shallow encoding.
+
 \subsubsection{Final Tagless Embedding}
 \label{sec:EBNTagless}
 Final tagless embedding \citep{Tagless}, which is a specific form of
@@ -597,6 +618,46 @@ the four components of EBN are as follows:
                     corresponds to the grammar of normal forms.
 \end{description}
 
+%{
+
+%format class    = "\textbf{class}"
+%format instance = "\textbf{instance}"
+%format :∙d   = ":∙_d:"
+
+For instance, the following is the four components in EBN of Chars
+ language with final tagless encoding:
+\begin{itemize}
+\item \emph{Syntactic domain} is the following type-class declaration:
+\begin{spec}
+class CharsLike chars where
+  epsf  :: chars
+  chrf  :: Char → chars
+  (∙f)  :: chars → chars → chars
+\end{spec}
+
+\item \emph{Semantic domain} is the type |[Char]| (list of characters) in Haskell
+\item \emph{Evaluation} is the following type-class instance:
+\begin{spec}
+instance CharsLike [Char] where
+  epsf    = []
+  chrf c  = [ c ]
+  m ∙f n  = m ++ n
+\end{spec}
+\item \emph{Reification} is the following function
+\begin{spec}
+reify :: [Char] → Charsd
+reify []        = Epsd
+reify (c : cs)  = Chrd c :∙d (reify cs)
+\end{spec}
+where code is defined as
+\begin{spec}
+data Charsd  =  Epsd
+             |  Chrd c
+             |  Charsd :∙d Charsd
+\end{spec}
+\end{itemize}
+
+%}
 
 \subsubsection{Deep Embedding}
 \label{sec:EBNDeep}
@@ -614,6 +675,36 @@ the four components of EBN are as follows:
 \item [Reification] is a mapping from host values of the semantic
                     domain type to a datatype describing normal forms
 \end{description}
+
+%{
+%format :∙d   = ":∙_d:"
+
+For instance, the following is the four components in EBN of Chars
+ language with deep encoding:
+\begin{itemize}
+\item \emph{Syntactic domain} is the following datatype:
+\begin{spec}
+data Charsd  =  Epsd
+             |  Chrd c
+             |  Charsd :∙d Charsd
+\end{spec}
+\item \emph{Semantic domain} is the type |[Char]| (list of characters) in Haskell
+\item \emph{Evaluation} is the following function:
+\begin{spec}
+eval :: Charsd → [Char]
+eval  Epsd        = []
+eval  (Chrd c)    = [ c ]
+eval  (m :∙d: n)  = m ++ n
+\end{spec}
+\item \emph{Reification} is the following function
+\begin{spec}
+reify :: [Char] → Charsd
+reify []        = Epsd
+reify (c : cs)  = Chrd c :∙d (reify cs)
+\end{spec}
+\end{itemize}
+
+%}
 
 \subsubsection{Quoted Embedding}
 \label{sec:EBNQuoted}
@@ -634,6 +725,37 @@ the four components of EBN are as follows:
 \item [Reification] is a mapping from host values of the semantic
                     domain type to a datatype describing normal forms
 \end{description}
+
+%{
+%format :∙d   = ":∙_d:"
+
+For instance, the following is the four components in EBN of Chars
+ language with quoted encoding:
+\begin{itemize}
+\item \emph{Syntactic domain} is |Charsd|, the resulting type of a
+      quasi-quotation denoted as |[c||...||]| for the following grammar:
+\begin{spec}
+c ∈ Char (set of characters)
+N ∈ CanonicalChars ::= ε₀ | Chr c ∙ N
+\end{spec}
+\item \emph{Semantic domain} is the type |[Char]| (list of characters)
+      in a functional language with quasi-quotation
+\item \emph{Evaluation} is the following function:
+\begin{spec}
+eval :: Charsd → [Char]
+eval  [c| ε₀       |]  = []
+eval  [c| Chr $c   |]  = [ c ]
+eval  [c| $m ∙ $n  |]  = m ++ n
+\end{spec}
+\item \emph{Reification} is the following function
+\begin{spec}
+reify :: [Char] → Charsd
+reify []        = [c| ε₀ |]
+reify (c : cs)  = [c| Chr $c ∙ $(reify cs) |]
+\end{spec}
+\end{itemize}
+
+%}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Type-Constrained Host as Semantic Domain
