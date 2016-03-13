@@ -22,18 +22,18 @@ reason, NBE is categorised as a reduction-free normalisation process.
 Nbe constitutes of four components:
 \begin{description}
 \item [Syntactic Domain]
-Syntactic domain is the language of terms to be
+is the language of terms to be
 normalised by a NBE algorithm.
 
 \item [Semantic Domain]
-Semantic domain is another language used in NBE, defining a model for
+is another language used in NBE, defining a model for
 evaluting terms in the syntactic domain. Often the semantic domain
 contains parts of the syntactic domain are left uninterpreted. The
 unintepreted parts are refered to as the residual parts, and in their
 presence the semantic model as the residualising model.
 
 \item [Evaluation]
-Evaluation is the process of mapping terms in the syntactic domain to
+is the process of mapping terms in the syntactic domain to
 the corresponding elements in the semantic domain. Despite the name,
 the evaluation process in NBE is often quite different from the one in
 the standard evaluators.  Although it is not necessarily required, the
@@ -43,7 +43,7 @@ denoted as |⟦_⟧|. In the typed variant of NBE, same notation is also
 used to denote mapping of types in evaluation.
 
 \item [Reification]
-Reification is the process of mapping (back) elements of semantic
+is the process of mapping (back) elements of semantic
 domain to the corresponding terms in the syntactic domain.
 In this paper, following the convention, reification functions are
 denoted as |↓|.

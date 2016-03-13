@@ -274,7 +274,7 @@ over the datatypes for semantics;
 quoted embedding, which is a specific form of deep embedding, is when
 a form of quotations is used to represent syntax, and functions over
 the unquoted representation (often normalised) for semantics;
-shallow embedding is when an interface form by a set of functions is
+shallow embedding is when an interface formed by a set of functions is
 used to represent the syntax, and implementation of the functions as
 semantics;
 final tagless embedding\citep{Tagless}, which is a specific form of
@@ -485,7 +485,7 @@ versa.
 There are can be different approaches to perform embedding-by-normalisation.
 For instance, provided a backend to process input code represented as data,
 embedding-by-normalisation follows the steps below:
-\begin{itemize}
+\begin{enumerate}
 \item The abstract syntax of the code expected by the backend
       is identified. Such abstract syntax corresponds to the grammar of
       normal forms.
@@ -494,7 +494,7 @@ embedding-by-normalisation follows the steps below:
       semantic domain to terms in normal form, as usual.
 \item Evaluation is identified as programs in the host language
       that map object terms to values in the semantic domain.
-\end{itemize}
+\end{enumerate}
 
 Above steps can be reordered. However, important
 observation here is that often defining syntax of normal forms and
@@ -509,16 +509,14 @@ abstract and general. Furthermore, as there are variety of NBE
 algorithms, there are variety of corresponding EBN techniques. The
 generality and variety make it difficult to propose a concrete
 encoding startegy for EBN. The remainder of this section discusses
-some general encoding strategies based on the existing techniques including
-deep embedding, quoted embedding, shallow embedding, tagless embedding, and
-the combined method of \citet{svenningsson:combining}.
-
+some general encoding strategies based on the existing techniques
+including shallow embedding, tagless embedding, deep embedding, and
+quoted embedding.
 
 % Then, this
 % section introduces Embedding-By-Normalisation (EBN) as a general
 % approach to structure and study embedding techniques that reuse
 % evaluation mechanism of the host language for normalisation.
-
 
 % todo: mention residualisation helps scalability
 % todo: mention
@@ -527,8 +525,95 @@ the combined method of \citet{svenningsson:combining}.
 %       enough to explain HOAS
 
 \subsection{Encoding Strategies}
-\label{sec:EBNImplementation}
+\label{sec:EBNEncoding}
+\subsubsection{Shallow Embedding}
+\label{sec:EBNShallow}
+Shallow embedding is when an interface formed by a set
+of functions in the host is used to represent the syntax of a DSL, and
+implementation of the functions as semantics. In shallow embedding,
+semantic of the DSL is required to be compositional \citep{Tagless,
+Gibbons}.
+In EBN, when encoding of object terms follows
+shallow embedding, the four components of EBN are as follows:
+\begin{description}
+\item [Syntacic Domain] is an interface formed by a set of functions
+                        (or values) in the host
+\item [Semantic Domain] is the result type of above interface
+\item [Evaluation] is the overall evaluation of the implementation of
+                   the above interface in the host. In this setting,
+                   EBN's evaluation process is also required to be
+                   compositional, and evaluation of a syntactic term
+                   is built up from the evaluation of its sub-terms.
+\item [Reification] is a mapping from host values of the semantic
+                    domain type to data that implements a subset of
+                    syntactic domain interface, i.e., the subset that
+                    corresponds to the grammar of normal forms.
+\end{description}
 
+\subsubsection{Final Tagless Embedding}
+\label{sec:EBNTagless}
+Final tagless embedding\citep{Tagless}, which is a specific form of
+shallow embedding, is when the shallow interface is parametric over
+the semantic type. In Haskell, the parametric interface is defined as
+a type-class, where instantiating the type-class defines
+semantics. Similar to shallow embedding, in final tagless embedding,
+evaluation is required to be compositional.
+
+In EBN, when encoding of object terms follows final tagless embedding,
+the four components of EBN are as follows:
+
+\begin{description}
+                        %or  a set of type-classes?
+\item [Syntacic Domain] is a type-class (or a similar machinery such as modules)
+                        defining syntax in final tagless style
+\item [Semantic Domain] is the type that the syntax type-class is
+                        instantiated with
+\item [Evaluation] is the implementation of an instance of syntax type class.
+                   In this setting, EBN's evaluation process is also required
+                   to be compositional. An instance of syntax type-class is
+                   an algebra for folds over the syntactic language
+\item [Reification] is a mapping from host values of the semantic
+                    domain type to data that implements a subset of
+                    syntactic domain interface, i.e., the subset that
+                    corresponds to the grammar of normal forms.
+\end{description}
+
+
+\subsubsection{Deep Embedding}
+\label{sec:EBNDeep}
+Deep embedding is when datatypes in host are used for representing the
+syntax of a DSL, and semantics is defined as functions (programs in
+general) over the syntax datatypes.
+
+In EBN, when encoding of object terms follows deep embedding,
+the four components of EBN are as follows:
+
+\begin{description}
+\item [Syntacic Domain] is a datatype
+\item [Semantic Domain] is a type that the syntax datatype is transformed to
+\item [Evaluation] is a function from syntax datatype to semantic domain
+\item [Reification] is a mapping from host values of the semantic
+                    domain type to a datatype describing normal forms
+\end{description}
+
+\subsubsection{Quoted Embedding}
+\label{sec:EBNQuoted}
+Quoted embedding, which is a specific form of deep embedding, is when
+some form of quotations is used to represent syntax, and semantics is
+defined as functions over the unquoted representation.
+
+In EBN, when encoding of object terms follows quoted embedding,
+the four components of EBN are as follows:
+
+\begin{description}
+\item [Syntacic Domain] is the type of quoted terms in the host
+\item [Semantic Domain] is a type that the unquoted representation of
+                        syntactic terms is transformed to
+\item [Evaluation] is a function from unquoted representation of
+                   syntactic terms to semantic domain
+\item [Reification] is a mapping from host values of the semantic
+                    domain type to a datatype describing normal forms
+\end{description}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Type-Constrained Host as Semantic Domain
@@ -539,17 +624,9 @@ the combined method of \citet{svenningsson:combining}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Basic
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Units, Functions, and Products}
+\subsection{Simple Types and Products}
 \label{sec:Basic}
 %include Basic.lagda
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Primitives
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Base Types, Literals, and Primitives}
-\label{sec:Primitives}
-%include Primitives.lagda
 
 % todo: mention Feldspar here
 
@@ -617,6 +694,7 @@ the combined method of \citet{svenningsson:combining}.
 %       (a) sum types
 %       (b) primitives
 
+\todo{}{Mention Filinsky}
 \todo{}{Mention Danvy's other related work}
 \todo{}{Mention Danvy's online partial evaluator}
 \todo{}{Mention Gill's CACM}
@@ -636,7 +714,7 @@ way to embed languages which combines deep and shallow embeddings
 which allows DSLs to be normalised by using evaluation in the host
 language.  Phrased in the framework of Embedding by Normalisation,
 their methodology matches the form of embedding presented in section
-\label{sec:Basic}. Hence, they can use host language functions and
+\ref{sec:Basic}. Hence, they can use host language functions and
 products for their DSL implementations. Though they cannot deal with
 arbitraty sum types, although they provide tricks for dealing with a
 restricted form of sum type, such as the |Maybe| type in the Haskell
