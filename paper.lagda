@@ -118,7 +118,7 @@ object code from the host.
 The correspondence is deep in that all four components in embedding
 and NBE correspond to each other. Based on this correspondence, this
 paper introduces Embedding-By-Normalisation (EBN) as a principled
-approach to embedding.
+approach to study and structure embedding.
 
 The correspondence is useful in that solutions from NBE can be
 borrowed to solve problems in embedding. In particular, based on NBE
@@ -142,16 +142,6 @@ domain-specific language, DSL,
 embedded domain-specific language, EDSL,
 semantic, normalisation-By-evaluation, NBE,
 type-directed partial evaluation, TDPE
-
-%if False
-\begin{code}
-open import Relation.Binary.PropositionalEquality
-   using (_≡_;cong;sym;trans;refl;cong₂;subst)
-open import Data.Product
-open import Function
-\end{code}
-%endif
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Introduction
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -184,7 +174,7 @@ noticeable amount of effort is required to customise and integrate
 pieces.
 
 Furthermore, as with any other distinct language, stand-alone
-DSLs come with their own ecosystem, ranging from liberaries to
+DSLs come with their own ecosystem, ranging from libraries to
 editors. It is often difficult to integrate programs written in
 different languages, and reuse the ecosystem of one for
 another. Object-relational impedance mismatch \citep{?}, and
@@ -218,7 +208,7 @@ Furthermore, as with any other host program, EDSL programs can often
 integrate smoothly with other host programs, and reuse parts of the
 ecosystem of the host language. Language-INtegrated Query (LINQ)
 \citep{LINQ} is a well-known instance of such successful integration,
-where SQL queries, as embedded DSL programs, are integerated with
+where SQL queries, as embedded DSL programs, are integrated with
 programs in mainstream GPLs.
 
 Although embedding can avoid remarkable implementation effort by
@@ -238,10 +228,10 @@ for embedding them.
 
 Unlike stand-alone languages that are often accompanied by a set of
 formal descriptions, EDSLs often possess no formal descriptions. Due
-to subtelties caused by embedding, EDSLs are often presented
+to subtleties caused by embedding, EDSLs are often presented
 informally by actual code in a mainstream host language; it is
 difficult to distinguish an EDSL from the the host language, as the
-boundry between an EDSL and its host language is not entirely clear.
+boundary between an EDSL and its host language is not entirely clear.
 Since often embedding techniques take smart use of techniques and
 stacks of unconventional features available in the host language,
 descriptions by actual code appear cryptic.  Such informal
@@ -255,7 +245,7 @@ than the sum its parts.
 % As it may not come surprising to the reader, increasing number of
 % papers are being published in peer-reviewed conferences (at the time
 % of writing this paper), key subjects of which are solely introducing
-% (informally) a new particular EDSL.  It is notriously difficult to
+% (informally) a new particular EDSL.  It is notoriously difficult to
 % compare these EDSLs with each others and draw conclusive results.
 % Regarding similar problems with GPLs, Sir Tony Hoare once suggested
 % \citep{?} introducing new features rather than new languages.
@@ -277,7 +267,7 @@ the unquoted representation (often normalised) for semantics;
 shallow embedding is when an interface formed by a set of functions is
 used to represent the syntax, and implementation of the functions as
 semantics;
-final tagless embedding\citep{Tagless}, which is a specific form of
+final tagless embedding \citep{Tagless}, which is a specific form of
 shallow embedding, is when type-classes are used to define interface
 representing syntax, and instances of the type-classes for semantics.
 
@@ -290,7 +280,7 @@ semantic in one hand, and reuse the host machinery in the other.
 % todo: forward-reference to a section with
 
 The kind of principles this paper is aiming for is the ones of
-mathmatical nature: abstract, simple, and insightful. These are the
+mathematical nature: abstract, simple, and insightful. These are the
 kind of principles that have been guiding design of functional
 programs since their dawn. One may argue these principles are
 discovered, as opposed to being invented \cite{Wadler-2015}.
@@ -302,7 +292,7 @@ where they identify shallow embedding as algebras of folds over syntax
 datatypes in deep embedding.  Decomposing embedding techniques into
 well-know structures such as semantic algebras or folds is liberating:
 embedding techniques can be studied independent of language features.
-Semantic algebras and folds enjoy clear mathmatical and formal
+Semantic algebras and folds enjoy clear mathematical and formal
 descriptions (e.g., via categorical semantics), hence establishing
 correspondence between embedding and folds enables borrowing ideas
 from other related fields.
@@ -319,7 +309,7 @@ in proof theory and programming semantics, commonly used for deriving
 canonical form of terms with respect to an equational theory.
 Decomposing embedding techniques into the key structures in
 NBE is liberating: embedding techniques can be studied independent of
-language features. NBE enjoys clear mathmatical and formal
+language features. NBE enjoys clear mathematical and formal
 description, hence establishing correspondence between embedding and
 NBE enables borrowing ideas from other related fields.  For instance,
 this paper shows how to use the NBE technique Type-Directed Partial
@@ -339,8 +329,8 @@ The contributions of this paper are as follows:
       (Section \ref{sec:NBE} and \ref{sec:EBN})
 \item To introduce Embedding-By-Normalisation (EBN) as a systematic
       and principled approach to embedding inspired by the
-      correpondence to NBE (Section \ref{sec:NBE} and \ref{sec:EBN})
-\item To show how to systematically embedd different variants of
+      correspondence to NBE (Section \ref{sec:NBE} and \ref{sec:EBN})
+\item To show how to systematically embed different variants of
       simply-typed lambda calculus by using EBN (Section \ref{sec:Basic}
       and Section \ref{sec:Primitives})
 \item To show how to extract code from embedded terms involving sum
@@ -356,7 +346,7 @@ The contributions of this paper are as follows:
       (Section \ref{sec:Implementation})
 \item To show how EBN relates to some of the related existing
       techniques, and highlighting some interesting insights when
-      observing such techniques through EBN lense
+      observing such techniques through EBN lens
       (Section \ref{sec:RelatedWork})
 \end{itemize}
 
@@ -371,7 +361,7 @@ used, hoping for the presentation to remain accessible to the readers
 familiar with functional programming.
 When inferrable from context, some unnecessary implementation details,
 such as type instantiations or overloading of constants, are
-intensionally left out of the code for brevity.
+intentionally left out of the code for brevity.
 As mentioned, the implementation concerns are addressed separately, in
 Section \ref{sec:Implementation}.
 
@@ -390,8 +380,8 @@ Section \ref{sec:Implementation}.
 
 The key selling points for embedding DSLs are to reuse the machinery
 available for a host language, from parser to type checker, and to
-integerate with its ecosystem, from editors to run-time system.
-EDSLs and embedding techniques that are proven sucessful in practice,
+integrate with its ecosystem, from editors to run-time system.
+EDSLs and embedding techniques that are proven successful in practice,
 go beyond traditional sole reuse of syntactic machinery such as parser
 and type-checker, and employ the evaluation mechanism of the host
 language to optimise the DSL terms
@@ -400,15 +390,13 @@ language to optimise the DSL terms
 Briefly put, what these techniques provide is
 abstraction-without-guilt: the possibility to define layers of
 abstraction in EDSLs, using features available in the host language,
-without sacrifising the performance of final produced code.
-As mentioned in the previous section, an optimisation process,
-such as the ones used in above techniques, can be
-viewed as a normalisation process. So essentially, what the mentioned
-embedding techniques do is to perform \textbf{normalisation} of embedded
-terms \textbf{by} reusing the \textbf{evaluation} mechanism of the host
-language.
-% As the words in the previous sentence start to scream,
-As the names suggest, there is a correspondence between such embedding
+without sacrificing the performance of final produced code.  As
+mentioned in the previous section, an optimisation process, such as
+the ones used in above techniques, can be viewed as a normalisation
+process. So essentially, what the mentioned embedding techniques do is
+to perform \textbf{normalisation} of embedded terms \textbf{by}
+reusing the \textbf{evaluation} mechanism of the host language.  As
+the names suggest, there is a correspondence between such embedding
 techniques and NBE begging to be examined:
 \begin{center}
 optimisation of object by evaluation in host\\
@@ -427,26 +415,34 @@ large and popular class of EDSLs possess some form of computational
 content. For the latter, as mentioned earlier, embedding techniques
 try to take full advantage of the evaluation process in the host
 language to optimise object terms before extracting code from
-them. The extracted code is passed, as data, to a backend, which
+them. The extracted code is passed, as data, to a back-end, which
 either interprets the data by directly calling foreign function
 interfaces (e.g., see \citet{?Mejerlinq, accelerate}), or by passing
 it to an external compiler (e.g., see
 \citet{FELDSPAR,sujeeth2013composition}). This class of EDSLs are
-refered to as \emph{normalised EDSLs} in this paper, and they are
+referred to as \emph{normalised EDSLs} in this paper, and they are
 distinguished from other EDSLs by the fact that (a) they possess
 computational content; (b) the object terms are optimised by using
 evaluation in the host language; and (c) they extract code from
 optimised object terms and the code is representable as data.
 
-One way to structure implementations of normalised EDSLs is as follows:
-\begin{itemize}
-\item object language
-\item host language
-\item encoding of object terms as host terms
-\item extraction of object code from the host
-\end{itemize}
+In general, embedding a DSL as a normalised EDSL constitutes of four
+components:
+\begin{description}
+\item [Object Language]
+      is the language defining the syntax of the DSL being embedded
+\item [Host Language]
+      is the language that the DSL is being embedded into
+\item [Encoding]
+      is the process of defining terms in the object language as a
+      specific set of terms in the host language
+\item [Code Extraction]
+      is the process of deriving object code, as data, from the
+      specific set of values (as opposed to general terms) in the host
+      language that encode (optimised) object terms
+\end{description}
 
-Encoding of object terms as host terms are done in a way that
+Encoding of object terms as host terms is done in a way that
 the resulting values after evaluation of host terms denote optimised
 object terms.
 
@@ -463,7 +459,7 @@ Reification      &\ \ <--->\ \ &  Code Extraction
 \end{tabular}
 \end{center}
 
-Viewing embedding through the lense of NBE, one can observe that many
+Viewing embedding through the lens of NBE, one can observe that many
 of the smart techniques for encoding object terms as host terms
 basically correspond to defining parts of an evaluation process that
 maps object terms to values (as opposed to general terms) in a subset
@@ -477,16 +473,17 @@ This paper dubs an embedding process that follows the NBE structure as
 Embedding-By-Normalisation, or EBN for short.
 Embedding-by-normalisation is to be viewed as a general
 theoretical framework to study existing embedding techniques in
-practice, and also as a recipie on how to structure implementation of
+practice, and also as a recipe on how to structure implementation of
 normalised EDSLs.
 EBN builds a bridge between theory and practice: theoretical solutions
 in NBE can be used to solve practical problems in embedding, and vice
 versa.
+
 There are can be different approaches to perform embedding-by-normalisation.
-For instance, provided a backend to process input code represented as data,
+For instance, provided a back-end to process input code represented as data,
 embedding-by-normalisation follows the steps below:
 \begin{enumerate}
-\item The abstract syntax of the code expected by the backend
+\item The abstract syntax of the code expected by the back-end
       is identified. Such abstract syntax corresponds to the grammar of
       normal forms.
 \item Semantic domain is identified as a subset of the host language.
@@ -504,28 +501,21 @@ domain can be seen as the class of host programs that can be
 normalised to terms following the grammar of normal forms.
 % (see presheaf models in \citet{NBE-Cat}).
 
-Due to its correspondence to NBE, EBN is of mathmatical nature:
-abstract and general. Furthermore, as there are variety of NBE
-algorithms, there are variety of corresponding EBN techniques. The
-generality and variety make it difficult to propose a concrete
-encoding startegy for EBN. The remainder of this section discusses
-some general encoding strategies based on the existing techniques
-including shallow embedding, tagless embedding, deep embedding, and
-quoted embedding.
-
-% Then, this
-% section introduces Embedding-By-Normalisation (EBN) as a general
-% approach to structure and study embedding techniques that reuse
-% evaluation mechanism of the host language for normalisation.
-
 % todo: mention residualisation helps scalability
 % todo: mention
 % possibly as a variant of typed lambda calculus with a set of primitives
-% todo: mention relation to other embedding techniques
-%       enough to explain HOAS
 
 \subsection{Encoding Strategies}
 \label{sec:EBNEncoding}
+Due to its correspondence to NBE, EBN is of mathematical nature:
+abstract and general. Furthermore, as there are variety of NBE
+algorithms, there are variety of corresponding EBN techniques. The
+generality and variety make it difficult to propose a concrete
+encoding strategy for EBN. The remainder of this section discusses
+some general encoding strategies based on the existing techniques
+including shallow embedding, final tagless embedding, deep embedding, and
+quoted embedding.
+
 \subsubsection{Shallow Embedding}
 \label{sec:EBNShallow}
 Shallow embedding is when an interface formed by a set
@@ -536,7 +526,7 @@ Gibbons}.
 In EBN, when encoding of object terms follows
 shallow embedding, the four components of EBN are as follows:
 \begin{description}
-\item [Syntacic Domain] is an interface formed by a set of functions
+\item [Syntactic Domain] is an interface formed by a set of functions
                         (or values) in the host
 \item [Semantic Domain] is the result type of above interface
 \item [Evaluation] is the overall evaluation of the implementation of
@@ -552,7 +542,7 @@ shallow embedding, the four components of EBN are as follows:
 
 \subsubsection{Final Tagless Embedding}
 \label{sec:EBNTagless}
-Final tagless embedding\citep{Tagless}, which is a specific form of
+Final tagless embedding \citep{Tagless}, which is a specific form of
 shallow embedding, is when the shallow interface is parametric over
 the semantic type. In Haskell, the parametric interface is defined as
 a type-class, where instantiating the type-class defines
@@ -564,7 +554,7 @@ the four components of EBN are as follows:
 
 \begin{description}
                         %or  a set of type-classes?
-\item [Syntacic Domain] is a type-class (or a similar machinery such as modules)
+\item [Syntactic Domain] is a type-class (or a similar machinery such as modules)
                         defining syntax in final tagless style
 \item [Semantic Domain] is the type that the syntax type-class is
                         instantiated with
@@ -589,7 +579,7 @@ In EBN, when encoding of object terms follows deep embedding,
 the four components of EBN are as follows:
 
 \begin{description}
-\item [Syntacic Domain] is a datatype
+\item [Syntactic Domain] is a datatype
 \item [Semantic Domain] is a type that the syntax datatype is transformed to
 \item [Evaluation] is a function from syntax datatype to semantic domain
 \item [Reification] is a mapping from host values of the semantic
@@ -598,15 +588,16 @@ the four components of EBN are as follows:
 
 \subsubsection{Quoted Embedding}
 \label{sec:EBNQuoted}
-Quoted embedding, which is a specific form of deep embedding, is when
-some form of quotations is used to represent syntax, and semantics is
-defined as functions over the unquoted representation.
+Quoted embedding \citep{QDSL}, which is a specific form of deep
+embedding, is when some form of quotations is used to represent
+syntax, and semantics is defined as functions over the unquoted
+representation.
 
 In EBN, when encoding of object terms follows quoted embedding,
 the four components of EBN are as follows:
 
 \begin{description}
-\item [Syntacic Domain] is the type of quoted terms in the host
+\item [Syntactic Domain] is the type of quoted terms in the host
 \item [Semantic Domain] is a type that the unquoted representation of
                         syntactic terms is transformed to
 \item [Evaluation] is a function from unquoted representation of
@@ -620,6 +611,39 @@ the four components of EBN are as follows:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Type-Constrained Host as Semantic Domain}
 \label{sec:TypeConstrained}
+Back in 1996, Landin in his landmark paper \citep{Landin1966} argues
+that seemingly different programming languages can be seen as
+instances of one unified language and that the differences can be
+factored as normal libraries for the unified language.  Landin
+nominates lambda calculus as the unified language, and shows how to
+encode seemingly different language constructs as normal programs in
+this language. Since then, Landin's idea has been proven correct over
+and over again, evidenced by successful functional programming
+languages built based on the very idea (e.g., see the design of
+\citet{?GHC}'s core language).
+
+Although Landin's idea was originally expressed in terms of
+general-purpose languages, it also applies to domain-specific ones.
+Following on his footsteps, this section proposes a generic approach
+to EBN by the viewing DSLs as a variant of lambda calculus, where
+domain-specific constructs are represented as the standard notion of
+primitive values and operations in lambda calculus (e.g., see
+\citet{?Plotkin}). Such a model allows for a parametric presentation of
+DSLs, where syntax of a DSL can be identified solely by the signature
+of the primitive values and operations.
+In particular, Section \ref{sec:Basic} presents an EBN technique for
+simply-typed lambda calculus with product types, parametric over the
+set of base types, literals, and the signature of primitive
+operations. The host language is assumed to be a typed functional
+language, and the subset the EBN technique is targeting (i.e., the
+semantic domain) is identified by a constraint on type of host terms.
+Section \ref{sec:Sums} adds sum types and corresponding terms to
+the syntax and updates the EBN algorithm.
+Section \ref{sec:Smart} proposes an alternative semantic domain, so
+that some of the primitives can be mapped to their corresponding host
+programs and get partially normalised.
+Finally, Section \ref{sec:Richer} discusses other possible extensions
+to support richer languages.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Basic
@@ -654,6 +678,7 @@ the four components of EBN are as follows:
 \subsection{Richer Languages}
 \label{sec:Richer}
 
+% extensionality
 % todo: mention Altenkirch and Dybjer's
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -667,6 +692,9 @@ the four components of EBN are as follows:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Agda}
 \label{sec:Agda}
+
+% mention type function problem and need for relation
+% mention HOAS
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Haskell
@@ -686,9 +714,6 @@ the four components of EBN are as follows:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion \& Related Work}
 \label{sec:RelatedWork}
-
-% todo: mention when EBN can be implemented by
-%       tagless/shallow
 
 % todo: mention the two impossibilities:
 %       (a) sum types
@@ -716,9 +741,9 @@ language.  Phrased in the framework of Embedding by Normalisation,
 their methodology matches the form of embedding presented in section
 \ref{sec:Basic}. Hence, they can use host language functions and
 products for their DSL implementations. Though they cannot deal with
-arbitraty sum types, although they provide tricks for dealing with a
+arbitrary sum types, although they provide tricks for dealing with a
 restricted form of sum type, such as the |Maybe| type in the Haskell
-standard library. Their implementation in Haskell uses a typeclass
+standard library. Their implementation in Haskell uses a type-class
 which contains two methods for encoding terms in the host language and
 reifying terms respectively.
 
@@ -735,7 +760,7 @@ and Nikola \citep{Mainland:2010}.
 
 % This paper is to free embedding from Girard's wedding cake dilemma.
 % Show the diagram of correspondence
-% Mention Compostional evaluation = shallow embedding
+% Mention Compositional evaluation = shallow embedding
 %
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -756,20 +781,41 @@ by EPSRC Grant EP/K034413/1.
 \end{document}
 
 %  LocalWords:  documentclass preprint lagda polycode fmt forall amsmath
-%  LocalWords:  usepackage amssymb stmaryrd pdfauthor Shayan Najd cL
-%  LocalWords:  Lindley Svenningsson Wadler pdftitle pagebackref url
+%  LocalWords:  usepackage amssymb stmaryrd pdfauthor cL
+%  LocalWords:  pdftitle pagebackref url
 %  LocalWords:  pdftex backref hyperref graphicx color usenames tex
 %  LocalWords:  dvipsnames svgnames xcolor newcommand todo noindent
-%  LocalWords:  framebox parbox dimexpr linewidth fboxsep fboxrule xs
+%  LocalWords:  framebox parbox dimexpr linewidth fboxsep fboxrule
 %  LocalWords:  textbf papersize setlength pdfpageheight paperheight
-%  LocalWords:  pdfpagewidth paperwidth conferenceinfo ICFP Nara NBE
-%  LocalWords:  copyrightyear copyrightdata nnnn ToDo copyrightdoi ys
-%  LocalWords:  nnnnnnn publicationrights authorinfo LFCS Chalmers ns
-%  LocalWords:  maketitle equational EBN reifying Applicative DSL EP
-%  LocalWords:  EDSL TDPE GPLs Haskell DSLs SQL VHDL Nbe evaluators
+%  LocalWords:  pdfpagewidth paperwidth conferenceinfo maketitle
+%  LocalWords:  copyrightyear copyrightdata nnnn ToDo copyrightdoi
+%  LocalWords:  nnnnnnn publicationrights authorinfo
+%  LocalWords:  llparenthesis rrparenthesis mathscr textpi textrho
+%  LocalWords:  DeclareTextCommandDefault textlambda textGamma citep
+%  LocalWords:  textiota textdelta textchi textXi textxi textSigma
+%  LocalWords:  textmu textalpha subsubsection bibliographystyle
+%  LocalWords:  abbrvnamed emph rcl center itemize sigplanconf
+%  LocalWords:  hidelinks DeclareUnicodeCharacter ensuremath
+%  LocalWords:  ucs utf citet
+%  LocalWords:  ICFP Nara
+%  LocalWords:  Shayan Najd Sam Lindley Josef Svenningsson Philip Wadler
+%  LocalWords:  LFCS Chalmers
+%  LocalWords:  NBE equational EBN reifying Applicative DSL
+%  LocalWords:  EDSL TDPE GPLs Haskell DSLs SQL VHDL
 %  LocalWords:  reification Tagless Virtualised Agda monad EDSLs agda
-%  LocalWords:  relatedwork RawFP EPSRC bibliographystyle abbrvnamed
-%  LocalWords:  sigplanconf Sem cdsl CDSLs OCaml Danvy's CACM LMS ucs
-%  LocalWords:  Sam's Dybjer's Altenkirch's Walid's Ziria utf Lof chr
+%  LocalWords:  relatedwork RawFP EPSRC
+%  LocalWords:  Sem cdsl CDSLs OCaml Danvy CACM LMS
+%  LocalWords:  Dybjer Altenkirch Walid Ziria Lof chr
 %  LocalWords:  inputenc Schwichtenberg denotational compositional
-%  LocalWords:  NBE Example endif regex lexing associativity nbe
+%  LocalWords:  Example associativity
+%  LocalWords:  spoofax GPL runtime
+%  LocalWords:  QDSL virtualisation hoc rompf scala GADTs INtegrated
+%  LocalWords:  LINQ Definitional svenningsson scalalms Hoare
+%  LocalWords:  Aho datatypes tagless scalability embeddings Untyped
+%  LocalWords:  MartinLof RelatedWork inferrable axelsson
+%  LocalWords:  instantiations svensson Mejerlinq sujeeth
+%  LocalWords:  representable versa presheaf residualisation
+%  LocalWords:  HOAS EBNEncoding EBNShallow EBNTagless EBNDeep
+%  LocalWords:  datatype EBNQuoted TypeConstrained Nikola
+%  LocalWords:  Filinsky evaluator combiningJournal Girard
+%  LocalWords:  Landin

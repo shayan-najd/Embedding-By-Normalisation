@@ -44,8 +44,8 @@ L,M,N ::=  ... | ι₁ₜ M | ι₂ₜ N | δₜ L M N
 ... (by trivial monadic lifting)
 ⟦ ι₁ₜ M      ⟧ Σ Γ  = ⦇ ι₁ (⟦ M ⟧ Σ Γ) ⦈
 ⟦ ι₂ₜ N      ⟧ Σ Γ  = ⦇ ι₂ (⟦ N ⟧ Σ Γ) ⦈
-⟦ δₜ L M N   ⟧ Σ Γ  = join ⦇ δₜ (⟦ L ⟧ Σ Γ)  (⟦ M ⟧ Σ Γ)
-                                             (⟦ N ⟧ Σ Γ) ⦈
+⟦ δₜ L M N   ⟧ Σ Γ  = join ⦇ δ (⟦ L ⟧ Σ Γ)  (⟦ M ⟧ Σ Γ)
+                                            (⟦ N ⟧ Σ Γ) ⦈
 \end{spec}
 
 \begin{spec}
