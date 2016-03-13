@@ -446,6 +446,35 @@ Encoding of object terms as host terms is done in a way that
 the resulting values after evaluation of host terms denote optimised
 object terms.
 
+%format epsf  = "eps_f"
+%format chrf = "chr_f"
+%format ∙f   = "∙_f"
+
+%format Epsd  = "Eps_d"
+%format Chrd = "Chr_d"
+%format ∙d   = "∙_d"
+
+For instance, the following is the four components in an embedding
+off Chars language:
+\begin{description}
+\item [Object Language] \hfill \\
+|L,M,N ∈ Chars ::= ε₀ || Chr c || M ∙ N|
+
+\item [Host Language] is a typed functional language
+\item [Encoding] \hfill \\
+|ε₀| is encoded as the host (nullary) function |epsf = []| \\
+|Chr n| is encoded as the host function |chrf n = [ n ]| \\
+|M ∙ N| is encoded as the host function |M ∙f N = M ++ N|
+\item [Code Extraction] is a function from list values
+to the datatype (of the $\__d$ indexed constructors) representing
+the extracted code
+\begin{spec}
+↓ []        = Epsd
+↓ (c ∷ cs)  = Chrd c ∙d (↓ cs)
+\end{spec}
+\end{description}
+
+
 Comparing above with NBE structure explained in Section \ref{sec:NBE},
 the correspondence is evident as follows:
 
