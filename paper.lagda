@@ -70,11 +70,13 @@
 %format Chrd = "Chr_d"
 %format ∙d   = "∙_d"
 %format Charsd = "Chars_d"
+%format do = "\textbf{\text{do}}"
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % latex macros
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \DeclareUnicodeCharacter{7523}{\ensuremath{_r}}
 \DeclareUnicodeCharacter{8343}{\ensuremath{_l}}
+\DeclareUnicodeCharacter{8345}{\ensuremath{_n}}
 \DeclareUnicodeCharacter{8337}{\ensuremath{_e}}
 \DeclareUnicodeCharacter{8348}{\ensuremath{_t}}
 \DeclareUnicodeCharacter{7522}{\ensuremath{_i}}
@@ -736,7 +738,8 @@ EDSLs and embedding techniques that are proven successful in practice,
 go beyond traditional sole reuse of syntactic machinery such as parser
 and type-checker, and employ the evaluation mechanism of the host
 language to optimise the DSL terms
-\citep{axelsson2010feldspar,svensson2011obsidian,?LMS,Mainland:2010}.
+\citep{axelsson2010feldspar,svensson2011obsidian,rompf2012lightweight,
+Mainland:2010}.
 
 Briefly put, what these techniques provide is
 abstraction-without-guilt: the possibility to define layers of
@@ -770,7 +773,7 @@ try to take full advantage of the evaluation process in the host
 language to optimise object terms before extracting code from
 them. The extracted code is passed, as data, to a back-end, which
 either interprets the data by directly calling foreign function
-interfaces (e.g., see \citet{?Mejerlinq, accelerate}), or by passing
+interfaces (e.g., see \citet{MeijerLINQ, accelerate}), or by passing
 it to an external compiler (e.g., see
 \citet{FELDSPAR,sujeeth2013composition}). This class of EDSLs are
 referred to as \emph{normalised EDSLs} in this paper, and they are
@@ -807,7 +810,7 @@ of Chars language:
 c ∈ Char (set of characters)
 L,M,N ∈ Chars ::= ε₀ | Chr c | M ∙ N
 \end{spec}
-\item \emph{Host language} is a typed functional language
+\item \emph{Host language} is a pure typed functional language
 \item \emph{Encoding} is as follows:\\
 |ε₀|    is encoded as the host (nullary) function |epsf = []| \\
 |Chr c| is encoded as the host function |chrf c = [ c ]| \\
@@ -835,8 +838,8 @@ printChars (Chrd c ∙d N)  = do  printChar   c
 
 \subsection{Correspondence}
 \label{sec:Correspondence}
-Comparing embedding structure, explained in Section \ref{sec:
-NormalisedEDSLs}, with NBE structure, explained in Section
+Comparing embedding structure, explained in Section
+\ref{sec:NormalisedEDSLs}, with NBE structure, explained in Section
 \ref{sec:NBE}, the correspondence is evident as follows:
 
 \begin{center}
@@ -896,7 +899,7 @@ normalised to terms following the grammar of normal forms.
 % possibly as a variant of typed lambda calculus with a set of primitives
 
 \subsection{Encoding Strategies}
-\label{sec:EBNEncoding}
+\label{sec:EBN:Encoding}
 Due to its correspondence to NBE, EBN is of mathematical nature:
 abstract and general. Furthermore, as there are variety of NBE
 algorithms, there are variety of corresponding EBN techniques. The
@@ -907,7 +910,7 @@ including shallow embedding, final tagless embedding, deep embedding, and
 quoted embedding.
 
 \subsubsection{Shallow Embedding}
-\label{sec:EBNShallow}
+\label{sec:EBN:Shallow}
 Shallow embedding is when an interface formed by a set
 of functions in the host is used to represent the syntax of a DSL, and
 implementation of the functions as semantics. In shallow embedding,
@@ -934,7 +937,7 @@ The Chars example in Section \ref{sec:NormalisedEDSLs} is EBN with
 shallow encoding.
 
 \subsubsection{Final Tagless Embedding}
-\label{sec:EBNTagless}
+\label{sec:EBN:Tagless}
 Final tagless embedding \citep{Tagless}, which is a specific form of
 shallow embedding, is when the shallow interface is parametric over
 the semantic type. In Haskell, the parametric interface is defined as
@@ -988,8 +991,8 @@ instance CharsLike (List Char) where
 \item \emph{Reification} is the following function
 \begin{spec}
 reify : List Char → Charsd
-reify []        = Epsd
-reify (c :: cs) = Chrd c ∙d (reify cs)
+reify []         = Epsd
+reify (c :: cs)  = Chrd c ∙d (reify cs)
 \end{spec}
 where code is defined as the following algebraic datatype
 \begin{spec}
@@ -1002,7 +1005,7 @@ data Charsd  =  Epsd
 %}
 
 \subsubsection{Deep Embedding}
-\label{sec:EBNDeep}
+\label{sec:EBN:Deep}
 Deep embedding is when datatypes in host are used for representing the
 syntax of a DSL, and semantics is defined as functions (programs in
 general) over the syntax datatypes.
@@ -1048,7 +1051,7 @@ reify (c ∷ cs)  = Chrd c ∙d (reify cs)
 %}
 
 \subsubsection{Quoted Embedding}
-\label{sec:EBNQuoted}
+\label{sec:EBN:Quoted}
 Quoted embedding \citep{QDSL}, which is a specific form of deep
 embedding, is when some form of quotations is used to represent
 syntax, and semantics is defined as functions over the unquoted
@@ -1096,7 +1099,7 @@ reify (c ∷ cs)  = [c| Chr $c ∙ $(reify cs) |]
 %% Type-Constrained Host as Semantic Domain
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Type-Constrained Host as Semantic Domain}
-\label{sec:TypeConstrained}
+\label{sec:Type-Constrained}
 Back in 1996, Landin in his landmark paper \citep{Landin1966} argues
 that seemingly different programming languages can be seen as
 instances of one unified language and that the differences can be
@@ -1126,12 +1129,12 @@ of the primitive values and operations.
 This subsection presents an EBN technique for simply-typed lambda
 calculus with product types, parametric over the set of base types,
 literals, and the signature of primitive operations. The host language
-is assumed to be a typed functional language, and the subset the EBN
+is assumed to be a pure typed functional language, and the subset the EBN
 technique is targeting (i.e., the semantic domain) is identified by a
 constraint on the type of host terms.
 
 \subsubsection{Syntactic Domain}
-
+\label{sec:Basic:Syn}
 The grammar of types in the object language is standard:
 \begin{spec}
 χ ∈ X (set of base types)
@@ -1144,7 +1147,7 @@ object language are underlined to distinguish it from the ones of the
 host language.
 
 The grammar of the terms in the object language is also standard
-\citep{?Filinski}:
+\citep{Filinski}:
 
 \begin{spec}
 x ∈ Γ (set of variables)
@@ -1167,7 +1170,7 @@ trivial, they are omitted from the paper.
 In this section, including the other subsections, the EBN technique is
 presented in a way that it is independent of encoding strategy: the
 underlined terms can be trivially encoded using the standard methods,
-such as the ones explained in Section \ref{sec:EBNEncoding}.  One
+such as the ones explained in Section \ref{sec:EBN:Encoding}.  One
 possible difficulty might be the treatment of free variables, which
 can be trivially addressed by using well-known techniques such as
 Higher-Order Abstract Syntax (HOAS) representation \citep{hoas}.
@@ -1187,13 +1190,13 @@ Now that the syntactic domain has been defined, i.e., the |Syn|
 language, it is time to define the semantic domain.
 
 \subsubsection{Semantic Domain}
-
-As the host language is a typed functional language, and the object
-language being a tiny typed functional language itself, a considerable
-part of the object language closely mirrors the one of the host
-language.  Moreover, the representation of the syntactic domain
-itself, is a program in the host language, i.e., a term of the type
-|Syn A|. This observation is realised by defining semantic domain
+\label{sec:Basic:Sem}
+As the host language is a pure typed functional language, and the
+object language being a tiny pure typed functional language itself, a
+considerable part of the object language closely mirrors the one of
+the host language.  Moreover, the representation of the syntactic
+domain itself, is a program in the host language, i.e., a term of the
+type |Syn A|. This observation is realised by defining semantic domain
 as follows:
 \[
 \text{Sem}\ A = ∀ (α : Type).\ α ∼ A ⇒ α
@@ -1213,7 +1216,7 @@ as follows:
 {(α ∼ A) && (β ∼ B)}
 &
 \infer[×_r]
-{(α → β) ∼ (A\ \underline{×}\ B)}
+{(α × β) ∼ (A\ \underline{×}\ B)}
 {(α ∼ A) && (β ∼ B)}
 \end{array}
 \]
@@ -1231,6 +1234,7 @@ as a residualised part, and the act of leaving a part uninterpreted as
 residualising.
 
 \subsubsection{Evaluation}
+\label{sec:Basic:Eval}
 Except for terms of base type, evaluation process is standard:
 syntactic terms are mapped to corresponding host terms.  Terms of base
 types, however, are residualised.  The definition of evaluation
@@ -1271,7 +1275,7 @@ denotes the mapping of different kinds of elements from syntax to
 semantic.
 
 \subsubsection{Reification}
-
+\label{sec:Basic:Reify}
 The final step is to define the reification function. Reification can
 be defined as a function indexed by the relation between syntax and
 semantics:
@@ -1281,15 +1285,16 @@ semantics:
 
 ↓ Synr      V  = V
 ↓ ⟨⟩r       V  = ⟨⟩ₜ
-↓ (A →r B)  V  = λₜ x →ₜ ↓ B (V (↑ A x ))
-↓ (A ×r B)  V  = (↓ A (π₁ V) ,ₜ ↓ B (π₂ V))
-
+↓ (a →r b)  V  = λₜ x →ₜ ↓ b (V (↑ a x ))
+↓ (a ×r b)  V  = (↓ a (π₁ V) ,ₜ ↓ b (π₂ V))
+\end{spec}
+\begin{spec}
 ↑ : α ~ A → Syn A → α
 
 ↑ Synr      M  = M
 ↑ ⟨⟩r       M  = ⟨⟩
-↑ (A →r B)  M  = λ x → ↑ B (M @ₜ (↓ A x))
-↑ (A ×r B)  M  = (↑ A (π₁ₜ M) , ↑ B (π₂ₜ M))
+↑ (a →r b)  M  = λ x → ↑ b (M @ₜ (↓ a x))
+↑ (a ×r b)  M  = (↑ a (π₁ₜ M) , ↑ b (π₂ₜ M))
 \end{spec}
 
 Above definition is similar to some classic NBE algorithms such as
@@ -1312,37 +1317,120 @@ equivalent but syntactically distinct (see Section \ref{sec:Richer}).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Sums}
 \label{sec:Sums}
-This section extends the EBN technique of the previous section, by
-fist adding sum types and the corresponding terms to the syntax and
-then updating the EBN technique to support them.
+This section extends the EBN technique of the previous subsection,
+to support DSL programs involving sum types, such as conditional
+expressions.
 
+\subsubsection{Syntactic Domain}
+\label{sec:SumsSyn}
+The grammar of syntactic domain in Section \ref{Sec:BasicSyn} is
+extended as follows:
 \begin{spec}
 A,B ::= ... | A +ₜ B
 \end{spec}
-
 \begin{spec}
 L,M,N ::=  ... | ι₁ₜ M | ι₂ₜ N | δₜ L M N
 \end{spec}
 
+The extensions are standard: sum types, left injection, right
+injection, and case expression. To simplify the presentation, branches
+of the case expression |δₜ L M N| (i.e., M and N) are standard terms
+of function type, as opposed to a specific built-in language
+constructs with bindings.  It follows Alonzo Church's original idea
+that all variable bindings in syntax can be done via bindings in
+lambda abstractions.
+
+\subsubsection{Semantic Domain}
+\label{sec:SumsSem}
+To support sum types, it is not enough to simply add a clause to the
+relation |~| of Section \ref{sec:Basic:Sem} relating sum types in the
+host to the ones in the object. Treating sum types has been a
+challenging problem in NBE and embedding. Essentially, to reify a
+semantic term of the type |(Syn A + Syn B) → Syn C|, following the
+same symmetric style of reify-reflect process in Section
+\ref{sec:Basic:Reify}, one needs (due to contravariance of function
+type) to convert a syntactic term of the type |Syn (A +ₜ B)| to a
+semantic term of the type |Syn A + Syn B|. The conversion of the type
+|Syn (A +ₜ B) → Syn A + Syn B| is problematic, since there is no way
+to destruct a term of the type |Syn| and remain in the semantic
+domain; the output type of the function is a term in the semantic
+domain, while destructing a sum type in syntactic domain demands a
+continuation in the syntactic domain. For a more detailed account of
+the reification problem for sum types, refer to
+\citet{QDSL,Gill:CACM,svenningsson:combiningJournal}.
+In the context of partial evaluation, \citet{TDPE} proposed an elegant
+solution to the problem of reification of sums, using composable
+continuations (delimited continuations) based on shift and
+reset\citep{Delimited}. This paper employs Danvy's solution.
+
+Delimited continuations are effect-full constructs. To model
+them in a pure and typed setting, this paper uses the standard
+monadic semantic (e.g., see \citep{Atkey,Dyvbig,Wadler}).
+The |~| relation from Section \ref{sec:Basic:Sem} is updated as follows:
+\[
+\begin{array}{cc}
+\infer[→_r]
+{(α ↝ β) ∼ (A\ \underline{→}\ B)}
+{(α ∼ A) && (β ∼ B)}
+&
+\infer[+_r]
+{(α + β) ∼ (A\ \underline{+}\ B)}
+{(α ∼ A) && (β ∼ B)}
+\end{array}
+\]
+
+where |↝| denotes type of monadic functions.
+
+One subtle, yet important factor in play here is the perspective that
+EBN offers: Danvy's elegant use of shift and reset is not a mere
+technical solution (even if it may seem like so when used in an untyped
+impure language); through the lens of NBE/EBN, it can be seen as a
+change of semantic domain to a monadic one, where the use of shift and
+reset are the resulting consequences.
+
+\subsubsection{Evaluation}
+\label{sec:Sums:Evaluation}
+The evaluation process is updates the one in Section
+\ref{sec:Basic:Eval}, by taking into account monadic structures, and
+performing trivial monadic lifting:
 \begin{spec}
 ...
 ⟦ A →ₜ B  ⟧ = ⟦ A ⟧  ↝  ⟦ B ⟧
 ⟦ A +ₜ B  ⟧ = ⟦ A ⟧  +  ⟦ B ⟧
 \end{spec}
-
 \begin{spec}
 ... (by trivial monadic lifting)
 ⟦ ι₁ₜ M      ⟧ Σᵥ Γᵥ  = ⦇ ι₁ (⟦ M ⟧ Σᵥ Γᵥ) ⦈
 ⟦ ι₂ₜ N      ⟧ Σᵥ Γᵥ  = ⦇ ι₂ (⟦ N ⟧ Σᵥ Γᵥ) ⦈
 ⟦ δₜ L M N   ⟧ Σᵥ Γᵥ  = join ⦇ δ (⟦ L ⟧ Σᵥ Γᵥ)  (⟦ M ⟧ Σᵥ Γᵥ)
-                                            (⟦ N ⟧ Σᵥ Γᵥ) ⦈
+                                                (⟦ N ⟧ Σᵥ Γᵥ) ⦈
 \end{spec}
+For clarity of presentation, applicative bracket notation
+\citep{Applicative} is used in above (denoted as |⦇ ... ⦈| .
+An applicative bracket notation |⦇ L M₀ ... Mₙ ⦈| is a mere syntactic sugar
+equivalent to the following term using monadic do notation:
+\begin{spec}
+   do  x₀  ← M₀
+       ...
+       xₙ  ← Mₙ
+       return (L x₀ ... xₙ)
+\end{spec}
+The function |join| is a the well-known monad join function, commonly
+used for flattening nested monadic structures.
+
+\subsubsection{Reification}
+\label{sec:Sums:Reification}
+To adopt Danvy's solution, the Reification process of
+\ref{sec:Basic:Reify} is updated as follows:
 
 \begin{spec}
 ...
 ↓ (A →ₑ B)  V  = λ x → reset ⦇ ↓ B (join ⦇ V (↑ A x) ⦈) ⦈
 ↓ (A +ₑ B)  V  = δ V  (λ x → ι₁ₜ (↓ A x))
                       (λ y → ι₂ₜ (↓ B y))
+\end{spec}
+\begin{spec}
+↑ : α ~ A → Syn A ↝ α
 
 ... (by trivial monadic lifting)
 ↑ (A +ₑ B)  M  =  shift  (λ k →
@@ -1350,91 +1438,16 @@ L,M,N ::=  ... | ι₁ₜ M | ι₂ₜ N | δₜ L M N
                          (λ y → reset ⦇ (k ∘ ι₂) (↑ B y) ⦈))
 \end{spec}
 
-
-\begin{spec}
-power n = λₜ x →ₜ
-  if n < 0       then
-    ifₜ x ==ₜ q0ₜ
-    thenₜ q0ₜ
-    elseₜ (-1ₜ /ₜ (power (- n) @ₜ x))
-  else if n == 0 then
-    q1ₜ
-  else if even n then
-    (  let  y = power (n / 2) @ₜ x
-       in   y *ₜ y)
-  else
-    x *ₜ (power (n - 1) @ₜ x)
-\end{spec}
-
-\begin{spec}
-Boolₜ   = ⟨⟩ₜ +ₜ ⟨⟩ₜ
-falseₜ  = ι₁ₜ ⟨⟩ₜ
-trueₜ   = ι₂ₜ ⟨⟩ₜ
-ifₜ  L thenₜ M elseₜ N = δₜ L (λₜ x →ₜ N) (λₜ y →ₜ M)
-\end{spec}
-
-\begin{spec}
-Ξ  = {ℚₜ ↦ ℚ}
-Σᵥ  = {  ==ₜ  : {ℚₜ , ℚₜ} ↦ Boolₜ ,
-         *ₜ   : {ℚₜ , ℚₜ} ↦ ℚₜ ,
-         /ₜ   : {ℚₜ , ℚₜ} ↦ ℚₜ }
-\end{spec}
-
-%% \begin{spec}
-%% χ ∈ X (set of base types)
-%% A,B ::= ⟨⟩ₜ | A →ₜ B | A ×ₜ B | χ | A +ₜ B
-%% \end{spec}
-
-%% \begin{spec}
-%% x ∈ Γ (set of variables)
-%% ξ ∈ Ξ (set of literals)
-%% c ∈ Σ (signature of primitives)
-%% L,M,N ::=  ⟨⟩ₜ  | x | λₜ x →ₜ N | L @ₜ M
-%%               | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
-%%               | ξₜ | c Mᵢ
-%%               | ι₁ₜ M | ι₂ₜ N | δₜ L M N
-%% \end{spec}
-
-%% \begin{spec}
-%% ⟦ ⟨⟩ₜ     ⟧ = ⟨⟩
-%% ⟦ A →ₜ B  ⟧ = ⟦ A ⟧  ↝  ⟦ B ⟧
-%% ⟦ A ×ₜ B  ⟧ = ⟦ A ⟧  ×  ⟦ B ⟧
-%% ⟦ χ       ⟧ = 𝔼 χ
-%% ⟦ A +ₜ B  ⟧ = ⟦ A ⟧  +  ⟦ B ⟧
-%% \end{spec}
-
-%% \begin{spec}
-%% ⟦ ⟨⟩ₜ        ⟧ Σᵥ Γᵥ  = ⦇ ⟨⟩ ⦈
-%% ⟦ x          ⟧ Σᵥ Γᵥ  = Γᵥ x
-%% ⟦ λₜ x →ₜ N  ⟧ Σᵥ Γᵥ  = ⦇ λ y → ⟦ N ⟧ Σᵥ (Γᵥ, x ↦ ⦇ y ⦈) ⦈
-%% ⟦ L @ₜ M     ⟧ Σᵥ Γᵥ  = join ⦇ (⟦ L ⟧ Σᵥ Γᵥ) (⟦ M ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ (M ,ₜ N)   ⟧ Σᵥ Γᵥ  = ⦇ (⟦ M ⟧ Σᵥ Γᵥ , ⟦ N ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ π₁ₜ L      ⟧ Σᵥ Γᵥ  = ⦇ π₁ (⟦ L ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ π₂ₜ L      ⟧ Σᵥ Γᵥ  = ⦇ π₂ (⟦ L ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ ξₜ         ⟧ Σᵥ Γᵥ  = ⦇ ξₜ ⦈
-%% ⟦ c Mᵢ       ⟧ Σᵥ Γᵥ  = Σᵥ c ⟦ Mᵢ ⟧
-%% ⟦ ι₁ₜ M      ⟧ Σᵥ Γᵥ  = ⦇ ι₁ (⟦ M ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ ι₂ₜ N      ⟧ Σᵥ Γᵥ  = ⦇ ι₂ (⟦ N ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ δₜ L M N   ⟧ Σᵥ Γᵥ  = join ⦇ δₜ (⟦ L ⟧ Σᵥ Γᵥ)  (⟦ M ⟧ Σᵥ Γᵥ)
-%%                                           (⟦ N ⟧ Σᵥ Γᵥ) ⦈
-%% \end{spec}
-
-%% \begin{spec}
-%% ↓ ⟨⟩ₑ       V  = ⟨⟩ₜ
-%% ↓ (A →ₑ B)  V  = λₜ x → reset ⦇ ↓ B (join ⦇ V (↑ A x) ⦈) ⦈
-%% ↓ (A ×ₑ B)  V  = (↓ A (π₁ V) ,ₜ ↓ B (π₂ V))
-%% ↓ 𝔼ₑ        V  = V
-%% ↓ (A +ₑ B)  V  = δ V  (λ x → ι₁ₜ (↓ A x))
-%%                       (λ y → ι₂ₜ (↓ B y))
-
-%% ↑ ⟨⟩ₑ       M  = ⦇ ⟨⟩ ⦈
-%% ↑ (A →ₑ B)  M  = ⦇ λ x → ↑ B (M @ₜ (↓ A x)) ⦈
-%% ↑ (A ×ₑ B)  M  = ⦇ (↑ A (π₁ₜ M) , ↑ B (π₂ₜ M)) ⦈
-%% ↑ 𝔼ₑ        M  = ⦇ M ⦈
-%% ↑ (A +ₑ B)  M  =  shift  (λ k →
-%%                   δₜ M   (λ x → reset ⦇ (k ∘ ι₁) (↑ A x) ⦈)
-%%                          (λ y → reset ⦇ (k ∘ ι₂) (↑ B y) ⦈))
-%% \end{spec}
+Except for the necessary monadic liftings, the nontrivial change is
+the clause related to sum types in the reflection function.  Instead
+of destructing |M| directly, which results in another term of |Syn|
+type, first it asks for a continuation |k| that given a semantic value
+of sum type, produces a syntactic term, and then uses this
+continuation for constructing the syntactic continuations needed for
+destructing |M|. Reader interested in more details, may try to follow
+above algorithm step-by-step to reify the semantic term |λ x → ⟨⟩ₜ| of
+the type |(Syn ⟨⟩ₜ + Syn ⟨⟩ₜ) → Syn ⟨⟩ₜ|, or the term |λ x → π₁ x| of
+the same type, and consult \citet{TDPE}, if needed.
 
 
 % todo: mention TDPE / offline PE here
@@ -1474,62 +1487,6 @@ L,M,N ::=  ...
 \end{spec}
 
 
-%% \begin{spec}
-%% χ ∈ X (set of base types)
-%% A,B ::= ⟨⟩ₜ | A →ₜ B | A ×ₜ B | χ | A +ₜ B
-%% \end{spec}
-
-%% \begin{spec}
-%% x ∈ Γ (set of variables)
-%% ξ ∈ Ξ (set of literals)
-%% c ∈ Σ (signature of primitives)
-%% L,M,N ::=  ⟨⟩ₜ  | x | λₜ x →ₜ N | L @ₜ M
-%%               | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
-%%               | ξₜ | c Mᵢ
-%%               | ι₁ₜ M | ι₂ₜ N | δₜ L M N
-%% \end{spec}
-
-%% \begin{spec}
-%% ⟦ ⟨⟩ₜ     ⟧ = ⟨⟩
-%% ⟦ A →ₜ B  ⟧ = ⟦ A ⟧  ↝  ⟦ B ⟧
-%% ⟦ A ×ₜ B  ⟧ = ⟦ A ⟧  ×  ⟦ B ⟧
-%% ⟦ χ       ⟧ = Ξ χ   +  𝔼 χ
-%% ⟦ A +ₜ B  ⟧ = ⟦ A ⟧  +  ⟦ B ⟧
-%% \end{spec}
-
-%% \begin{spec}
-%% ⟦ ⟨⟩ₜ        ⟧ Σᵥ Γᵥ  = ⦇ ⟨⟩ ⦈
-%% ⟦ x          ⟧ Σᵥ Γᵥ  = Γᵥ x
-%% ⟦ λₜ x →ₜ N  ⟧ Σᵥ Γᵥ  = ⦇ λ y → ⟦ N ⟧ Σᵥ (Γᵥ, x ↦ ⦇ y ⦈) ⦈
-%% ⟦ L @ₜ M     ⟧ Σᵥ Γᵥ  = join ⦇ (⟦ L ⟧ Σᵥ Γᵥ) (⟦ M ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ (M ,ₜ N)   ⟧ Σᵥ Γᵥ  = ⦇ (⟦ M ⟧ Σᵥ Γᵥ , ⟦ N ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ π₁ₜ L      ⟧ Σᵥ Γᵥ  = ⦇ π₁ (⟦ L ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ π₂ₜ L      ⟧ Σᵥ Γᵥ  = ⦇ π₂ (⟦ L ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ ξₜ         ⟧ Σᵥ Γᵥ  = ⦇ (ι₁ ξ) ⦈
-%% ⟦ c Mᵢ       ⟧ Σᵥ Γᵥ  = Σᵥ c ⟦ Mᵢ ⟧
-%% ⟦ ι₁ₜ M      ⟧ Σᵥ Γᵥ  = ⦇ ι₁ (⟦ M ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ ι₂ₜ N      ⟧ Σᵥ Γᵥ  = ⦇ ι₂ (⟦ N ⟧ Σᵥ Γᵥ) ⦈
-%% ⟦ δₜ L M N   ⟧ Σᵥ Γᵥ  = join ⦇ δₜ (⟦ L ⟧ Σᵥ Γᵥ)  (⟦ M ⟧ Σᵥ Γᵥ)
-%%                                           (⟦ N ⟧ Σᵥ Γᵥ) ⦈
-%% \end{spec}
-
-%% \begin{spec}
-%% ↓ ⟨⟩ₑ       V  = ⟨⟩ₜ
-%% ↓ (A →ₑ B)  V  = λₜ x → reset ⦇ ↓ B (join ⦇ V (↑ A x) ⦈) ⦈
-%% ↓ (A ×ₑ B)  V  = (↓ A (π₁ V) ,ₜ ↓ B (π₂ V))
-%% ↓ 𝔼ₑ        V  = V
-%% ↓ (A +ₑ B)  V  = δ V  (λ x → ι₁ₜ (↓ A x))
-%%                       (λ y → ι₂ₜ (↓ B y))
-
-%% ↑ ⟨⟩ₑ       M  = ⦇ ⟨⟩ ⦈
-%% ↑ (A →ₑ B)  M  = ⦇ λ x → ↑ B (M @ₜ (↓ A x)) ⦈
-%% ↑ (A ×ₑ B)  M  = ⦇ (↑ A (π₁ₜ M) , ↑ B (π₂ₜ M)) ⦈
-%% ↑ 𝔼ₑ        M  = ⦇ M ⦈
-%% ↑ (A +ₑ B)  M  =  shift  (λ k →
-%%                   δₜ M   (λ x → reset ⦇ (k ∘ ι₁) (↑ A x) ⦈)
-%%                          (λ y → reset ⦇ (k ∘ ι₂) (↑ B y) ⦈))
-%% \end{spec}
-
 % todo: mention online PE here
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1546,6 +1503,40 @@ This section discusses other possible extensions to support richer languages.
 \todo{}{Mention support for datatypes}
 \todo{}{Mention support for polymorphism}
 \todo{}{Mention untyped approach}
+
+\subsection{An Example}
+\label{sec:Example}
+
+
+\begin{spec}
+power n = λₜ x →ₜ
+  if n < 0       then
+    ifₜ x ==ₜ q0ₜ
+    thenₜ q0ₜ
+    elseₜ (-1ₜ /ₜ (power (- n) @ₜ x))
+  else if n == 0 then
+    q1ₜ
+  else if even n then
+    (  let  y = power (n / 2) @ₜ x
+       in   y *ₜ y)
+  else
+    x *ₜ (power (n - 1) @ₜ x)
+\end{spec}
+
+\begin{spec}
+Boolₜ   = ⟨⟩ₜ +ₜ ⟨⟩ₜ
+falseₜ  = ι₁ₜ ⟨⟩ₜ
+trueₜ   = ι₂ₜ ⟨⟩ₜ
+ifₜ  L thenₜ M elseₜ N = δₜ L (λₜ x →ₜ N) (λₜ y →ₜ M)
+\end{spec}
+
+\begin{spec}
+Ξ  = {ℚₜ ↦ ℚ}
+Σᵥ  = {  ==ₜ  : {ℚₜ , ℚₜ} ↦ Boolₜ ,
+         *ₜ   : {ℚₜ , ℚₜ} ↦ ℚₜ ,
+         /ₜ   : {ℚₜ , ℚₜ} ↦ ℚₜ }
+\end{spec}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Implementation
@@ -1681,7 +1672,8 @@ by EPSRC Grant EP/K034413/1.
 %  LocalWords:  MartinLof RelatedWork inferrable axelsson Dybjer's
 %  LocalWords:  instantiations svensson Mejerlinq sujeeth Walid's
 %  LocalWords:  representable versa presheaf residualisation Girard's
-%  LocalWords:  HOAS EBNEncoding EBNShallow EBNTagless EBNDeep
-%  LocalWords:  datatype EBNQuoted TypeConstrained Nikola
+%  LocalWords:  HOAS
+%  LocalWords:  datatype Nikola
 %  LocalWords:  Filinsky evaluator combiningJournal Girard
-%  LocalWords:  Landin Altenkirch's residualised
+%  LocalWords:  Landin Altenkirch's residualised composable
+%  LocalWords:  contravariance liftings
