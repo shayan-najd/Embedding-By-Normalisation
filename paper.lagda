@@ -1112,7 +1112,8 @@ reify (c ∷ cs)  = [c| Chr $c ∙ $(reify cs) |]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Type-Constrained Host as Semantic Domain}
 \label{sec:Type-Constrained}
-Back in 1996, Landin in his landmark paper \citep{Landin1966} argues
+Back in 1966, Landin in his landmark paper "The Next 700 Programming Languages"
+\citep{Landin1966} argues
 that seemingly different programming languages can be seen as
 instances of one unified language and that the differences can be
 factored as normal libraries for the unified language.  Landin
@@ -1125,13 +1126,14 @@ languages built based on the very idea (e.g., see the design of
 
 Although Landin's idea was originally expressed in terms of
 general-purpose languages, it also applies to domain-specific ones.
-Following on his footsteps, this section introduces a generic EBN
-algorithm by modeling DSLs as a variant of lambda calculus, where
-domain-specific constructs are represented as the standard notion of
-primitive values and operations in lambda calculus (e.g., see
-\citet{Plotkin1975}). Such a model allows for a parametric presentation of
-DSLs, where syntax of a DSL can be identified solely by the signature
-of the primitive values and operations.
+Following in his footsteps, in this paper we will consider DSLs which
+can be expressed using the lambda calculus enriched with constants to
+express domain-specific constructs. Not all DSLs can be modelled in
+this way and the principles of EBN applies even outside this
+model. But it covers a large and useful set of DSLs and allows for a
+parametric presentation of DSLs, where syntax of a DSL can be
+identified solely by the signature of the primitive values and
+operations.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Basic
