@@ -1555,15 +1555,21 @@ take into account the convertibility rules:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Richer Languages}
 \label{sec:Richer}
-This section discusses other possible extensions to support richer languages.
+There is a wealth of solutions available in NBE and related areas that
+can be adopted to support embedding by normalisation of languages with
+features not covered in this paper.
 
-\todo{}{Mention support for recursion}
-\todo{}{Mention support for side-effects}
-\todo{}{Mention support for let / syntactic sharing}
-\todo{}{Mention support for extensionality (related to the support for let)}
-\todo{}{Mention support for datatypes}
-\todo{}{Mention support for polymorphism}
-\todo{}{Mention untyped approach}
+In the context of partial evaluation, Danvy, his collaborators, and others
+worked on a series of extensions to the algorithm presented
+above. They considered support for object language features such as
+recursion, side-effects, syntactic sharing, laziness and memoization, and
+datatypes (e.g., see \citet{Pragmatics,Memoization,Online,Sheard}).
+
+In the context of type theory, Altenkirch, Dybjer, and others extended
+NBE to richer type systems. They considered systems such as variants
+of Martin-Löf type theory (e.g., see \citet{NBE-TT}), polymorphic
+lambda calculus \citep{NBE-F}, and simply typed lambda calculus with
+strong sums \citep{NBE-Sum,Extensional}.
 
 \subsection{An Example}
 \label{sec:Example}
