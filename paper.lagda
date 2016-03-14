@@ -1160,6 +1160,24 @@ L,M,N ∈ Syn ::= ξₜ  | c Mᵢ | ⟨⟩ₜ | x | λₜ x →ₜ N | L @ₜ M
                     | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
 \end{spec}
 
+\[
+\begin{array}{cc}
+\infer{\Gamma ; \Delta \vdash ξ : χ}{}
+&
+\infer{\Gamma ; \Delta \vdash \Conid{c} \; \overline{\Conid{M}} : \Conid{B}}{\Gamma ; \Delta \vdash \Conid{c} : \overline{\Conid{A} \; \underline{→}} \; \Conid{B} \in \Delta \, \overline{\Gamma ; \Delta \vdash \Conid{M} : \Conid{A}}}
+\\~\\
+\infer{\Gamma ; \Delta\vdash \underline{λ} \; \Conid{x} \; \underline{→} \; \Conid{N} : \Conid{A} \; \underline{→} \; \Conid{B}}{\Gamma , \Conid{x}; \Delta : \Conid{A} \vdash \Conid{N} : \Conid{B}}
+&
+\infer{\Gamma ; \Delta \vdash \Conid{L} \; \underline{@@} \; \Conid{M} : \Conid{B}}{\Gamma ; \Delta \vdash \Conid{L} : \Conid{A} \; \underline{→} \; \Conid{B} \, \Gamma ; \Delta \vdash \Conid{M} : \Conid{B}}
+\\~\\
+\infer{\Gamma ; \Delta \vdash (\Conid{M} \; \underline{,} \; \Conid{N}) : \Conid{A} \underline{×} \Conid{B}}{\Gamma ; \Delta \vdash \Conid{M} : \Conid{A} \; \Gamma ; \Delta \vdash \Conid{N} : \Conid{B}}
+\\~\\
+\infer{\Gamma ; \Delta \vdash \underline{π_1} \; \Conid{L} : \Conid{A}}{\Gamma ; \Delta \vdash \Conid{L} : \Conid{A} \; \underline{×} \; \Conid{B}}
+&
+\infer{\Gamma ; \Delta \vdash \underline{π_2} \; \Conid{L} : \Conid{B}}{\Gamma ; \Delta \vdash \Conid{L} : \Conid{A} \; \underline{×} \; \Conid{B}}
+\end{array}
+\]
+
 The language, referred to as |Syn|, is parametric over a set of
 literals, and signature of primitive operations. Besides literals, and
 primtive operations (which are assumed to be fully applied), it
