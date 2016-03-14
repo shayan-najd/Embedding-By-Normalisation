@@ -12,7 +12,8 @@
 \usepackage{stmaryrd}
 \usepackage[
   hidelinks,
-  pdfauthor={Shayan Najd,Sam Lindley,Josef Svenningsson,Philip Wadler},
+%  pdfauthor={Shayan Najd,Sam Lindley,Josef Svenningsson,Philip Wadler},
+  pdfauthor={Removed,Removed,Removed,Removed},
   pdftitle={Embedding By Normalisation},
   pagebackref=true,pdftex,backref=none]{hyperref}
 \usepackage{graphicx}
@@ -55,6 +56,7 @@
 %format ℚₜ     = "\underline{ℚ}"
 %format Boolₜ  = "\underline{\text{Bool}}"
 %format αₜ     = "\underline{α}"
+%format ΞT     = "Ξ_T"
 %format ΣT     = "Σ_T"
 %format ΓT     = "Γ_T"
 %format Synr   = "\text{Syn}_r"
@@ -71,6 +73,12 @@
 %format ∙d   = "∙_d"
 %format Charsd = "Chars_d"
 %format do = "\textbf{\text{do}}"
+%format ⇑+r = "⇑^+_r"
+%format ⇑-r = "⇑^-_r"
+%format ⇑-r = "⇑^-_r"
+%format ∼+  = "∼^+"
+%format ∼-  = "∼^-"
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % latex macros
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -83,6 +91,8 @@
 \DeclareUnicodeCharacter{7525}{\ensuremath{_v}}
 \DeclareUnicodeCharacter{10631}{\ensuremath{\llparenthesis}}
 \DeclareUnicodeCharacter{10632}{\ensuremath{\rrparenthesis}}
+\DeclareUnicodeCharacter{8599}{\ensuremath{\nearrow}}
+\DeclareUnicodeCharacter{8598} {\ensuremath{\nwarrow}}
 % \DeclareUnicodeCharacter{120793}{\ensuremath{\mathscr{a}}}
 \DeclareTextCommandDefault\textpi{\ensuremath{\pi}}
 \DeclareTextCommandDefault\textlambda{\ensuremath{\lambda}}
@@ -129,20 +139,31 @@
 %% \subtitle{Domain-Specific Languages With Character}
 %% \subtitle{Domain-Specific Languages With Semantics}
 %% \subtitle{Domain-Specific Languages That You Understand}
-
-\authorinfo{Shayan Najd}
-           {LFCS,\\ The University of Edinburgh}
-           {sh.najd@@ed.ac.uk}
-\authorinfo{Sam Lindley}
-           {LFCS,\\ The University of Edinburgh}
-           {sam.lindley@@ed.ac.uk}
-\authorinfo{Josef Svenningsson}
-           {Functional Programming Group,
-            Chalmers University of Technology}
-           {josefs@@chalmers.se}
-\authorinfo{Philip Wadler}
-           {LFCS,\\ The University of Edinburgh}
-           {wadler@@inf.ed.ac.uk}
+\authorinfo{Removed}
+           {For}
+           {Double-Blind Review}
+\authorinfo{Removed}
+           {Removed}
+           {Removed}
+\authorinfo{Removed}
+           {Removed}
+           {Removed}
+\authorinfo{Removed}
+           {Removed}
+           {Removed}
+%% \authorinfo{Shayan Najd}
+%%           {LFCS,\\ The University of Edinburgh}
+%%           {sh.najd@@ed.ac.uk}
+%% \authorinfo{Sam Lindley}
+%%           {LFCS,\\ The University of Edinburgh}
+%%           {sam.lindley@@ed.ac.uk}
+%% \authorinfo{Josef Svenningsson}
+%%           {Functional Programming Group,
+%%            Chalmers University of Technology}
+%%           {josefs@@chalmers.se}
+%% \authorinfo{Philip Wadler}
+%%           {LFCS,\\ The University of Edinburgh}
+%%           {wadler@@inf.ed.ac.uk}
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -350,7 +371,6 @@ direct correspondence between embedding techniques in practice and
 Normalisation-By-Evaluation \citep{MartinLof,Berger} (NBE) techniques
 in theory.  NBE is a well-studied
 approach (e.g., see \citet{NBE-Cat,NBE-Sum,NBE-Untyped,Lindley05})
-% todo: add even more
 in proof theory and programming semantics, commonly used for deriving
 canonical form of terms with respect to an equational theory.
 Decomposing embedding techniques into the key structures in
@@ -894,10 +914,6 @@ domain can be seen as the class of host programs that can be
 normalised to terms following the grammar of normal forms.
 % (see presheaf models in \citet{NBE-Cat}).
 
-% todo: mention residualisation helps scalability
-% todo: mention
-% possibly as a variant of typed lambda calculus with a set of primitives
-
 \subsection{Encoding Strategies}
 \label{sec:EBN:Encoding}
 Due to its correspondence to NBE, EBN is of mathematical nature:
@@ -1255,7 +1271,7 @@ as a residualised part, and the act of leaving a part uninterpreted as
 residualising.
 
 \subsubsection{Evaluation}
-\label{sec:Basic:Eval}
+\label{sec:Basic:Evaluation}
 Except for terms of base type, evaluation process is standard:
 syntactic terms are mapped to corresponding host terms.  Terms of base
 types, however, are residualised.  The definition of evaluation
@@ -1329,10 +1345,6 @@ results in a code for the corresponding term in η-long β-normal form.
 However, the normal form is not extensional, in that two normal terms may be
 equivalent but syntactically distinct (see Section \ref{sec:Richer}).
 
-% todo: NBE
-
-% todo: mention Feldspar here
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Sums
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1343,7 +1355,7 @@ to support DSL programs involving sum types, such as conditional
 expressions.
 
 \subsubsection{Syntactic Domain}
-\label{sec:SumsSyn}
+\label{sec:Sums:Syn}
 The grammar of syntactic domain in Section \ref{Sec:BasicSyn} is
 extended as follows:
 \begin{spec}
@@ -1362,7 +1374,7 @@ that all variable bindings in syntax can be done via bindings in
 lambda abstractions.
 
 \subsubsection{Semantic Domain}
-\label{sec:SumsSem}
+\label{sec:Sums:Sem}
 To support sum types, it is not enough to simply add a clause to the
 relation |~| of Section \ref{sec:Basic:Sem} relating sum types in the
 host to the ones in the object. Treating sum types has been a
@@ -1389,6 +1401,9 @@ them in a pure and typed setting, this paper uses the standard
 monadic semantic (e.g., see \citep{Atkey,Dyvbig,Wadler}).
 The |~| relation from Section \ref{sec:Basic:Sem} is updated as follows:
 \[
+...
+\]
+\[
 \begin{array}{cc}
 \infer[→_r]
 {(α ↝ β) ∼ (A\ \underline{→}\ B)}
@@ -1412,7 +1427,7 @@ reset are the resulting consequences.
 \subsubsection{Evaluation}
 \label{sec:Sums:Evaluation}
 The evaluation process is updates the one in Section
-\ref{sec:Basic:Eval}, by taking into account monadic structures, and
+\ref{sec:Basic:Evaluation}, by taking into account monadic structures, and
 performing trivial monadic lifting:
 \begin{spec}
 ...
@@ -1470,45 +1485,89 @@ above algorithm step-by-step to reify the semantic term |λ x → ⟨⟩ₜ| of
 the type |(Syn ⟨⟩ₜ + Syn ⟨⟩ₜ) → Syn ⟨⟩ₜ|, or the term |λ x → π₁ x| of
 the same type, and consult \citet{TDPE}, if needed.
 
-
-% todo: mention TDPE / offline PE here
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Smart
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Smart Primitives}
 \label{sec:Smart}
-This subsection proposes an
+So far, syntactic terms of base types have been residualised: they are
+treated as uninterpreted entities. This subsection proposes an
 alternative semantic domain, so that some of the primitives can be
-mapped to their corresponding host programs and get partially
-normalised.
+mapped to their corresponding host programs and terms with syntactic
+terms with base types get partially normalised.
 
-\begin{spec}
-A,B ::= ...
-\end{spec}
+\subsubsection{Syntactic Domain}
+\label{sec:Smart:Syn}
+Syntactic domain in this subsection is the same as the one in
+Section \ref{sec:Sums:Syn}.
 
-\begin{spec}
-L,M,N ::=  ...
-\end{spec}
+\subsubsection{Semantic Domain}
+\label{sec:Smart:Sem}
+The type relation |∼| in \ref{sec:Sums:Sem} does not consider
+convertibility of semantic values in the host language: given object
+type A, if value |V| in the host is convertible, by a function in the
+host, to another value |W| which respects |~ A|, |V| also respects |~
+A|. The following is a generalisation of the type relation |~| in
+\ref{sec:Sums:Sem}, based on this observation:
+\[
+\begin{array}{cc}
+... (\text{by tracking polarity})
+&
+\infer[→_r]
+{(α ↝ β) ∼^{p} (A\ \underline{→}\ B)}
+{(α ∼^{¬ p} A) \ \ \  (β ∼^{p} B)}
+\\~\\
+\infer[⇑^-_r]
+{β ∼^{-} A}
+{(α ∼^{-} A)\ \ \ (∃ f : α → β)}
+&
+\infer[⇑^+_r]
+{α ∼^{+} A}
+{(β ∼^{+} A) \ \ \ (∃ f : α → β)}
+\end{array}
+\]
 
+Notice that the polarity, or variance, of a type should be tracked as
+the type of conversion functions changes direction due to function
+types. For instance, consider function |f| converting |V : Syn A → Syn
+B| to |f V : (Syn A , Syn A) → Syn B|. One should provide a function |g|
+of type |(Syn A , Syn A) → Syn A|, rather than |Syn A → (Syn A , Syn
+A)|, so that |f V = λ x → V (g x)|.
+
+\subsubsection{Evaluation}
+\label{sec:Smart:Evaluation}
+Evaluation is similar to the one in Section \ref{sec:Sums:Evaluation},
+except that here base types can be either residual syntactic terms, as
+before, or the corresponding values in the semantic domain:
 \begin{spec}
 ...
-⟦ χ       ⟧ = Ξ χ   +  𝔼 χ
+⟦ χ       ⟧ =  𝔼 χ + ΞT χ
 \end{spec}
-
 \begin{spec}
 ...
-⟦ ξₜ ⟧ Σᵥ Γᵥ  = ⦇ (ι₁ ξ) ⦈
+⟦ ξₜ ⟧ Σᵥ Γᵥ  = ⦇ (ι₂ ξ) ⦈
 \end{spec}
 
+This rather simple change has a practically significant impact:
+primitive operations defined in |Σᵥ|, can now pattern match on their
+input of base type, and provide optimised versions based on the
+available values. This is demonstrated in the example presented in
+Section \ref{sec:Example}.
+
+\subsubsection{Reification}
+\label{sec:Smart:Reification}
+Reification in Section \ref{sec:Sums:Reification}, is updated to
+take into account the convertibility rules:
+
 \begin{spec}
+↓ : α ∼+ A → α → Syn A
 ↓ ...
+↓ (⇑+r a  f) V = ↓ a (f V)
 
+↑ : α ∼- A → Syn A ↝ α
 ↑ ...
+↑ (⇑-r a f) M = ⦇ f (↑ a M) ⦈
 \end{spec}
-
-
-% todo: mention online PE here
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Richer
@@ -1593,6 +1652,13 @@ ifₜ  L thenₜ M elseₜ N = δₜ L (λₜ x →ₜ N) (λₜ y →ₜ M)
 \section{Discussion \& Related Work}
 \label{sec:RelatedWork}
 
+% todo: NBE
+
+% todo: mention Feldspar here
+
+% todo: mention offline PE here
+% todo: mention online PE here
+
 % todo: mention the two impossibilities:
 %       (a) sum types
 %       (b) primitives
@@ -1603,6 +1669,7 @@ ifₜ  L thenₜ M elseₜ N = δₜ L (λₜ x →ₜ N) (λₜ y →ₜ M)
 \todo{}{Mention Gill's CACM}
 \todo{}{Mention Feldspar again}
 \todo{}{Mention LMS}
+\todo{}{Mention There is similarity between smart primitives and the one of LMS}
 \todo{}{Mention Sam's PhD}
 \todo{}{Mention Peter Dybjer's related works}
 \todo{}{Mention Altenkirch's related works}
@@ -1645,10 +1712,11 @@ and Nikola \citep{Mainland:2010}.
 % Acknowledgements
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph*{Acknowledgements}
-Najd was funded by a Google Europe Fellowship in Programming
-Technology. Svenningsson was funded by the Swedish Foundation for
-Strategic Research under grant RawFP. Lindley and Wadler were funded
-by EPSRC Grant EP/K034413/1.
+**Removed for the review process**
+% Najd was funded by a Google Europe Fellowship in Programming
+% Technology. Svenningsson was funded by the Swedish Foundation for
+% Strategic Research under grant RawFP. Lindley and Wadler were funded
+% by EPSRC Grant EP/K034413/1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
