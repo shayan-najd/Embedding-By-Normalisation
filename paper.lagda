@@ -12,7 +12,8 @@
 \usepackage{stmaryrd}
 \usepackage[
   hidelinks,
-  pdfauthor={Shayan Najd,Sam Lindley,Josef Svenningsson,Philip Wadler},
+%  pdfauthor={Shayan Najd,Sam Lindley,Josef Svenningsson,Philip Wadler},
+  pdfauthor={Removed,Removed,Removed,Removed},
   pdftitle={Embedding By Normalisation},
   pagebackref=true,pdftex,backref=none]{hyperref}
 \usepackage{graphicx}
@@ -129,20 +130,31 @@
 %% \subtitle{Domain-Specific Languages With Character}
 %% \subtitle{Domain-Specific Languages With Semantics}
 %% \subtitle{Domain-Specific Languages That You Understand}
-
-\authorinfo{Shayan Najd}
-           {LFCS,\\ The University of Edinburgh}
-           {sh.najd@@ed.ac.uk}
-\authorinfo{Sam Lindley}
-           {LFCS,\\ The University of Edinburgh}
-           {sam.lindley@@ed.ac.uk}
-\authorinfo{Josef Svenningsson}
-           {Functional Programming Group,
-            Chalmers University of Technology}
-           {josefs@@chalmers.se}
-\authorinfo{Philip Wadler}
-           {LFCS,\\ The University of Edinburgh}
-           {wadler@@inf.ed.ac.uk}
+\authorinfo{Removed}
+           {For}
+           {Double-Blind Review}
+\authorinfo{Removed}
+           {Removed}
+           {Removed}
+\authorinfo{Removed}
+           {Removed}
+           {Removed}
+\authorinfo{Removed}
+           {Removed}
+           {Removed}
+%% \authorinfo{Shayan Najd}
+%%           {LFCS,\\ The University of Edinburgh}
+%%           {sh.najd@@ed.ac.uk}
+%% \authorinfo{Sam Lindley}
+%%           {LFCS,\\ The University of Edinburgh}
+%%           {sam.lindley@@ed.ac.uk}
+%% \authorinfo{Josef Svenningsson}
+%%           {Functional Programming Group,
+%%            Chalmers University of Technology}
+%%           {josefs@@chalmers.se}
+%% \authorinfo{Philip Wadler}
+%%           {LFCS,\\ The University of Edinburgh}
+%%           {wadler@@inf.ed.ac.uk}
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1368,6 +1380,9 @@ them in a pure and typed setting, this paper uses the standard
 monadic semantic (e.g., see \citep{Atkey,Dyvbig,Wadler}).
 The |~| relation from Section \ref{sec:Basic:Sem} is updated as follows:
 \[
+...
+\]
+\[
 \begin{array}{cc}
 \infer[→_r]
 {(α ↝ β) ∼ (A\ \underline{→}\ B)}
@@ -1624,10 +1639,11 @@ and Nikola \citep{Mainland:2010}.
 % Acknowledgements
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph*{Acknowledgements}
-Najd was funded by a Google Europe Fellowship in Programming
-Technology. Svenningsson was funded by the Swedish Foundation for
-Strategic Research under grant RawFP. Lindley and Wadler were funded
-by EPSRC Grant EP/K034413/1.
+**Removed for the review process**
+% Najd was funded by a Google Europe Fellowship in Programming
+% Technology. Svenningsson was funded by the Swedish Foundation for
+% Strategic Research under grant RawFP. Lindley and Wadler were funded
+% by EPSRC Grant EP/K034413/1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
