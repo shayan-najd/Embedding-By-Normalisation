@@ -1481,6 +1481,8 @@ equivalent to the following term using monadic do notation:
 The function |join| is a the well-known monad join function, commonly
 used for flattening nested monadic structures.
 
+\todo{Explain what is actually happening in the evaluation for sum types}
+
 \subsubsection{Reification}
 \label{sec:Sums:Reification}
 To adopt Danvy's solution, the Reification process of
