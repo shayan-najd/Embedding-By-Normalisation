@@ -1100,7 +1100,7 @@ reify (c ∷ cs)  = [c| Chr $c ∙ $(reify cs) |]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Type-Constrained Host as Semantic Domain}
 \label{sec:Type-Constrained}
-Back in 1996, Landin in his landmark paper \citep{Landin1966} argues
+Back in 1966, Landin in his landmark paper \citep{Landin1966} argues
 that seemingly different programming languages can be seen as
 instances of one unified language and that the differences can be
 factored as normal libraries for the unified language.  Landin
