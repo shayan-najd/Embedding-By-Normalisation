@@ -1128,7 +1128,8 @@ operations.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Simple Types and Products}
 \label{sec:Basic}
-This subsection presents an EBN technique for simply-typed lambda
+This subsection presents an instantiation of the EBN technique for DSLs
+which can be captured by the simply-typed lambda
 calculus with product types, parametric over the set of base types,
 literals, and the signature of primitive operations. The host language
 is assumed to be a pure typed functional language, and the subset the EBN
