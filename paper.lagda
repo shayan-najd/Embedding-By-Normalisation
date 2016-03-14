@@ -1116,6 +1116,9 @@ reify (c ∷ cs)  = [c| Chr $c ∙ $(reify cs) |]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Type-Constrained Host as Semantic Domain}
 \label{sec:Type-Constrained}
+
+\todo{Think of a better section title}
+
 Back in 1966, Landin in his landmark paper "The Next 700 Programming Languages"
 \citep{Landin1966} argues
 that seemingly different programming languages can be seen as
@@ -1175,6 +1178,8 @@ c ∈ Σ (signature of primitives)
 L,M,N ∈ Syn ::= ξₜ  | c Mᵢ | ⟨⟩ₜ | x | λₜ x →ₜ N | L @ₜ M
                     | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
 \end{spec}
+
+\todo{Explain why the set of primitives and the set of literals are kept different}
 
 The language, referred to as |Syn|, is parametric over a set of
 literals, and signature of primitive operations. Besides literals, and
@@ -1257,6 +1262,8 @@ as follows:
 {(α ∼ A) && (β ∼ B)}
 \end{array}
 \]
+
+\todo{Fix the typography of the rules above so that they match the grammar.}
 
 That is, a term of type |A| in the semantic domain is any host term
 whose type respects the |∼| relation. The relation |∼| states that (a)
