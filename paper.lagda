@@ -1307,11 +1307,11 @@ function is as follows:
 ⟦ π₂ₜ L      ⟧ Σᵥ Γᵥ  = π₂ (⟦ L ⟧ Σᵥ Γᵥ)
 \end{spec}
 
-Except the input syntactic term, the evaluation function takes two
+Apart from the expression to be evaluated, the evaluation function takes two
 extra arguments: the environment of semantic values corresponding to
-each primitive operator, dented as the variable |Σᵥ| of type |⟦ ΣT ⟧|,
+each primitive operator (variable |Σᵥ| of type |⟦ ΣT ⟧|),
 and the environment of semantic values corresponding to each free
-variable, denoted as the variable |Γᵥ| of type |⟦ ΓT ⟧|.  At the
+variable (variable |Γᵥ| of type |⟦ ΓT ⟧|).  At the
 type-level, |ΣT| denotes the typing environment for the primitives,
 and |ΓT| denotes the typing environment for free variables.  Following
 the convention, the semantic bracket notation is overloaded, and
