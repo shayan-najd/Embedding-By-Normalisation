@@ -1424,6 +1424,8 @@ The |~| relation from Section \ref{sec:Basic:Sem} is updated as follows:
 
 where |↝| denotes type of monadic functions.
 
+\todo{Explain what a monadic function is}
+
 One subtle, yet important factor in play here is the perspective that
 EBN offers: Danvy's elegant use of shift and reset is not a mere
 technical solution (even if it may seem like so when used in an untyped
