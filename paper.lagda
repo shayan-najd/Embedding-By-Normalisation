@@ -1363,7 +1363,7 @@ expressions.
 
 \subsubsection{Syntactic Domain}
 \label{sec:Sums:Syn}
-The grammar of syntactic domain in Section \ref{Sec:BasicSyn} is
+The grammar of the syntactic domain in Section \ref{sec:Basic:Syn} is
 extended as follows:
 \begin{spec}
 A,B ::= ... | A +ₜ B
@@ -1401,7 +1401,7 @@ the reification problem for sum types, refer to
 In the context of partial evaluation, \citet{TDPE} proposed an elegant
 solution to the problem of reification of sums, using composable
 continuations (delimited continuations) based on shift and
-reset\citep{Delimited}. This paper employs Danvy's solution.
+reset \citep{Delimited}. This paper employs Danvy's solution.
 
 Delimited continuations are effect-full constructs. To model
 them in a pure and typed setting, this paper uses the standard
