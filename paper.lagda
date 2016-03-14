@@ -1116,6 +1116,9 @@ reify (c ∷ cs)  = [c| Chr $c ∙ $(reify cs) |]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Type-Constrained Host as Semantic Domain}
 \label{sec:Type-Constrained}
+
+\todo{Think of a better section title}
+
 Back in 1966, Landin in his landmark paper "The Next 700 Programming Languages"
 \citep{Landin1966} argues
 that seemingly different programming languages can be seen as
@@ -1144,7 +1147,8 @@ operations.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Simple Types and Products}
 \label{sec:Basic}
-This subsection presents an EBN technique for simply-typed lambda
+This subsection presents an instantiation of the EBN technique for DSLs
+which can be captured by the simply-typed lambda
 calculus with product types, parametric over the set of base types,
 literals, and the signature of primitive operations. The host language
 is assumed to be a pure typed functional language, and the subset the EBN
@@ -1175,6 +1179,8 @@ L,M,N ∈ Syn ::= ξₜ  | c Mᵢ | ⟨⟩ₜ | x | λₜ x →ₜ N | L @ₜ M
                     | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
 \end{spec}
 
+\todo{Explain why the set of primitives and the set of literals are kept different}
+
 The language, referred to as |Syn|, is parametric over a set of
 literals, and signature of primitive operations. Besides literals, and
 primtive operations (which are assumed to be fully applied), it
@@ -1182,8 +1188,26 @@ involves unit term, variables, lambda abstraction, application, pairs,
 and projections. The terms of the object language are underlined to
 distinguish it from the ones of the host language.
 
-As the typing rules and semantic of above language is standard and
-trivial, they are omitted from the paper.
+The typing rules are the expected ones. The typing judgement has two
+contexts, one for variables and one for constants.
+
+\[
+\begin{array}{cc}
+\infer{\Gamma ; \Delta \vdash ξ : χ}{}
+&
+\infer{\Gamma ; \Delta \vdash \Conid{c} \; \overline{\Conid{M}} : \Conid{B}}{\Gamma ; \Delta \vdash \Conid{c} : \overline{\Conid{A} \; \underline{→}} \; \Conid{B} \in \Delta \, \overline{\Gamma ; \Delta \vdash \Conid{M} : \Conid{A}}}
+\\~\\
+\infer{\Gamma ; \Delta\vdash \underline{λ} \; \Conid{x} \; \underline{→} \; \Conid{N} : \Conid{A} \; \underline{→} \; \Conid{B}}{\Gamma , \Conid{x}; \Delta : \Conid{A} \vdash \Conid{N} : \Conid{B}}
+&
+\infer{\Gamma ; \Delta \vdash \Conid{L} \; \underline{@@} \; \Conid{M} : \Conid{B}}{\Gamma ; \Delta \vdash \Conid{L} : \Conid{A} \; \underline{→} \; \Conid{B} \, \Gamma ; \Delta \vdash \Conid{M} : \Conid{B}}
+\\~\\
+\infer{\Gamma ; \Delta \vdash (\Conid{M} \; \underline{,} \; \Conid{N}) : \Conid{A} \underline{×} \Conid{B}}{\Gamma ; \Delta \vdash \Conid{M} : \Conid{A} \; \Gamma ; \Delta \vdash \Conid{N} : \Conid{B}}
+\\~\\
+\infer{\Gamma ; \Delta \vdash \underline{π_1} \; \Conid{L} : \Conid{A}}{\Gamma ; \Delta \vdash \Conid{L} : \Conid{A} \; \underline{×} \; \Conid{B}}
+&
+\infer{\Gamma ; \Delta \vdash \underline{π_2} \; \Conid{L} : \Conid{B}}{\Gamma ; \Delta \vdash \Conid{L} : \Conid{A} \; \underline{×} \; \Conid{B}}
+\end{array}
+\]
 
 In this section, including the other subsections, the EBN technique is
 presented in a way that it is independent of encoding strategy: the
@@ -1239,6 +1263,8 @@ as follows:
 \end{array}
 \]
 
+\todo{Fix the typography of the rules above so that they match the grammar.}
+
 That is, a term of type |A| in the semantic domain is any host term
 whose type respects the |∼| relation. The relation |∼| states that (a)
 semantic terms of unit, function, and product type correspond to host
@@ -1281,11 +1307,11 @@ function is as follows:
 ⟦ π₂ₜ L      ⟧ Σᵥ Γᵥ  = π₂ (⟦ L ⟧ Σᵥ Γᵥ)
 \end{spec}
 
-Except the input syntactic term, the evaluation function takes two
+Apart from the expression to be evaluated, the evaluation function takes two
 extra arguments: the environment of semantic values corresponding to
-each primitive operator, dented as the variable |Σᵥ| of type |⟦ ΣT ⟧|,
+each primitive operator (variable |Σᵥ| of type |⟦ ΣT ⟧|),
 and the environment of semantic values corresponding to each free
-variable, denoted as the variable |Γᵥ| of type |⟦ ΓT ⟧|.  At the
+variable (variable |Γᵥ| of type |⟦ ΓT ⟧|).  At the
 type-level, |ΣT| denotes the typing environment for the primitives,
 and |ΓT| denotes the typing environment for free variables.  Following
 the convention, the semantic bracket notation is overloaded, and
@@ -1337,7 +1363,7 @@ expressions.
 
 \subsubsection{Syntactic Domain}
 \label{sec:Sums:Syn}
-The grammar of syntactic domain in Section \ref{Sec:BasicSyn} is
+The grammar of the syntactic domain in Section \ref{sec:Basic:Syn} is
 extended as follows:
 \begin{spec}
 A,B ::= ... | A +ₜ B
@@ -1375,7 +1401,7 @@ the reification problem for sum types, refer to
 In the context of partial evaluation, \citet{TDPE} proposed an elegant
 solution to the problem of reification of sums, using composable
 continuations (delimited continuations) based on shift and
-reset\citep{Delimited}. This paper employs Danvy's solution.
+reset \citep{Delimited}. This paper employs Danvy's solution.
 
 Delimited continuations are effect-full constructs. To model
 them in a pure and typed setting, this paper uses the standard
@@ -1398,6 +1424,8 @@ The |~| relation from Section \ref{sec:Basic:Sem} is updated as follows:
 
 where |↝| denotes type of monadic functions.
 
+\todo{Explain what a monadic function is}
+
 One subtle, yet important factor in play here is the perspective that
 EBN offers: Danvy's elegant use of shift and reset is not a mere
 technical solution (even if it may seem like so when used in an untyped
@@ -1407,16 +1435,34 @@ reset are the resulting consequences.
 
 \subsubsection{Evaluation}
 \label{sec:Sums:Evaluation}
-The evaluation process is updates the one in Section
-\ref{sec:Basic:Evaluation}, by taking into account monadic structures, and
-performing trivial monadic lifting:
+
+Since we will use a monad for delimited continuations the semantic domain
+will be updated so that functions in the object language are now mapped to
+monadic functions in the host language. As anticipated, we also add sums,
+which maps to sums in the host language.
+
 \begin{spec}
 ...
 ⟦ A →ₜ B  ⟧ = ⟦ A ⟧  ↝  ⟦ B ⟧
 ⟦ A +ₜ B  ⟧ = ⟦ A ⟧  +  ⟦ B ⟧
 \end{spec}
+
+
+The evaluator now needs to be updated to reflect the fact that the semantic
+domain uses monadic functions. All of the cases from the evaluator Section
+\ref{sec:Basic:Evaluation} have been updated to lift the result into a monad.
 \begin{spec}
-... (by trivial monadic lifting)
+⟦_⟧ : Syn ΓT A → ⟦ ΣT ⟧ → ⟦ ΓT ⟧ → ⟦ A ⟧
+
+⟦ ξₜ         ⟧ Σᵥ Γᵥ  = return ξₜ
+⟦ c Mᵢ       ⟧ Σᵥ Γᵥ  = return (Σᵥ c ⟦ Mᵢ ⟧)
+⟦ ⟨⟩ₜ        ⟧ Σᵥ Γᵥ  = return ⟨⟩
+⟦ x          ⟧ Σᵥ Γᵥ  = return (Γᵥ x)
+⟦ λₜ x →ₜ N  ⟧ Σᵥ Γᵥ  = return (λ y → ⟦ N ⟧ Σᵥ (Γᵥ, x ↦ y))
+⟦ L @ₜ M     ⟧ Σᵥ Γᵥ  = return ( (⟦ L ⟧ Σᵥ Γᵥ) (⟦ M ⟧ Σᵥ Γᵥ) )
+⟦ (M ,ₜ N)   ⟧ Σᵥ Γᵥ  = return ( (⟦ M ⟧ Σᵥ Γᵥ , ⟦ N ⟧ Σᵥ Γᵥ) )
+⟦ π₁ₜ L      ⟧ Σᵥ Γᵥ  = return ( π₁ (⟦ L ⟧ Σᵥ Γᵥ) )
+⟦ π₂ₜ L      ⟧ Σᵥ Γᵥ  = return ( π₂ (⟦ L ⟧ Σᵥ Γᵥ) )
 ⟦ ι₁ₜ M      ⟧ Σᵥ Γᵥ  = ⦇ ι₁ (⟦ M ⟧ Σᵥ Γᵥ) ⦈
 ⟦ ι₂ₜ N      ⟧ Σᵥ Γᵥ  = ⦇ ι₂ (⟦ N ⟧ Σᵥ Γᵥ) ⦈
 ⟦ δₜ L M N   ⟧ Σᵥ Γᵥ  = join ⦇ δ (⟦ L ⟧ Σᵥ Γᵥ)  (⟦ M ⟧ Σᵥ Γᵥ)
@@ -1434,6 +1480,8 @@ equivalent to the following term using monadic do notation:
 \end{spec}
 The function |join| is a the well-known monad join function, commonly
 used for flattening nested monadic structures.
+
+\todo{Explain what is actually happening in the evaluation for sum types}
 
 \subsubsection{Reification}
 \label{sec:Sums:Reification}
