@@ -1176,6 +1176,16 @@ L,M,N ∈ Syn ::= ξₜ  | c Mᵢ | ⟨⟩ₜ | x | λₜ x →ₜ N | L @ₜ M
                     | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
 \end{spec}
 
+The language, referred to as |Syn|, is parametric over a set of
+literals, and signature of primitive operations. Besides literals, and
+primtive operations (which are assumed to be fully applied), it
+involves unit term, variables, lambda abstraction, application, pairs,
+and projections. The terms of the object language are underlined to
+distinguish it from the ones of the host language.
+
+The typing rules are the expected ones. The typing judgement has two
+contexts, one for variables and one for constants.
+
 \[
 \begin{array}{cc}
 \infer{\Gamma ; \Delta \vdash ξ : χ}{}
@@ -1193,16 +1203,6 @@ L,M,N ∈ Syn ::= ξₜ  | c Mᵢ | ⟨⟩ₜ | x | λₜ x →ₜ N | L @ₜ M
 \infer{\Gamma ; \Delta \vdash \underline{π_2} \; \Conid{L} : \Conid{B}}{\Gamma ; \Delta \vdash \Conid{L} : \Conid{A} \; \underline{×} \; \Conid{B}}
 \end{array}
 \]
-
-The language, referred to as |Syn|, is parametric over a set of
-literals, and signature of primitive operations. Besides literals, and
-primtive operations (which are assumed to be fully applied), it
-involves unit term, variables, lambda abstraction, application, pairs,
-and projections. The terms of the object language are underlined to
-distinguish it from the ones of the host language.
-
-As the typing rules and semantic of above language is standard and
-trivial, they are omitted from the paper.
 
 In this section, including the other subsections, the EBN technique is
 presented in a way that it is independent of encoding strategy: the
