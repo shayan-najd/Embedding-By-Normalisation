@@ -1435,16 +1435,34 @@ reset are the resulting consequences.
 
 \subsubsection{Evaluation}
 \label{sec:Sums:Evaluation}
-The evaluation process is updates the one in Section
-\ref{sec:Basic:Evaluation}, by taking into account monadic structures, and
-performing trivial monadic lifting:
+
+Since we will use a monad for delimited continuations the semantic domain
+will be updated so that functions in the object language are now mapped to
+monadic functions in the host language. As anticipated, we also add sums,
+which maps to sums in the host language.
+
 \begin{spec}
 ...
 ⟦ A →ₜ B  ⟧ = ⟦ A ⟧  ↝  ⟦ B ⟧
 ⟦ A +ₜ B  ⟧ = ⟦ A ⟧  +  ⟦ B ⟧
 \end{spec}
+
+
+The evaluator now needs to be updated to reflect the fact that the semantic
+domain uses monadic functions. All of the cases from the evaluator Section
+\ref{sec:Basic:Evaluation} have been updated to lift the result into a monad.
 \begin{spec}
-... (by trivial monadic lifting)
+⟦_⟧ : Syn ΓT A → ⟦ ΣT ⟧ → ⟦ ΓT ⟧ → ⟦ A ⟧
+
+⟦ ξₜ         ⟧ Σᵥ Γᵥ  = return ξₜ
+⟦ c Mᵢ       ⟧ Σᵥ Γᵥ  = return (Σᵥ c ⟦ Mᵢ ⟧)
+⟦ ⟨⟩ₜ        ⟧ Σᵥ Γᵥ  = return ⟨⟩
+⟦ x          ⟧ Σᵥ Γᵥ  = return (Γᵥ x)
+⟦ λₜ x →ₜ N  ⟧ Σᵥ Γᵥ  = return (λ y → ⟦ N ⟧ Σᵥ (Γᵥ, x ↦ y))
+⟦ L @ₜ M     ⟧ Σᵥ Γᵥ  = return ( (⟦ L ⟧ Σᵥ Γᵥ) (⟦ M ⟧ Σᵥ Γᵥ) )
+⟦ (M ,ₜ N)   ⟧ Σᵥ Γᵥ  = return ( (⟦ M ⟧ Σᵥ Γᵥ , ⟦ N ⟧ Σᵥ Γᵥ) )
+⟦ π₁ₜ L      ⟧ Σᵥ Γᵥ  = return ( π₁ (⟦ L ⟧ Σᵥ Γᵥ) )
+⟦ π₂ₜ L      ⟧ Σᵥ Γᵥ  = return ( π₂ (⟦ L ⟧ Σᵥ Γᵥ) )
 ⟦ ι₁ₜ M      ⟧ Σᵥ Γᵥ  = ⦇ ι₁ (⟦ M ⟧ Σᵥ Γᵥ) ⦈
 ⟦ ι₂ₜ N      ⟧ Σᵥ Γᵥ  = ⦇ ι₂ (⟦ N ⟧ Σᵥ Γᵥ) ⦈
 ⟦ δₜ L M N   ⟧ Σᵥ Γᵥ  = join ⦇ δ (⟦ L ⟧ Σᵥ Γᵥ)  (⟦ M ⟧ Σᵥ Γᵥ)
