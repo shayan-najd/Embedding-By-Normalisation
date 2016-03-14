@@ -1,11 +1,11 @@
 all: paper.pdf
 
-paper.tex: paper.lagda NBE.lagda Basic.lagda Sums.lagda Smart.lagda formalism.tex
+paper.tex: paper.lagda
 	if [ -f "paper.tex" ]; then chmod +w paper.tex; fi
 	lhs2TeX --agda -o paper.tex paper.lagda
 	chmod -w paper.tex
 
-paper.aux: paper.tex formalism.tex
+paper.aux: paper.tex
 	pdflatex paper
 
 paper.bbl: paper.aux paper.bib

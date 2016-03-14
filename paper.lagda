@@ -8,9 +8,8 @@
 % latex package imports
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{amsmath}
-
-% \usepackage{stmaryrd}
-% \usepackage{proof}
+\usepackage{proof}
+\usepackage{stmaryrd}
 \usepackage[
   hidelinks,
   pdfauthor={Shayan Najd,Sam Lindley,Josef Svenningsson,Philip Wadler},
@@ -27,7 +26,50 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % lhs2TeX macros
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%format ⟨⟩ₜ  = "\underline{⟨⟩}"
+%format ×ₜ  = "\underline{×}"
+%format +ₜ  = "\underline{+}"
+%format λₜ  = "\underline{λ}"
+%format →ₜ  = "\underline{→}"
+%format @ₜ  = "\underline{@}"
+%format ,ₜ  = "\underline{,}"
+%format π₁ₜ = "\underline{π₁}"
+%format π₂ₜ = "\underline{π₂}"
+%format ξₜ  = "\underline{ξ}"
+%format ι₁ₜ = "\underline{ι₁}"
+%format ι₂ₜ = "\underline{ι₂}"
+%format δₜ  = "\underline{δ}"
+%format Mᵢ  = "\overline{M}"
+%format ==  = "=="
+%format ==ₜ = "\underline{==}"
+%format *ₜ  = "\underline{*}"
+%format /ₜ     = "\underline{/}"
+%format q0ₜ    = "\underline{0}"
+%format q1ₜ    = "\underline{1}"
+%format -1ₜ    = "\underline{-1}"
+%format ifₜ    = "\underline{\text{if}}"
+%format thenₜ  = "\underline{\text{then}}"
+%format elseₜ  = "\underline{\text{else}}"
+%format trueₜ  = "\underline{\text{true}}"
+%format falseₜ = "\underline{\text{false}}"
+%format ℚₜ     = "\underline{ℚ}"
+%format Boolₜ  = "\underline{\text{Bool}}"
+%format αₜ     = "\underline{α}"
+%format ΣT     = "Σ_T"
+%format ΓT     = "Γ_T"
+%format Synr   = "\text{Syn}_r"
+%format ⟨⟩r     = "⟨⟩_r"
+%format →r     = "→_r"
+%format ×r     = "×_r"
+%format +r     = "+_r"
+%format Typeₜ = "\underline{\text{Type}}"
+%format epsf  = "eps_f"
+%format chrf = "chr_f"
+%format ∙f   = "∙_f"
+%format Epsd  = "Eps_d"
+%format Chrd = "Chr_d"
+%format ∙d   = "∙_d"
+%format Charsd = "Chars_d"
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % latex macros
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -36,6 +78,7 @@
 \DeclareUnicodeCharacter{8337}{\ensuremath{_e}}
 \DeclareUnicodeCharacter{8348}{\ensuremath{_t}}
 \DeclareUnicodeCharacter{7522}{\ensuremath{_i}}
+\DeclareUnicodeCharacter{7525}{\ensuremath{_v}}
 \DeclareUnicodeCharacter{10631}{\ensuremath{\llparenthesis}}
 \DeclareUnicodeCharacter{10632}{\ensuremath{\rrparenthesis}}
 % \DeclareUnicodeCharacter{120793}{\ensuremath{\mathscr{a}}}
@@ -51,7 +94,9 @@
 \DeclareTextCommandDefault\textSigma{\ensuremath{\Sigma}}
 \DeclareTextCommandDefault\textmu{\ensuremath{\mu}}
 \DeclareTextCommandDefault\textalpha{\ensuremath{\alpha}}
-%include formalism.tex
+\DeclareTextCommandDefault\textbeta{\ensuremath{\beta}}
+\DeclareTextCommandDefault\textgamma{\ensuremath{\gamma}}
+\DeclareTextCommandDefault\texteta{\ensuremath{\eta}}
 
 \newcommand{\todo}[2]
   {{\noindent\small\color{red}
@@ -369,7 +414,314 @@ Section \ref{sec:Implementation}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Normalisation-By-Evaluation}
 \label{sec:NBE}
-%include NBE.lagda
+Normalisation-by-Evaluation (NBE) is the process of deriving canonical
+form of terms with respect to an equational theory.The process of
+deriving canonical forms is often referred to as normalisation, where
+the canonical forms are refereed to as normal forms. NBE dates back to
+\citet{MartinLof}, where he used a similar technique, although not by
+its current name, for normalising terms in type theory.
+\citet{Berger} introduced NBE as an efficient normalisation technique.
+In the context of proof theory, they observed that the round trip of
+first evaluating terms, and then applying an inverse of the evaluation
+function, normalises the terms. Following \citet{Berger}, \citet{TDPE}
+used NBE to implement an offline partial evaluator that only required
+types of terms to partially evaluate them.
+
+There are different approaches to normalisation.  One popular approach
+to normalisation is reduction-based, where a set of rewrite rules are
+applied exhaustively until they can no longer be applied.  In contrast
+to reduction-based approaches, NBE is defined based on a pair of
+well-known program transformations, instead of rewrite rules. For this
+reason, NBE is categorised as a reduction-free normalisation process.
+
+NBE constitutes of four components:
+\begin{description}
+\item [Syntactic Domain]
+is the language of terms to be
+normalised by a NBE algorithm.
+
+\item [Semantic Domain]
+is another language used in NBE, defining a model for
+evaluating terms in the syntactic domain. Often the semantic domain
+contains parts of the syntactic domain left uninterpreted. The
+uninterpreted parts are referred to as the residual parts, and in their
+presence the semantic model as the residualising model.
+
+\item [Evaluation]
+is the process of mapping terms in the syntactic domain to
+the corresponding elements in the semantic domain. Despite the name,
+the evaluation process in NBE is often quite different from the one in
+the standard evaluators.  Although it is not necessarily required, the
+evaluation process in NBE is often compositional.
+In this paper, following the convention, evaluation functions are
+denoted as |⟦_⟧|. In the typed variant of NBE, same notation is also
+used to denote mapping of types in evaluation.
+
+\item [Reification]
+is the process of mapping (back) elements of semantic
+domain to the corresponding terms in the syntactic domain.
+In this paper, following the convention, reification functions are
+denoted as |↓|.
+
+\end{description}
+
+More formally, an algorithm with NBE structure can be seen as an
+instance of the following (dependent) record:
+\begin{spec}
+NBE = {  Syn  : Type ,
+         Sem  : Type ,
+         ⟦_⟧   : Syn → Sem ,
+         ↓    : Sem → Syn }
+\end{spec}
+
+As mentioned, normalisation in NBE is the round trip of first
+evaluating terms, and then reifying them back. Therefore,
+normalisation in NBE is a mapping from syntactic domain
+to syntactic domain:
+
+\begin{spec}
+norm : Syn → Syn
+norm M = ↓ ⟦ M ⟧
+\end{spec}
+
+In a typed setting, it is expected that transformations in NBE to
+preserve types of the terms. More formally, an algorithm with NBE
+structure in a typed setting can be seen as an instance of the
+following (dependent) record, with the following normalisation
+function:
+
+\begin{spec}
+TypedNBE = {  Syn  : Typeₜ → Type ,
+              Sem  : Typeₜ → Type ,
+              ⟦_⟧   : ∀ A. Syn A → Sem A ,
+              ↓    : ∀ A. Sem A → Syn A }
+
+norm : ∀ A. Syn A → Syn A
+norm M = ↓ ⟦ M ⟧
+\end{spec}
+
+Above, |Typeₜ| denotes kind of object types. It is underlined to
+contrast it with |Type| which is the kind of types in the metalanguage.
+
+A valid NBE normalisation algorithm, both untyped and typed, should
+guarantee that, (a) normalisation preserves the intended meaning of
+the terms, and (b) normalisation derives canonical form of terms up to
+certain congruence relation.
+
+% Canonicity of NBE,
+% as defined by the mentioned congruence relation, varies from an application
+% to another. In simpler cases, syntactic equality is considered, while for
+% others ...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Chars
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{A First Example}
+\label{sec:CharsLists}
+As the first example, consider the "hello world" of NBE, terms of the
+following language:
+\begin{spec}
+c ∈ Char (set of characters)
+L,M,N ∈ Chars ::= ε₀ | Chr c | M ∙ N
+\end{spec}
+
+The language, referred to as Chars, consists of an empty string, a
+string containing only one character, and concatenation of strings.
+
+For example, the terms
+\begin{spec}
+Chr 'N' ∙ (Chr 'B' ∙ Chr 'E')
+\end{spec} and
+\begin{spec}
+(Chr 'N' ∙ ε₀) ∙ ((Chr 'B' ∙ ε₀) ∙ (Chr 'E' ∙ ε₀))
+\end{spec} both represent the string ``NBE".
+
+The intended equational theory for this language is the one of
+free monoids, i.e., congruence over the following equations:
+\begin{center}
+\begin{spec}
+      ε₀ ∙ M  =  M
+     M  ∙ ε₀  =  M
+ (L ∙ M) ∙ N  =  L ∙ (M ∙ N)
+\end{spec}
+\end{center}
+NBE provides a normalisation process to derive a Canonical form for
+the terms with respect to above equational theory. If two terms
+represent the same string, they have an identical canonical form.
+For instance, the two example terms above normalise to the following
+term in canonical form:
+\begin{spec}
+Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ ε₀))
+\end{spec}
+
+For a specific syntactic domain, in this case the Chars language,
+there are different ways to implement a NBE algorithm, as
+there are different semantic domains to choose from.
+For pedagogical purposes, two distinct NBE algorithms are presented
+for the Chars language based on two distinct semantic domains:
+(1) lists of characters, and
+(2) functions over the syntactic domain itself.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Chars Lists
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Lists as Semantic}
+The syntactic domain given to be the Chars language, and semantic
+domain chosen to be a list of characters, the next step
+for defining a NBE algorithm is defining an evaluation function:
+
+\begin{spec}
+⟦_⟧ : Chars → List Char
+
+⟦ ε₀     ⟧ = []
+⟦ Chr n  ⟧ = [ n ]
+⟦ M ∙ N  ⟧ = ⟦ M ⟧ ++ ⟦ N ⟧
+\end{spec}
+
+Evaluation defined above is a simple mapping from Chars terms to
+lists, where empty string is mapped to empty list, singleton
+string to singleton list, and concatenation of strings to
+concatenation of lists.
+For instance, the two example terms representing ``NBE" earlier are
+evaluated to the list |['N', 'B', 'E']|.
+
+Above evaluation process is particularly interesting in that it is
+compositional: semantic of a term is constructed from the semantic
+of its subterms. Though compositionality is a highly desired property,
+thanks to the elegant mathematical properties, the evaluation
+process in NBE is not required to be compositional.
+In fact, some evaluation functions cannot be defined compositionaly.
+Compositionality of a function forces it to be expressible solely by
+folds, and not every function can be defined solely in terms of folds.
+For instance, evaluation that rely on some forms of global
+transformations, sometimes cannot be expressed solely in terms of
+folds.
+
+The next step is to define a reification process:
+
+\begin{spec}
+↓ : List Char → Chars
+
+↓ []        = ε₀
+↓ (c ∷ cs)  = Chr c ∙ (↓ cs)
+\end{spec}
+
+Reification defined above is a simple mapping from lists to Chars
+terms, where empty list is mapped to empty strings, cons of list head
+to list tail to concatenation of the corresponding singleton string
+to the reified string of tail.
+For example, the list |['N', 'B', 'E']| from earlier is reified to the
+following term:
+\begin{spec}
+Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ ε₀))
+\end{spec}
+The reification function is also compositional.
+
+Putting the pieces together normalisation function is defined as
+usual:
+\begin{spec}
+norm : Chars → Chars
+norm M = ↓ ⟦ M ⟧
+\end{spec}
+As expected, above function derives canonical form of Chars terms.
+For instance, we have
+\begin{spec}
+norm (Chr 'N' ∙ (Chr 'B' ∙ Chr 'E'))
+  =
+norm ((Chr 'N' ∙ ε₀) ∙ ((Chr 'B' ∙ ε₀) ∙ (Chr 'E' ∙ ε₀)))
+  =
+Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ ε₀))
+\end{spec}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Chars Hughes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Functions as Semantic}
+\label{sec:CharsHughes}
+The syntactic domain given to be the Chars language, and semantic
+domain now chosen to be functions over syntactic domain itself, the next step
+for defining a NBE algorithm is defining an evaluation function:
+
+\begin{spec}
+⟦_⟧ : Chars → (Chars → Chars)
+
+⟦ ε₀     ⟧ = id
+⟦ Chr c  ⟧ = λ N → (Chr c) ∙ N
+⟦ M ∙ N  ⟧ = ⟦ M ⟧ ∘ ⟦ N ⟧
+\end{spec}
+
+Evaluation defined above is a simple mapping from Chars terms to
+functions from Chars to Chars, where empty string is mapped to
+identity function, singleton string to a function that concatenates the
+same singleton string to its input, and concatenation of strings to
+function composition.
+For instance, the two example terms representing ``NBE" earlier are
+evaluated to the function
+\begin{spec}
+λ N → Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ N))
+\end{spec}
+Above evaluation is also compositional.
+
+The next step is to define a reification process:
+
+\begin{spec}
+↓ : (Chars → Chars) → Chars
+
+↓ f = f ε₀
+\end{spec}
+
+Reification defined above is very simple: it applies semantic
+function to empty string.
+For example, the function
+\begin{spec}
+λ N → Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ N))
+\end{spec}
+from earlier is reified to the following term:
+\begin{spec}
+Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ ε₀))
+\end{spec}
+Reification is also obviously compositional.
+
+Normalisation function is defined as usual.  However, the
+normalisation process based on function semantics is more efficient
+compared to the one based on list semantics.  Essentially, the
+evaluation process using the semantic domain |Char → Char|, evaluates
+terms using an efficient representation of lists, known as Hughes
+lists \citep{hughes1986novel}.
+
+\subsubsection{Observation}
+\label{sec:ADT}
+For this example, three domains are explicitly discussed: Chars
+syntactic domain, semantic domain based on normal lists and semantic
+domain based on Hughes lists.  There is also a fourth domain implicit
+in the discussion: the syntactic domain of canonical forms, which is a
+subset of the syntactic domain. For Chars language, terms in canonical
+form are of the following grammar:
+\begin{spec}
+c ∈ Char (set of characters)
+N ∈ CanonicalChars ::= ε₀ | Chr c ∙ N
+\end{spec}
+
+For instance, the example canonical form derived earlier follows the
+above grammar.
+
+Compared to Chars, the grammar of canonical forms is less flexible but
+more compact: it is easier to program in Chars, but it is also harder
+to analyse programs in Chars. At the cost of implementing a
+normalisation process, like the two NBE algorithms above, one can use
+benefits of the two languages: let programs to be written in the
+syntactic domain, since they are easier to write, then normalise the
+programs and let analysis be done on normalised programs, since they
+are easier to analyse.  It is an important observation, which can be
+generalised to any language possessing canonical forms. Indeed,
+compilers use the same approach by transforming programs written in
+the flexible surface syntax to a more compact internal
+representation. For languages with computational content, such
+transformations often improve the performance of the programs.
+In this perspective, optimisation of terms can be viewed as
+normalisation of terms.
+
+Next section puts this observation to work for EDSLs.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% EBN
@@ -447,14 +799,6 @@ Encoding of object terms as host terms is done in a way that
 the resulting values after evaluation of host terms denote optimised
 object terms.
 
-%format epsf  = "eps_f"
-%format chrf = "chr_f"
-%format ∙f   = "∙_f"
-
-%format Epsd  = "Eps_d"
-%format Chrd = "Chr_d"
-%format ∙d   = "∙_d"
-
 For instance, the following is the four components in an embedding
 of Chars language:
 \begin{itemize}
@@ -482,7 +826,6 @@ functions, and the extracted code, the $\__d$ indexed data, is passed
 to back-end of the Chars EDSL.  A simple example of such back-end
 would be a function that takes the code and prints the denoted string:
 
-%format Charsd = "Chars_d"
 \begin{spec}
 printChars : Charsd → IO ⟨⟩
 printChars Epsd           = printString ""
@@ -767,33 +1110,200 @@ languages built based on the very idea (e.g., see the design of
 
 Although Landin's idea was originally expressed in terms of
 general-purpose languages, it also applies to domain-specific ones.
-Following on his footsteps, this section proposes a generic approach
-to EBN by the viewing DSLs as a variant of lambda calculus, where
+Following on his footsteps, this section introduces a generic EBN
+algorithm by modeling DSLs as a variant of lambda calculus, where
 domain-specific constructs are represented as the standard notion of
 primitive values and operations in lambda calculus (e.g., see
-\citet{?Plotkin}). Such a model allows for a parametric presentation of
+\citet{Plotkin1975}). Such a model allows for a parametric presentation of
 DSLs, where syntax of a DSL can be identified solely by the signature
 of the primitive values and operations.
-In particular, Section \ref{sec:Basic} presents an EBN technique for
-simply-typed lambda calculus with product types, parametric over the
-set of base types, literals, and the signature of primitive
-operations. The host language is assumed to be a typed functional
-language, and the subset the EBN technique is targeting (i.e., the
-semantic domain) is identified by a constraint on type of host terms.
-Section \ref{sec:Sums} adds sum types and corresponding terms to
-the syntax and updates the EBN algorithm.
-Section \ref{sec:Smart} proposes an alternative semantic domain, so
-that some of the primitives can be mapped to their corresponding host
-programs and get partially normalised.
-Finally, Section \ref{sec:Richer} discusses other possible extensions
-to support richer languages.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Basic
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Simple Types and Products}
 \label{sec:Basic}
-%include Basic.lagda
+This subsection presents an EBN technique for simply-typed lambda
+calculus with product types, parametric over the set of base types,
+literals, and the signature of primitive operations. The host language
+is assumed to be a typed functional language, and the subset the EBN
+technique is targeting (i.e., the semantic domain) is identified by a
+constraint on the type of host terms.
+
+\subsubsection{Syntactic Domain}
+
+The grammar of types in the object language is standard:
+\begin{spec}
+χ ∈ X (set of base types)
+A,B ∈ Typeₜ::= χ | ⟨⟩ₜ | A →ₜ B | A ×ₜ B
+\end{spec}
+
+It is parametric over a set of base types. Besides base types, it
+includes unit, function type, and product type.  The types of the
+object language are underlined to distinguish it from the ones of the
+host language.
+
+The grammar of the terms in the object language is also standard
+\citep{?Filinski}:
+
+\begin{spec}
+x ∈ Γ (set of variables)
+ξ ∈ Ξ (set of literals)
+c ∈ Σ (signature of primitives)
+L,M,N ∈ Syn ::= ξₜ  | c Mᵢ | ⟨⟩ₜ | x | λₜ x →ₜ N | L @ₜ M
+                    | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
+\end{spec}
+
+The language, referred to as |Syn|, is parametric over a set of
+literals, and signature of primitive operations. Besides literals, and
+primtive operations (which are assumed to be fully applied), it
+involves unit term, variables, lambda abstraction, application, pairs,
+and projections. The terms of the object language are underlined to
+distinguish it from the ones of the host language.
+
+As the typing rules and semantic of above language is standard and
+trivial, they are omitted from the paper.
+
+In this section, including the other subsections, the EBN technique is
+presented in a way that it is independent of encoding strategy: the
+underlined terms can be trivially encoded using the standard methods,
+such as the ones explained in Section \ref{sec:EBNEncoding}.  One
+possible difficulty might be the treatment of free variables, which
+can be trivially addressed by using well-known techniques such as
+Higher-Order Abstract Syntax (HOAS) representation \citep{hoas}.
+Representation of object terms is assumed be quotient with respect to
+alpha-conversion, when new bindings are introduced variables are
+assumed to be fresh, and substitutions to be capture avoiding.
+Furthermore, terms in syntactic domain and the normal syntactic terms
+are represented in the same way. Though in practice, depending on
+encoding, the two may be implemented in different ways. In this paper,
+host programs of the type |Syn A| refer to both the type of a host
+term encoding a term of the type |A| in syntactic domain, and the type
+of the extracted code for a normal syntactic term of the type |A|.
+The type |Syn ΓT A| denotes open |Syn A| terms with |ΓT| being a typing
+environment containing the free variables.
+
+Now that the syntactic domain has been defined, i.e., the |Syn|
+language, it is time to define the semantic domain.
+
+\subsubsection{Semantic Domain}
+
+As the host language is a typed functional language, and the object
+language being a tiny typed functional language itself, a considerable
+part of the object language closely mirrors the one of the host
+language.  Moreover, the representation of the syntactic domain
+itself, is a program in the host language, i.e., a term of the type
+|Syn A|. This observation is realised by defining semantic domain
+as follows:
+\[
+\text{Sem}\ A = ∀ (α : Type).\ α ∼ A ⇒ α
+\]
+\[
+\begin{array}{cc}
+\infer[\text{Syn}_r]
+{\text{Syn}\ A ∼ A}
+{}
+&
+\infer[⟨⟩_r]
+{⟨⟩ ∼ \underline{⟨⟩}}
+{}
+\\~\\
+\infer[→_r]
+{(α → β) ∼ (A\ \underline{→}\ B)}
+{(α ∼ A) && (β ∼ B)}
+&
+\infer[×_r]
+{(α → β) ∼ (A\ \underline{×}\ B)}
+{(α ∼ A) && (β ∼ B)}
+\end{array}
+\]
+
+That is, a term of type |A| in the semantic domain is any host term
+whose type respects the |∼| relation. The relation |∼| states that (a)
+semantic terms of unit, function, and product type correspond to host
+terms of similar type, (b) a syntactic term encoded in the host
+directly correspond to a semantic term of the same type.
+Condition (b) is a distinguishing feature in the definition of
+evaluation and semantic domain of NBE. As mentioned in Section
+\ref{sec:NBE}, evaluation in NBE is allowed to leave parts of
+syntactic terms uninterpreted. An uninterpreted part is referred to
+as a residualised part, and the act of leaving a part uninterpreted as
+residualising.
+
+\subsubsection{Evaluation}
+Except for terms of base type, evaluation process is standard:
+syntactic terms are mapped to corresponding host terms.  Terms of base
+types, however, are residualised.  The definition of evaluation
+function is as follows:
+
+\begin{spec}
+⟦_⟧ : Typeₜ → Type
+
+⟦ χ       ⟧ = Syn χ
+⟦ ⟨⟩ₜ     ⟧ = ⟨⟩
+⟦ A →ₜ B  ⟧ = ⟦ A ⟧  →  ⟦ B ⟧
+⟦ A ×ₜ B  ⟧ = ⟦ A ⟧  ×  ⟦ B ⟧
+\end{spec}
+
+\begin{spec}
+⟦_⟧ : Syn ΓT A → ⟦ ΣT ⟧ → ⟦ ΓT ⟧ → ⟦ A ⟧
+
+⟦ ξₜ         ⟧ Σᵥ Γᵥ  = ξₜ
+⟦ c Mᵢ       ⟧ Σᵥ Γᵥ  = Σᵥ c ⟦ Mᵢ ⟧
+⟦ ⟨⟩ₜ        ⟧ Σᵥ Γᵥ  = ⟨⟩
+⟦ x          ⟧ Σᵥ Γᵥ  = Γᵥ x
+⟦ λₜ x →ₜ N  ⟧ Σᵥ Γᵥ  = λ y → ⟦ N ⟧ Σᵥ (Γᵥ, x ↦ y)
+⟦ L @ₜ M     ⟧ Σᵥ Γᵥ  = (⟦ L ⟧ Σᵥ Γᵥ) (⟦ M ⟧ Σᵥ Γᵥ)
+⟦ (M ,ₜ N)   ⟧ Σᵥ Γᵥ  = (⟦ M ⟧ Σᵥ Γᵥ , ⟦ N ⟧ Σᵥ Γᵥ)
+⟦ π₁ₜ L      ⟧ Σᵥ Γᵥ  = π₁ (⟦ L ⟧ Σᵥ Γᵥ)
+⟦ π₂ₜ L      ⟧ Σᵥ Γᵥ  = π₂ (⟦ L ⟧ Σᵥ Γᵥ)
+\end{spec}
+
+Except the input syntactic term, the evaluation function takes two
+extra arguments: the environment of semantic values corresponding to
+each primitive operator, dented as the variable |Σᵥ| of type |⟦ ΣT ⟧|,
+and the environment of semantic values corresponding to each free
+variable, denoted as the variable |Γᵥ| of type |⟦ ΓT ⟧|.  At the
+type-level, |ΣT| denotes the typing environment for the primitives,
+and |ΓT| denotes the typing environment for free variables.  Following
+the convention, the semantic bracket notation is overloaded, and
+denotes the mapping of different kinds of elements from syntax to
+semantic.
+
+\subsubsection{Reification}
+
+The final step is to define the reification function. Reification can
+be defined as a function indexed by the relation between syntax and
+semantics:
+
+\begin{spec}
+↓ : α ~ A → α → Syn A
+
+↓ Synr      V  = V
+↓ ⟨⟩r       V  = ⟨⟩ₜ
+↓ (A →r B)  V  = λₜ x →ₜ ↓ B (V (↑ A x ))
+↓ (A ×r B)  V  = (↓ A (π₁ V) ,ₜ ↓ B (π₂ V))
+
+↑ : α ~ A → Syn A → α
+
+↑ Synr      M  = M
+↑ ⟨⟩r       M  = ⟨⟩
+↑ (A →r B)  M  = λ x → ↑ B (M @ₜ (↓ A x))
+↑ (A ×r B)  M  = (↑ A (π₁ₜ M) , ↑ B (π₂ₜ M))
+\end{spec}
+
+Above definition is similar to some classic NBE algorithms such as
+\citet{Berger} and \citet{TDPE}. Essentially, what above does is a
+form of η-expansion in two levels: object language and host language
+\citep{TDPE}.  The reification function |↓| is mutually defined with
+the function |↑| referred to as the reflection function.
+
+Embedding a term by the EBN algorithm defined in this subsection
+results in a code for the corresponding term in η-long β-normal form.
+However, the normal form is not extensional, in that two normal terms may be
+equivalent but syntactically distinct (see Section \ref{sec:Richer}).
+
+% todo: NBE
 
 % todo: mention Feldspar here
 
@@ -802,7 +1312,130 @@ to support richer languages.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Sums}
 \label{sec:Sums}
-%include Sums.lagda
+This section extends the EBN technique of the previous section, by
+fist adding sum types and the corresponding terms to the syntax and
+then updating the EBN technique to support them.
+
+\begin{spec}
+A,B ::= ... | A +ₜ B
+\end{spec}
+
+\begin{spec}
+L,M,N ::=  ... | ι₁ₜ M | ι₂ₜ N | δₜ L M N
+\end{spec}
+
+\begin{spec}
+...
+⟦ A →ₜ B  ⟧ = ⟦ A ⟧  ↝  ⟦ B ⟧
+⟦ A +ₜ B  ⟧ = ⟦ A ⟧  +  ⟦ B ⟧
+\end{spec}
+
+\begin{spec}
+... (by trivial monadic lifting)
+⟦ ι₁ₜ M      ⟧ Σᵥ Γᵥ  = ⦇ ι₁ (⟦ M ⟧ Σᵥ Γᵥ) ⦈
+⟦ ι₂ₜ N      ⟧ Σᵥ Γᵥ  = ⦇ ι₂ (⟦ N ⟧ Σᵥ Γᵥ) ⦈
+⟦ δₜ L M N   ⟧ Σᵥ Γᵥ  = join ⦇ δ (⟦ L ⟧ Σᵥ Γᵥ)  (⟦ M ⟧ Σᵥ Γᵥ)
+                                            (⟦ N ⟧ Σᵥ Γᵥ) ⦈
+\end{spec}
+
+\begin{spec}
+...
+↓ (A →ₑ B)  V  = λ x → reset ⦇ ↓ B (join ⦇ V (↑ A x) ⦈) ⦈
+↓ (A +ₑ B)  V  = δ V  (λ x → ι₁ₜ (↓ A x))
+                      (λ y → ι₂ₜ (↓ B y))
+
+... (by trivial monadic lifting)
+↑ (A +ₑ B)  M  =  shift  (λ k →
+                  δₜ M   (λ x → reset ⦇ (k ∘ ι₁) (↑ A x) ⦈)
+                         (λ y → reset ⦇ (k ∘ ι₂) (↑ B y) ⦈))
+\end{spec}
+
+
+\begin{spec}
+power n = λₜ x →ₜ
+  if n < 0       then
+    ifₜ x ==ₜ q0ₜ
+    thenₜ q0ₜ
+    elseₜ (-1ₜ /ₜ (power (- n) @ₜ x))
+  else if n == 0 then
+    q1ₜ
+  else if even n then
+    (  let  y = power (n / 2) @ₜ x
+       in   y *ₜ y)
+  else
+    x *ₜ (power (n - 1) @ₜ x)
+\end{spec}
+
+\begin{spec}
+Boolₜ   = ⟨⟩ₜ +ₜ ⟨⟩ₜ
+falseₜ  = ι₁ₜ ⟨⟩ₜ
+trueₜ   = ι₂ₜ ⟨⟩ₜ
+ifₜ  L thenₜ M elseₜ N = δₜ L (λₜ x →ₜ N) (λₜ y →ₜ M)
+\end{spec}
+
+\begin{spec}
+Ξ  = {ℚₜ ↦ ℚ}
+Σᵥ  = {  ==ₜ  : {ℚₜ , ℚₜ} ↦ Boolₜ ,
+         *ₜ   : {ℚₜ , ℚₜ} ↦ ℚₜ ,
+         /ₜ   : {ℚₜ , ℚₜ} ↦ ℚₜ }
+\end{spec}
+
+%% \begin{spec}
+%% χ ∈ X (set of base types)
+%% A,B ::= ⟨⟩ₜ | A →ₜ B | A ×ₜ B | χ | A +ₜ B
+%% \end{spec}
+
+%% \begin{spec}
+%% x ∈ Γ (set of variables)
+%% ξ ∈ Ξ (set of literals)
+%% c ∈ Σ (signature of primitives)
+%% L,M,N ::=  ⟨⟩ₜ  | x | λₜ x →ₜ N | L @ₜ M
+%%               | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
+%%               | ξₜ | c Mᵢ
+%%               | ι₁ₜ M | ι₂ₜ N | δₜ L M N
+%% \end{spec}
+
+%% \begin{spec}
+%% ⟦ ⟨⟩ₜ     ⟧ = ⟨⟩
+%% ⟦ A →ₜ B  ⟧ = ⟦ A ⟧  ↝  ⟦ B ⟧
+%% ⟦ A ×ₜ B  ⟧ = ⟦ A ⟧  ×  ⟦ B ⟧
+%% ⟦ χ       ⟧ = 𝔼 χ
+%% ⟦ A +ₜ B  ⟧ = ⟦ A ⟧  +  ⟦ B ⟧
+%% \end{spec}
+
+%% \begin{spec}
+%% ⟦ ⟨⟩ₜ        ⟧ Σᵥ Γᵥ  = ⦇ ⟨⟩ ⦈
+%% ⟦ x          ⟧ Σᵥ Γᵥ  = Γᵥ x
+%% ⟦ λₜ x →ₜ N  ⟧ Σᵥ Γᵥ  = ⦇ λ y → ⟦ N ⟧ Σᵥ (Γᵥ, x ↦ ⦇ y ⦈) ⦈
+%% ⟦ L @ₜ M     ⟧ Σᵥ Γᵥ  = join ⦇ (⟦ L ⟧ Σᵥ Γᵥ) (⟦ M ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ (M ,ₜ N)   ⟧ Σᵥ Γᵥ  = ⦇ (⟦ M ⟧ Σᵥ Γᵥ , ⟦ N ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ π₁ₜ L      ⟧ Σᵥ Γᵥ  = ⦇ π₁ (⟦ L ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ π₂ₜ L      ⟧ Σᵥ Γᵥ  = ⦇ π₂ (⟦ L ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ ξₜ         ⟧ Σᵥ Γᵥ  = ⦇ ξₜ ⦈
+%% ⟦ c Mᵢ       ⟧ Σᵥ Γᵥ  = Σᵥ c ⟦ Mᵢ ⟧
+%% ⟦ ι₁ₜ M      ⟧ Σᵥ Γᵥ  = ⦇ ι₁ (⟦ M ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ ι₂ₜ N      ⟧ Σᵥ Γᵥ  = ⦇ ι₂ (⟦ N ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ δₜ L M N   ⟧ Σᵥ Γᵥ  = join ⦇ δₜ (⟦ L ⟧ Σᵥ Γᵥ)  (⟦ M ⟧ Σᵥ Γᵥ)
+%%                                           (⟦ N ⟧ Σᵥ Γᵥ) ⦈
+%% \end{spec}
+
+%% \begin{spec}
+%% ↓ ⟨⟩ₑ       V  = ⟨⟩ₜ
+%% ↓ (A →ₑ B)  V  = λₜ x → reset ⦇ ↓ B (join ⦇ V (↑ A x) ⦈) ⦈
+%% ↓ (A ×ₑ B)  V  = (↓ A (π₁ V) ,ₜ ↓ B (π₂ V))
+%% ↓ 𝔼ₑ        V  = V
+%% ↓ (A +ₑ B)  V  = δ V  (λ x → ι₁ₜ (↓ A x))
+%%                       (λ y → ι₂ₜ (↓ B y))
+
+%% ↑ ⟨⟩ₑ       M  = ⦇ ⟨⟩ ⦈
+%% ↑ (A →ₑ B)  M  = ⦇ λ x → ↑ B (M @ₜ (↓ A x)) ⦈
+%% ↑ (A ×ₑ B)  M  = ⦇ (↑ A (π₁ₜ M) , ↑ B (π₂ₜ M)) ⦈
+%% ↑ 𝔼ₑ        M  = ⦇ M ⦈
+%% ↑ (A +ₑ B)  M  =  shift  (λ k →
+%%                   δₜ M   (λ x → reset ⦇ (k ∘ ι₁) (↑ A x) ⦈)
+%%                          (λ y → reset ⦇ (k ∘ ι₂) (↑ B y) ⦈))
+%% \end{spec}
+
 
 % todo: mention TDPE / offline PE here
 
@@ -811,7 +1444,91 @@ to support richer languages.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Smart Primitives}
 \label{sec:Smart}
-%include Smart.lagda
+This subsection proposes an
+alternative semantic domain, so that some of the primitives can be
+mapped to their corresponding host programs and get partially
+normalised.
+
+\begin{spec}
+A,B ::= ...
+\end{spec}
+
+\begin{spec}
+L,M,N ::=  ...
+\end{spec}
+
+\begin{spec}
+...
+⟦ χ       ⟧ = Ξ χ   +  𝔼 χ
+\end{spec}
+
+\begin{spec}
+...
+⟦ ξₜ ⟧ Σᵥ Γᵥ  = ⦇ (ι₁ ξ) ⦈
+\end{spec}
+
+\begin{spec}
+↓ ...
+
+↑ ...
+\end{spec}
+
+
+%% \begin{spec}
+%% χ ∈ X (set of base types)
+%% A,B ::= ⟨⟩ₜ | A →ₜ B | A ×ₜ B | χ | A +ₜ B
+%% \end{spec}
+
+%% \begin{spec}
+%% x ∈ Γ (set of variables)
+%% ξ ∈ Ξ (set of literals)
+%% c ∈ Σ (signature of primitives)
+%% L,M,N ::=  ⟨⟩ₜ  | x | λₜ x →ₜ N | L @ₜ M
+%%               | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
+%%               | ξₜ | c Mᵢ
+%%               | ι₁ₜ M | ι₂ₜ N | δₜ L M N
+%% \end{spec}
+
+%% \begin{spec}
+%% ⟦ ⟨⟩ₜ     ⟧ = ⟨⟩
+%% ⟦ A →ₜ B  ⟧ = ⟦ A ⟧  ↝  ⟦ B ⟧
+%% ⟦ A ×ₜ B  ⟧ = ⟦ A ⟧  ×  ⟦ B ⟧
+%% ⟦ χ       ⟧ = Ξ χ   +  𝔼 χ
+%% ⟦ A +ₜ B  ⟧ = ⟦ A ⟧  +  ⟦ B ⟧
+%% \end{spec}
+
+%% \begin{spec}
+%% ⟦ ⟨⟩ₜ        ⟧ Σᵥ Γᵥ  = ⦇ ⟨⟩ ⦈
+%% ⟦ x          ⟧ Σᵥ Γᵥ  = Γᵥ x
+%% ⟦ λₜ x →ₜ N  ⟧ Σᵥ Γᵥ  = ⦇ λ y → ⟦ N ⟧ Σᵥ (Γᵥ, x ↦ ⦇ y ⦈) ⦈
+%% ⟦ L @ₜ M     ⟧ Σᵥ Γᵥ  = join ⦇ (⟦ L ⟧ Σᵥ Γᵥ) (⟦ M ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ (M ,ₜ N)   ⟧ Σᵥ Γᵥ  = ⦇ (⟦ M ⟧ Σᵥ Γᵥ , ⟦ N ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ π₁ₜ L      ⟧ Σᵥ Γᵥ  = ⦇ π₁ (⟦ L ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ π₂ₜ L      ⟧ Σᵥ Γᵥ  = ⦇ π₂ (⟦ L ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ ξₜ         ⟧ Σᵥ Γᵥ  = ⦇ (ι₁ ξ) ⦈
+%% ⟦ c Mᵢ       ⟧ Σᵥ Γᵥ  = Σᵥ c ⟦ Mᵢ ⟧
+%% ⟦ ι₁ₜ M      ⟧ Σᵥ Γᵥ  = ⦇ ι₁ (⟦ M ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ ι₂ₜ N      ⟧ Σᵥ Γᵥ  = ⦇ ι₂ (⟦ N ⟧ Σᵥ Γᵥ) ⦈
+%% ⟦ δₜ L M N   ⟧ Σᵥ Γᵥ  = join ⦇ δₜ (⟦ L ⟧ Σᵥ Γᵥ)  (⟦ M ⟧ Σᵥ Γᵥ)
+%%                                           (⟦ N ⟧ Σᵥ Γᵥ) ⦈
+%% \end{spec}
+
+%% \begin{spec}
+%% ↓ ⟨⟩ₑ       V  = ⟨⟩ₜ
+%% ↓ (A →ₑ B)  V  = λₜ x → reset ⦇ ↓ B (join ⦇ V (↑ A x) ⦈) ⦈
+%% ↓ (A ×ₑ B)  V  = (↓ A (π₁ V) ,ₜ ↓ B (π₂ V))
+%% ↓ 𝔼ₑ        V  = V
+%% ↓ (A +ₑ B)  V  = δ V  (λ x → ι₁ₜ (↓ A x))
+%%                       (λ y → ι₂ₜ (↓ B y))
+
+%% ↑ ⟨⟩ₑ       M  = ⦇ ⟨⟩ ⦈
+%% ↑ (A →ₑ B)  M  = ⦇ λ x → ↑ B (M @ₜ (↓ A x)) ⦈
+%% ↑ (A ×ₑ B)  M  = ⦇ (↑ A (π₁ₜ M) , ↑ B (π₂ₜ M)) ⦈
+%% ↑ 𝔼ₑ        M  = ⦇ M ⦈
+%% ↑ (A +ₑ B)  M  =  shift  (λ k →
+%%                   δₜ M   (λ x → reset ⦇ (k ∘ ι₁) (↑ A x) ⦈)
+%%                          (λ y → reset ⦇ (k ∘ ι₂) (↑ B y) ⦈))
+%% \end{spec}
 
 % todo: mention online PE here
 
@@ -820,9 +1537,15 @@ to support richer languages.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Richer Languages}
 \label{sec:Richer}
+This section discusses other possible extensions to support richer languages.
 
-% extensionality
-% todo: mention Altenkirch and Dybjer's
+\todo{}{Mention support for recursion}
+\todo{}{Mention support for side-effects}
+\todo{}{Mention support for let / syntactic sharing}
+\todo{}{Mention support for extensionality (related to the support for let)}
+\todo{}{Mention support for datatypes}
+\todo{}{Mention support for polymorphism}
+\todo{}{Mention untyped approach}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Implementation
@@ -924,41 +1647,41 @@ by EPSRC Grant EP/K034413/1.
 \end{document}
 
 %  LocalWords:  documentclass preprint lagda polycode fmt forall amsmath
-%  LocalWords:  usepackage amssymb stmaryrd pdfauthor cL
-%  LocalWords:  pdftitle pagebackref url
+%  LocalWords:  usepackage amssymb stmaryrd pdfauthor cL lhs overline
+%  LocalWords:  pdftitle pagebackref url Bool Danvy's residualising
 %  LocalWords:  pdftex backref hyperref graphicx color usenames tex
 %  LocalWords:  dvipsnames svgnames xcolor newcommand todo noindent
-%  LocalWords:  framebox parbox dimexpr linewidth fboxsep fboxrule
+%  LocalWords:  framebox parbox dimexpr linewidth fboxsep fboxrule EP
 %  LocalWords:  textbf papersize setlength pdfpageheight paperheight
-%  LocalWords:  pdfpagewidth paperwidth conferenceinfo maketitle
+%  LocalWords:  pdfpagewidth paperwidth conferenceinfo maketitle ADT
 %  LocalWords:  copyrightyear copyrightdata nnnn ToDo copyrightdoi
-%  LocalWords:  nnnnnnn publicationrights authorinfo
+%  LocalWords:  nnnnnnn publicationrights authorinfo evaluators epsf
 %  LocalWords:  llparenthesis rrparenthesis mathscr textpi textrho
 %  LocalWords:  DeclareTextCommandDefault textlambda textGamma citep
 %  LocalWords:  textiota textdelta textchi textXi textxi textSigma
-%  LocalWords:  textmu textalpha subsubsection bibliographystyle
-%  LocalWords:  abbrvnamed emph rcl center itemize sigplanconf
-%  LocalWords:  hidelinks DeclareUnicodeCharacter ensuremath
-%  LocalWords:  ucs utf citet
-%  LocalWords:  ICFP Nara
+%  LocalWords:  textmu textalpha subsubsection bibliographystyle eps
+%  LocalWords:  abbrvnamed emph rcl center itemize sigplanconf hughes
+%  LocalWords:  hidelinks DeclareUnicodeCharacter ensuremath TypedNBE
+%  LocalWords:  ucs utf citet untyped canonicity CharsLists monoids
+%  LocalWords:  ICFP Nara subterms compositionality compositionaly
 %  LocalWords:  Shayan Najd Sam Lindley Josef Svenningsson Philip Wadler
-%  LocalWords:  LFCS Chalmers
-%  LocalWords:  NBE equational EBN reifying Applicative DSL
-%  LocalWords:  EDSL TDPE GPLs Haskell DSLs SQL VHDL
+%  LocalWords:  LFCS Chalmers reified CharsHughes CanonicalChars chrf
+%  LocalWords:  NBE equational EBN reifying Applicative DSL Epsd Chrd
+%  LocalWords:  EDSL TDPE GPLs Haskell DSLs SQL VHDL NormalisedEDSLs
 %  LocalWords:  reification Tagless Virtualised Agda monad EDSLs agda
-%  LocalWords:  relatedwork RawFP EPSRC
-%  LocalWords:  Sem cdsl CDSLs OCaml Danvy CACM LMS
-%  LocalWords:  Dybjer Altenkirch Walid Ziria Lof chr
+%  LocalWords:  relatedwork RawFP EPSRC nullary reify Charsd EBN's
+%  LocalWords:  Sem cdsl CDSLs OCaml Danvy CACM LMS printChars eval
+%  LocalWords:  Dybjer Altenkirch Walid Ziria Lof chr printString GHC
 %  LocalWords:  inputenc Schwichtenberg denotational compositional
-%  LocalWords:  Example associativity
-%  LocalWords:  spoofax GPL runtime
+%  LocalWords:  Example associativity printChar CharsLike Landin's
+%  LocalWords:  spoofax GPL runtime Plotkin monadic extensionality
 %  LocalWords:  QDSL virtualisation hoc rompf scala GADTs INtegrated
-%  LocalWords:  LINQ Definitional svenningsson scalalms Hoare
+%  LocalWords:  LINQ Definitional svenningsson scalalms Hoare Sam's
 %  LocalWords:  Aho datatypes tagless scalability embeddings Untyped
-%  LocalWords:  MartinLof RelatedWork inferrable axelsson
-%  LocalWords:  instantiations svensson Mejerlinq sujeeth
-%  LocalWords:  representable versa presheaf residualisation
+%  LocalWords:  MartinLof RelatedWork inferrable axelsson Dybjer's
+%  LocalWords:  instantiations svensson Mejerlinq sujeeth Walid's
+%  LocalWords:  representable versa presheaf residualisation Girard's
 %  LocalWords:  HOAS EBNEncoding EBNShallow EBNTagless EBNDeep
 %  LocalWords:  datatype EBNQuoted TypeConstrained Nikola
 %  LocalWords:  Filinsky evaluator combiningJournal Girard
-%  LocalWords:  Landin
+%  LocalWords:  Landin Altenkirch's residualised
