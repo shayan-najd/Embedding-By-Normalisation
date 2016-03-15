@@ -73,11 +73,17 @@
 %format ∙d   = "∙_d"
 %format Charsd = "Chars_d"
 %format do = "\textbf{\text{do}}"
-%format ⇑+r = "⇑^+_r"
-%format ⇑-r = "⇑^-_r"
-%format ⇑-r = "⇑^-_r"
+%format ∼np  = "∼^{¬p}"
+%format ∼p  = "∼^p"
 %format ∼+  = "∼^+"
 %format ∼-  = "∼^-"
+%format infer1 (a) (b) = "\infer{"b"}{"a"}"
+%format inferl1 (l) (a) (b) = "\infer["l"]{"b"}{"a"}"
+%format infer2 (a) (b) (c) = "\infer{"c"}{"a"\ \ \ \ "b"}"
+%format inferl2 (l) (a) (b) (c) = "\infer["l"]{"c"}{"a"\ \ \ \ "b"}"
+%format infer3 (a) (b) (c) (d) = "\infer{"d"}{"a"\ \ \ "b"\ \ \ "c"}"
+%format over (a) = "\overline{"a"}"
+%format Mii  = "Mᵢ"
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % latex macros
@@ -1117,7 +1123,7 @@ reify (c ∷ cs)  = [c| Chr $c ∙ $(reify cs) |]
 \section{Type-Constrained Host as Semantic Domain}
 \label{sec:Type-Constrained}
 
-\todo{Think of a better section title}
+\todo{}{Think of a better section title}
 
 Back in 1966, Landin in his landmark paper "The Next 700 Programming Languages"
 \citep{Landin1966} argues
@@ -1133,14 +1139,14 @@ languages built based on the very idea (e.g., see the design of
 
 Although Landin's idea was originally expressed in terms of
 general-purpose languages, it also applies to domain-specific ones.
-Following in his footsteps, in this paper we will consider DSLs which
-can be expressed using the lambda calculus enriched with constants to
-express domain-specific constructs. Not all DSLs can be modelled in
-this way and the principles of EBN applies even outside this
-model. But it covers a large and useful set of DSLs and allows for a
-parametric presentation of DSLs, where syntax of a DSL can be
-identified solely by the signature of the primitive values and
-operations.
+Following in his footsteps, this section considers DSLs which can be
+expressed using the lambda calculus enriched with primitive values and
+operations \citep{Plotkin1975} to express domain-specific constructs.
+Not all DSLs can be modelled in this way, and the principles of EBN
+applies even outside this model. But this model covers a large and
+useful class of DSLs and allows for a parametric presentation of DSLs,
+where syntax of a DSL can be identified solely by the signature of the
+primitive values and operations.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Basic
@@ -1179,7 +1185,7 @@ L,M,N ∈ Syn ::= ξₜ  | c Mᵢ | ⟨⟩ₜ | x | λₜ x →ₜ N | L @ₜ M
                     | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
 \end{spec}
 
-\todo{Explain why the set of primitives and the set of literals are kept different}
+\todo{}{Explain why the set of primitives and the set of literals are kept different}
 
 The language, referred to as |Syn|, is parametric over a set of
 literals, and signature of primitive operations. Besides literals, and
@@ -1188,26 +1194,30 @@ involves unit term, variables, lambda abstraction, application, pairs,
 and projections. The terms of the object language are underlined to
 distinguish it from the ones of the host language.
 
-The typing rules are the expected ones. The typing judgement has two
-contexts, one for variables and one for constants.
+The typing rules are the expected ones:
 
-\[
-\begin{array}{cc}
-\infer{\Gamma ; \Delta \vdash ξ : χ}{}
+\begin{tabular}{@@{}cc@@{}}
+\\
+|infer1 (ξ ∈ ΞT χ) (ΓT ⊢ ξₜ : χ)|
 &
-\infer{\Gamma ; \Delta \vdash \Conid{c} \; \overline{\Conid{M}} : \Conid{B}}{\Gamma ; \Delta \vdash \Conid{c} : \overline{\Conid{A} \; \underline{→}} \; \Conid{B} \in \Delta \, \overline{\Gamma ; \Delta \vdash \Conid{M} : \Conid{A}}}
+|infer1 ((x : A) ∈ ΓT) (ΓT ⊢ x : A)|
 \\~\\
-\infer{\Gamma ; \Delta\vdash \underline{λ} \; \Conid{x} \; \underline{→} \; \Conid{N} : \Conid{A} \; \underline{→} \; \Conid{B}}{\Gamma , \Conid{x}; \Delta : \Conid{A} \vdash \Conid{N} : \Conid{B}}
+\multicolumn{2}{c}{
+|infer2 (over (ΓT ⊢ Mii : Aᵢ)) ((c : {...,Aᵢ,...} ↦ B) ∈ ΣT) (ΓT ⊢ c Mᵢ : B)|}
+\\~\\
+|infer1 (ΓT , x : A ⊢ N : B) (ΓT ⊢ λₜ x →ₜ N : A →ₜ B)|
 &
-\infer{\Gamma ; \Delta \vdash \Conid{L} \; \underline{@@} \; \Conid{M} : \Conid{B}}{\Gamma ; \Delta \vdash \Conid{L} : \Conid{A} \; \underline{→} \; \Conid{B} \, \Gamma ; \Delta \vdash \Conid{M} : \Conid{B}}
+|infer2 (ΓT ⊢ L : A →ₜ B) (ΓT ⊢ M : A) (ΓT ⊢ L @ₜ M : B)|
 \\~\\
-\infer{\Gamma ; \Delta \vdash (\Conid{M} \; \underline{,} \; \Conid{N}) : \Conid{A} \underline{×} \Conid{B}}{\Gamma ; \Delta \vdash \Conid{M} : \Conid{A} \; \Gamma ; \Delta \vdash \Conid{N} : \Conid{B}}
-\\~\\
-\infer{\Gamma ; \Delta \vdash \underline{π_1} \; \Conid{L} : \Conid{A}}{\Gamma ; \Delta \vdash \Conid{L} : \Conid{A} \; \underline{×} \; \Conid{B}}
+|infer1 ( ) (ΓT ⊢ ⟨⟩ₜ : ⟨⟩ₜ)|
 &
-\infer{\Gamma ; \Delta \vdash \underline{π_2} \; \Conid{L} : \Conid{B}}{\Gamma ; \Delta \vdash \Conid{L} : \Conid{A} \; \underline{×} \; \Conid{B}}
-\end{array}
-\]
+|infer2 (ΓT ⊢ M : A) (ΓT ⊢ N : B) (ΓT ⊢ (M ,ₜ N) : A ×ₜ B)|
+\\~\\
+|infer1 (ΓT ⊢ L : A ×ₜ B) (ΓT ⊢ π₁ₜ L : A)|
+&
+|infer1 (ΓT ⊢ L : A ×ₜ B) (ΓT ⊢ π₂ₜ L : B)|
+\\~\\
+\end{tabular}
 
 In this section, including the other subsections, the EBN technique is
 presented in a way that it is independent of encoding strategy: the
@@ -1240,30 +1250,20 @@ the host language.  Moreover, the representation of the syntactic
 domain itself, is a program in the host language, i.e., a term of the
 type |Syn A|. This observation is realised by defining semantic domain
 as follows:
-\[
-\text{Sem}\ A = ∀ (α : Type).\ α ∼ A ⇒ α
-\]
-\[
-\begin{array}{cc}
-\infer[\text{Syn}_r]
-{\text{Syn}\ A ∼ A}
-{}
-&
-\infer[⟨⟩_r]
-{⟨⟩ ∼ \underline{⟨⟩}}
-{}
-\\~\\
-\infer[→_r]
-{(α → β) ∼ (A\ \underline{→}\ B)}
-{(α ∼ A) && (β ∼ B)}
-&
-\infer[×_r]
-{(α × β) ∼ (A\ \underline{×}\ B)}
-{(α ∼ A) && (β ∼ B)}
-\end{array}
-\]
+\begin{spec}
+Sem A = ∀ (α : Type) → α ∼ A ⇒ α
+\end{spec}
 
-\todo{Fix the typography of the rules above so that they match the grammar.}
+\begin{tabular}{cc}
+|inferl1 (Synᵣ) () (Syn A ∼ A)|
+&
+|inferl1 (⟨⟩ᵣ) ( ) (⟨⟩ ~ ⟨⟩ₜ)|
+\\~\\
+|inferl2 (→ᵣ) (α ∼ A) (β ∼ B) ((α → β) ∼ (A →ₜ B))|
+&
+|inferl2 (×ᵣ) (α ∼ A) (β ∼ B) ((α × β) ∼ (A ×ₜ B))|
+\\~\\
+\end{tabular}
 
 That is, a term of type |A| in the semantic domain is any host term
 whose type respects the |∼| relation. The relation |∼| states that (a)
@@ -1325,20 +1325,20 @@ be defined as a function indexed by the relation between syntax and
 semantics:
 
 \begin{spec}
-↓ : α ~ A → α → Syn A
+↓ : α ∼ A → α → Syn A
 
-↓ Synr      V  = V
-↓ ⟨⟩r       V  = ⟨⟩ₜ
-↓ (a →r b)  V  = λₜ x →ₜ ↓ b (V (↑ a x ))
-↓ (a ×r b)  V  = (↓ a (π₁ V) ,ₜ ↓ b (π₂ V))
+↓ Synᵣ      V  = V
+↓ ⟨⟩ᵣ       V  = ⟨⟩ₜ
+↓ (a →ᵣ b)  V  = λₜ x →ₜ ↓ b (V (↑ a x ))
+↓ (a ×ᵣ b)  V  = (↓ a (π₁ V) ,ₜ ↓ b (π₂ V))
 \end{spec}
 \begin{spec}
-↑ : α ~ A → Syn A → α
+↑ : α ∼ A → Syn A → α
 
-↑ Synr      M  = M
-↑ ⟨⟩r       M  = ⟨⟩
-↑ (a →r b)  M  = λ x → ↑ b (M @ₜ (↓ a x))
-↑ (a ×r b)  M  = (↑ a (π₁ₜ M) , ↑ b (π₂ₜ M))
+↑ Synᵣ      M  = M
+↑ ⟨⟩ᵣ       M  = ⟨⟩
+↑ (a →ᵣ b)  M  = λ x → ↑ b (M @ₜ (↓ a x))
+↑ (a ×ᵣ b)  M  = (↑ a (π₁ₜ M) , ↑ b (π₂ₜ M))
 \end{spec}
 
 Above definition is similar to some classic NBE algorithms such as
@@ -1371,6 +1371,19 @@ A,B ::= ... | A +ₜ B
 \begin{spec}
 L,M,N ::=  ... | ι₁ₜ M | ι₂ₜ N | δₜ L M N
 \end{spec}
+\begin{tabular}{@@{}cc@@{}}
+\\
+...
+\\~\\
+|infer1 (ΓT ⊢ M : A) (ΓT ⊢ ι₁ₜ M : A +ₜ B)|
+&
+|infer1 (ΓT ⊢ N : B) (ΓT ⊢ ι₂ₜ N : A +ₜ B)|
+\\~\\
+\multicolumn{2}{c}{
+|infer3 (ΓT ⊢ L : A +ₜ B) (ΓT ⊢ M : A →ₜ C) (ΓT ⊢ N : B →ₜ C) (ΓT ⊢ δₜ L M N : C)|}
+\\~\\
+\end{tabular}
+
 
 The extensions are standard: sum types, left injection, right
 injection, and case expression. To simplify the presentation, branches
@@ -1383,7 +1396,7 @@ lambda abstractions.
 \subsubsection{Semantic Domain}
 \label{sec:Sums:Sem}
 To support sum types, it is not enough to simply add a clause to the
-relation |~| of Section \ref{sec:Basic:Sem} relating sum types in the
+relation |∼| of Section \ref{sec:Basic:Sem} relating sum types in the
 host to the ones in the object. Treating sum types has been a
 challenging problem in NBE and embedding. Essentially, to reify a
 semantic term of the type |(Syn A + Syn B) → Syn C|, following the
@@ -1398,33 +1411,29 @@ domain, while destructing a sum type in syntactic domain demands a
 continuation in the syntactic domain. For a more detailed account of
 the reification problem for sum types, refer to
 \citet{QDSL,Gill:CACM,svenningsson:combiningJournal}.
-In the context of partial evaluation, \citet{TDPE} proposed an elegant
-solution to the problem of reification of sums, using composable
-continuations (delimited continuations) based on shift and
-reset \citep{Delimited}. This paper employs Danvy's solution.
+In the context of type-directed partial evaluation, a NBE based
+technique, \citet{TDPE} proposed an elegant solution to the problem of
+reification of sums, using composable continuations (delimited
+continuations) based on shift and reset \citep{Delimited}. This paper
+employs Danvy's solution.
 
-Delimited continuations are effect-full constructs. To model
-them in a pure and typed setting, this paper uses the standard
-monadic semantic (e.g., see \citep{Atkey,Dyvbig,Wadler}).
-The |~| relation from Section \ref{sec:Basic:Sem} is updated as follows:
-\[
+Delimited continuations are effect-full constructs. To model them in
+the pure and typed setting of the host language, this paper uses the
+standard monadic semantic (e.g., see \citep{Atkey,Dyvbig,Wadler}).
+The |∼| relation from Section \ref{sec:Basic:Sem} is updated as
+follows:
+\begin{spec}
 ...
-\]
-\[
-\begin{array}{cc}
-\infer[→_r]
-{(α ↝ β) ∼ (A\ \underline{→}\ B)}
-{(α ∼ A) && (β ∼ B)}
+\end{spec}
+\begin{tabular}{cc}
+|inferl2 (→ᵣ) (α ∼ A) (β ∼ B) ((α ↝ β) ∼ (A →ₜ B))|
 &
-\infer[+_r]
-{(α + β) ∼ (A\ \underline{+}\ B)}
-{(α ∼ A) && (β ∼ B)}
-\end{array}
-\]
+|inferl2 (+ᵣ) (α ∼ A) (β ∼ B) ((α + β) ∼ (A +ₜ B))|
+\\~\\
+\end{tabular}
 
-where |↝| denotes type of monadic functions.
-
-\todo{Explain what a monadic function is}
+where |↝| denotes type of monadic functions, i.e., effect-full
+functions modelled in the mentioned standard monadic semantic.
 
 One subtle, yet important factor in play here is the perspective that
 EBN offers: Danvy's elegant use of shift and reset is not a mere
@@ -1480,7 +1489,7 @@ equivalent to the following term using monadic do notation:
 The function |join| is a the well-known monad join function, commonly
 used for flattening nested monadic structures.
 
-\todo{Explain what is actually happening in the evaluation for sum types}
+\todo{}{Explain what is actually happening in the evaluation for sum types}
 
 \subsubsection{Reification}
 \label{sec:Sums:Reification}
@@ -1489,17 +1498,20 @@ To adopt Danvy's solution, the Reification process of
 
 \begin{spec}
 ...
-↓ (A →ₑ B)  V  = λ x → reset ⦇ ↓ B (join ⦇ V (↑ A x) ⦈) ⦈
-↓ (A +ₑ B)  V  = δ V  (λ x → ι₁ₜ (↓ A x))
-                      (λ y → ι₂ₜ (↓ B y))
+↓ (a →ᵣ b)  V  = λ x → reset ⦇ ↓ b (join ⦇ V (↑ a x) ⦈) ⦈
+↓ (a +ᵣ b)  V  = δ V  (λ x → ι₁ₜ (↓ a x))
+                      (λ y → ι₂ₜ (↓ b y))
 \end{spec}
 \begin{spec}
-↑ : α ~ A → Syn A ↝ α
+↑ : α ∼ A → Syn A ↝ α
 
-... (by trivial monadic lifting)
-↑ (A +ₑ B)  M  =  shift  (λ k →
-                  δₜ M   (λ x → reset ⦇ (k ∘ ι₁) (↑ A x) ⦈)
-                         (λ y → reset ⦇ (k ∘ ι₂) (↑ B y) ⦈))
+↑ Synᵣ      M  = ⦇ M ⦈
+↑ ⟨⟩ᵣ       M  = ⦇ ⟨⟩ ⦈
+↑ (a →ᵣ b)  M  = ⦇ λ x → ↑ b (M @ₜ (↓ a x)) ⦈
+↑ (a ×ᵣ b)  M  = ⦇ (↑ a (π₁ₜ M) , ↑ b (π₂ₜ M)) ⦈
+↑ (a +ᵣ b)  M  =  shift  (λ k →
+                  δₜ M   (λ x → reset ⦇ (k ∘ ι₁) (↑ a x) ⦈)
+                         (λ y → reset ⦇ (k ∘ ι₂) (↑ b y) ⦈))
 \end{spec}
 
 Except for the necessary monadic liftings, the nontrivial change is
@@ -1534,33 +1546,38 @@ Section \ref{sec:Sums:Syn}.
 The type relation |∼| in \ref{sec:Sums:Sem} does not consider
 convertibility of semantic values in the host language: given object
 type A, if value |V| in the host is convertible, by a function in the
-host, to another value |W| which respects |~ A|, |V| also respects |~
-A|. The following is a generalisation of the type relation |~| in
+host, to another value |W| which respects |∼ A|, |V| also respects |∼
+A|. The following is a generalisation of the type relation |∼| in
 \ref{sec:Sums:Sem}, based on this observation:
-\[
-\begin{array}{cc}
-... (\text{by tracking polarity})
+
+
+\begin{tabular}{@@{}c@@{}c@@{}}
+\\
+|inferl1 (Synᵣ) () (Syn A ∼p A)|
 &
-\infer[→_r]
-{(α ↝ β) ∼^{p} (A\ \underline{→}\ B)}
-{(α ∼^{¬ p} A) \ \ \  (β ∼^{p} B)}
+|inferl1 (⟨⟩ᵣ) () (⟨⟩ ∼p ⟨⟩ₜ) |
 \\~\\
-\infer[⇑^-_r]
-{β ∼^{-} A}
-{(α ∼^{-} A)\ \ \ (∃ f : α → β)}
+\multicolumn{2}{c}{
+|inferl2 (→ᵣ) ((α ∼np A)) ((β ∼p B)) ((α ↝ β) ∼p (A →ₜ B))|
+}
+\\~\\
+|inferl2 (×ᵣ) ((α ∼p A)) ((β ∼p B)) ((α × β) ∼p (A ×ₜ B))|
 &
-\infer[⇑^+_r]
-{α ∼^{+} A}
-{(β ∼^{+} A) \ \ \ (∃ f : α → β)}
-\end{array}
-\]
+|inferl2 (+ᵣ) ((α ∼p A)) ((β ∼p B)) ((α + β) ∼p (A +ₜ B))|
+\\~\\
+|inferl2 (⇑⁻ᵣ) ((α ∼⁻ A)) ((∃ f : α → β)) (β ∼⁻ A)|
+&
+|inferl2 (⇑⁺ᵣ) ((β ∼⁺ A)) ((∃ f : α → β)) (α ∼⁺ A) |
+\\~\\
+\end{tabular}
 
 Notice that the polarity, or variance, of a type should be tracked as
-the type of conversion functions changes direction due to function
-types. For instance, consider function |f| converting |V : Syn A → Syn
-B| to |f V : (Syn A , Syn A) → Syn B|. One should provide a function |g|
-of type |(Syn A , Syn A) → Syn A|, rather than |Syn A → (Syn A , Syn
-A)|, so that |f V = λ x → V (g x)|.
+the type of conversion functions changes direction due to
+contravariance of arguments in function types. For instance, consider
+function |f| converting |V : Syn A → Syn B| to |f V : (Syn A , Syn A)
+→ Syn B|. One should provide a function |g| of type |(Syn A , Syn A) →
+Syn A|, rather than |Syn A → (Syn A , Syn A)|, so that |f V = λ x → V
+(g x)|.
 
 \subsubsection{Evaluation}
 \label{sec:Smart:Evaluation}
@@ -1588,13 +1605,13 @@ Reification in Section \ref{sec:Sums:Reification}, is updated to
 take into account the convertibility rules:
 
 \begin{spec}
-↓ : α ∼+ A → α → Syn A
+↓ : α ∼⁺ A → α → Syn A
 ↓ ...
-↓ (⇑+r a  f) V = ↓ a (f V)
+↓ (⇑⁺ᵣ a  f) V = ↓ a (f V)
 
-↑ : α ∼- A → Syn A ↝ α
+↑ : α ∼⁻ A → Syn A ↝ α
 ↑ ...
-↑ (⇑-r a f) M = ⦇ f (↑ a M) ⦈
+↑ (⇑⁻ᵣ a f) M = ⦇ f (↑ a M) ⦈
 \end{spec}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1620,7 +1637,6 @@ strong sums \citep{NBE-Sum,Extensional}.
 
 \subsection{An Example}
 \label{sec:Example}
-
 
 \begin{spec}
 power n = λₜ x →ₜ
