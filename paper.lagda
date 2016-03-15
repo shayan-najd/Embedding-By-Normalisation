@@ -129,10 +129,10 @@
 \DeclareTextCommandDefault\textgamma{\ensuremath{\gamma}}
 \DeclareTextCommandDefault\texteta{\ensuremath{\eta}}
 
-\newcommand{\todo}[2]
-  {{\noindent\small\color{red}
-   \framebox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}
-                    {\textbf{TODO #1:} #2}}}}
+% \newcommand{\todo}[2]
+%   {{\noindent\small\color{red}
+%    \framebox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}
+%                     {\textbf{TODO #1:} #2}}}}
 
 % \newcommand{\todo}[2]{}
 
@@ -381,7 +381,7 @@ The contributions of this paper are as follows:
       primitive values and operations, as a by-product of EBN
       for above model involving primitives (Section \ref{sec:Smart})
 \item To show how EBN relates to some of the related existing
-      techniques, and highlighting some interesting insights when
+      techniques, and highlighting some insights when
       observing such techniques through EBN lens
       (Section \ref{sec:RelatedWork})
 \end{itemize}
@@ -1081,10 +1081,10 @@ reify (c ∷ cs)  = [c| Chr $c ∙ $(reify cs) |]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Type-Constrained Host as Semantic Domain
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Type-Constrained Host as Semantic Domain}
+\section{Embedding-By-Normalisation, Generically}
 \label{sec:Type-Constrained}
 
-\todo{}{Think of a better section title}
+% \todo{}{Think of a better section title}
 
 Back in 1966, Landin in his landmark paper "The Next 700 Programming Languages"
 \citep{Landin1966} argues
@@ -1096,7 +1096,7 @@ encode seemingly different language constructs as normal programs in
 this language. Since then, Landin's idea has been proven correct over
 and over again, evidenced by successful functional programming
 languages built based on the very idea (e.g., see the design of
-\citet{?GHC}'s core language).
+Glasgow Haskell Compiler).
 
 Although Landin's idea was originally expressed in terms of
 general-purpose languages, it also applies to domain-specific ones.
@@ -1114,7 +1114,7 @@ primitive values and operations.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Simple Types and Products}
 \label{sec:Basic}
-This subsection presents an instantiation of the EBN technique for DSLs
+This subsection presents an instantiations of the EBN technique for DSLs
 which can be captured by the simply-typed lambda
 calculus with product types, parametric over the set of base types,
 literals, and the signature of primitive operations. The host language
@@ -1141,20 +1141,17 @@ The grammar of the terms in the object language is also standard
 \begin{spec}
 x ∈ Γ (set of variables)
 ξ ∈ Ξ (set of literals)
-c ∈ Σ (set of signature of primitives (name × arity))
+c ∈ Σ (set of signature of primitives)
 L,M,N ∈ Syn ::= ξₜ  | c Mᵢ | ⟨⟩ₜ | x | λₜ x →ₜ N | L @ₜ M
                     | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
 \end{spec}
 
-\todo{}{Explain why the set of primitives and the set of literals are kept different}
-
 The language, referred to as |Syn|, is parametric over a set of
 literals, and signature of primitive operations. Besides literals, and
-primtive operations (which are assumed to be fully applied), it
+primitive operations (which are assumed to be fully applied), it
 involves unit term, variables, lambda abstraction, application, pairs,
 and projections. The terms of the object language are underlined to
 distinguish it from the ones of the host language.
-
 The typing rules are the expected ones:
 
 \begin{tabular}{@@{}cc@@{}}
@@ -1164,7 +1161,7 @@ The typing rules are the expected ones:
 |infer1 ((x : A) ∈ ΓT) (ΓT ⊢ x : A)|
 \\~\\
 \multicolumn{2}{c}{
-|infer2 (over (ΓT ⊢ Mii : Aᵢ)) ((c : {...,Aᵢ,...} ↦ B) ∈ ΣT) (ΓT ⊢ c Mᵢ : B)|}
+|infer2 (over (ΓT ⊢ Mii : Aᵢ)) ((c : [...,Aᵢ,...] ↦ B) ∈ ΣT) (ΓT ⊢ c Mᵢ : B)|}
 \\~\\
 |infer1 (ΓT , x : A ⊢ N : B) (ΓT ⊢ λₜ x →ₜ N : A →ₜ B)|
 &
@@ -1190,7 +1187,7 @@ Higher-Order Abstract Syntax (HOAS) representation \citep{hoas}.
 Representation of object terms is assumed be quotient with respect to
 alpha-conversion, when new bindings are introduced variables are
 assumed to be fresh, and substitutions to be capture avoiding.
-Furthermore, terms in syntactic domain and the normal syntactic terms
+Terms in syntactic domain and the normal syntactic terms
 are represented in the same way. Though in practice, depending on
 encoding, the two may be implemented in different ways. In this paper,
 host programs of the type |Syn A| refer to both the type of a host
@@ -1198,6 +1195,21 @@ term encoding a term of the type |A| in syntactic domain, and the type
 of the extracted code for a normal syntactic term of the type |A|.
 The type |Syn ΓT A| denotes open |Syn A| terms with |ΓT| being a typing
 environment containing the free variables.
+Literals in the object language, denoted as |ξₜ|, are a subset of
+the ones in the host identified by the set |Ξ|.
+To retrieve a corresponding literal value in the host language, the
+underline notation is removed.
+|ΞT| is a mapping from base types in the object language to types in the
+host language. |ξ ∈ ΞT χ| denotes a predicate asserting that the
+literal |ξ| is an element the type |ΞT χ| in the host language.
+|Σ| is a mapping from the name of a primitive operation to its arity.
+Primitive operations are fully applied, a series of arguments, or a
+series of typing judgements relating to a primitive is denoted by
+overlining.
+|ΣT| is the typing environment for primitive operations, with elements
+of the form |c : [A₀,...,Aₙ] ↦ B| which reads as that the primitive
+|c| takes |n + 1| (arity of the primitive) elements of the type |Aᵢ|,
+for i ranging form |0| to |n|, and returns a value of type |B|.
 
 Now that the syntactic domain has been defined, i.e., the |Syn|
 language, it is time to define the semantic domain.
@@ -1268,15 +1280,13 @@ function is as follows:
 ⟦ π₂ₜ L      ⟧ ΣV ΓV  = π₂ (⟦ L ⟧ ΣV ΓV)
 \end{spec}
 
-Apart from the expression to be evaluated, the evaluation function takes two
-extra arguments: the environment of semantic values corresponding to
-each primitive operator (variable |ΣV| of type |⟦ ΣT ⟧|),
-and the environment of semantic values corresponding to each free
-variable (variable |ΓV| of type |⟦ ΓT ⟧|).  At the
-type-level, |ΣT| denotes the typing environment for the primitives,
-and |ΓT| denotes the typing environment for free variables.  Following
-the convention, the semantic bracket notation is overloaded, and
-denotes the mapping of different kinds of elements from syntax to
+Apart from the input expression, the evaluation function takes two
+extra arguments: variable |ΣV| of type |⟦ ΣT ⟧|, that is the
+environment of semantic values corresponding to each primitive operator;
+and variable |ΓV| of type |⟦ ΓT ⟧|, that is the environment of
+semantic values corresponding to each free variable.
+Following the convention, the semantic bracket notation is overloaded,
+and denotes the mapping of different kinds of elements from syntax to
 semantic.
 
 \subsubsection{Reification}
@@ -1450,7 +1460,7 @@ equivalent to the following term using monadic do notation:
 The function |join| is a the well-known monad join function, commonly
 used for flattening nested monadic structures.
 
-\todo{}{Explain what is actually happening in the evaluation for sum types}
+% \todo{}{Explain what is actually happening in the evaluation for sum types}
 
 \subsubsection{Reification}
 \label{sec:Sums:Reification}
@@ -1674,7 +1684,7 @@ X = {ℚₜ}
 \end{spec}
 \end{description}
 
-Above relies on the definition of boolean values defined as a sum of unit types:
+Above relies on the definition of Boolean values defined as a sum of unit types:
 \begin{spec}
 Boolₜ   = ⟨⟩ₜ +ₜ ⟨⟩ₜ
 falseₜ  = ι₁ₜ ⟨⟩ₜ
@@ -1708,7 +1718,7 @@ by one, simplifies to |M|. Without such smart primitives, running
 To demonstrate normalisation of sum types, a simple form of
 abstraction is considered: handling corner-cases. The definition of
 |Power| is split into two parts. One alters definition of |Power| to
-return |nothing| of |Maybe| type, instead of |0| when division by zero
+return |nothing| of |Maybe| type  instead of |0| when division by zero
 happens, and another replaces |nothing| by |0|:
 \begin{spec}
 power' : ℤ → Syn (ℚₜ →ₜ (Maybeₜ ℚₜ))
@@ -1753,7 +1763,7 @@ achieves abstraction-without-guilt, even for sum types.
 \section{Discussion \& Related Work}
 \label{sec:RelatedWork}
 As with any other paper describing correspondence between two areas,
-this paper has introduced the main body of the related works, while
+this paper introduces the main body of the related works, while
 explaining the related concepts. Focus of this section is to mention
 key related areas, besides NBE, and where EBN stands in comparison.
 
@@ -1772,7 +1782,7 @@ although they provide tricks for dealing with a restricted form of sum
 type, such as the |Maybe| type in the Haskell standard library. Their
 implementation in Haskell uses a type-class which contains two methods
 for converting from shallow embedding to deep embedding of terms and
-vice versa. The type-class and its intances corresponds to the
+vice versa. The type-class and its instances correspond to the
 reification function in EBN, where conversion from shallow to deep can
 be seen as reification function and conversion from deep to shallow as
 reflection function.
@@ -1783,27 +1793,26 @@ and Nikola \citep{Mainland:2010}.
 Other important related works, are series of successful EDSLs
 implemented in Scala using LMS \citep{scalalms,rompf2012lightweight}.
 They use evaluation mechanism of the host language for optimising
-DSLs.  Their system is based on the of staging DSLs (e.g., see
+DSLs.  Their systems are based on a form staged computation (e.g., see
 \citet{metaml}), and they do so by a smart type-directed approach
 utilising virtualisation (e.g., see \citet{rompf2013scala}). Rompf has
 characterised the essence of LMS, as an approach based on the
-two-level lambda calculi (e.g., see \citep{2005}).  As explored by
-\citet{TDPE}, NBE and the two-level calculi are related.  One
+two-level lambda calculi (e.g., see \citep{Nielson-2005}).  As explored by
+\citet{TDPE}, NBE and two-level calculi are related.  One
 interesting future work is to exploit the relation to compare EBN with
 the technique underlying LMS.
 
-There are also a large body works on embedding specific DSLs in
-Haskell, that use the evaluation mechanism of Haskell, though not
-explicitly, to optimise embedded terms.
-
-\citet{Gill:CACM} provides a general overview of embedding techniques
-in Haskell, and a crisp explanation of the reification problems
-addressed in this paper. One possible explanation of why reification
-for sum types or primitives appeared difficult (if not impossible), is
-that DSL designers presumed semantic domain to be a simple sub-set of
-the host language without continuations or lifted base types. As EBN
-reveals, to be able to reify terms involving sums or primitives, one
-needs to settle for an alternative semantic domain.
+There are also large bodies of works on embedding specific DSLs in
+Haskell that use the evaluation mechanism of Haskell to optimise
+embedded terms.  \citet{Gill:CACM} provides a general overview of
+embedding techniques in Haskell, and a crisp explanation of the
+reification problems addressed in this paper. One possible explanation
+of why reification for sum types or primitives appeared difficult (if
+not impossible), is that DSL designers presumed the semantic domain to be
+a simple sub-set of the host language without continuations or lifted
+base types, i.e., the one in Section \ref{sec:Basic:Sem}.
+As EBN reveals, to be able to reify terms involving sums
+or primitives, one needs to settle for an alternative semantic domain.
 
 \subsection{Partial Evaluation}
 
@@ -1819,12 +1828,12 @@ For a more practical use of online partial evaluation in embedding, see
 evaluation and NBE.
 
 \subsection{Stand-Alone DSLs}
-DSLs can be also be implemented as a stand-alone language.  In theory,
+DSLs can also be implemented as a stand-alone language.  In theory,
 for a stand-alone DSL one needs to implemented all the required
 machinery, and they do not integrate easily with other
 languages. However, there are wide range of tools and frameworks
 available that automate parts of the implementation process (e.g., see
-\citep{spoofax}). While obviously EBN does not apply to stand-alone
+\citet{spoofax}). While obviously EBN does not apply to stand-alone
 language, the original NBE techniques can definitely be used as a way
 to write normalisers for stand-alone DSLs. In theory, it is even
 possible to implement tools to automate part of the process.
@@ -1834,8 +1843,8 @@ possible to implement tools to automate part of the process.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 \label{sec:conclusion}
-Girard, starts the first chapter of his popular book "Proofs and
-Types" \citep{Girard} by the following paragraph:
+Girard, starts the first chapter of his popular book ``Proofs and
+Types'' \citep{Girard} by the following paragraph:
 \begin{displayquote}
 Theoretical Computing is not yet a science. Many basic concepts have not been
 clarified, and current work in the area obeys a kind of “wedding cake” paradigm:
@@ -1853,7 +1862,7 @@ This paper characterises the correspondence, and puts it into practice,
 by an approach dubbed as Embedding-By-Normalisation (EBN). Then, the
 paper employs EBN to clarify some of the basic concepts in the
 practical embedding techniques, concepts such as code extraction
-(reification) and normalisation. The clarification offered by EBN helped
+(reification) and normalisation. The clarification offered by EBN helps
 to solve the problem of extracting object code from embedded programs
 involving sum types, such as conditional expressions, and primitives,
 such as literals and operations on them.
@@ -1888,9 +1897,9 @@ and patience to uncover.
 %  LocalWords:  framebox parbox dimexpr linewidth fboxsep fboxrule EP
 %  LocalWords:  textbf papersize setlength pdfpageheight paperheight
 %  LocalWords:  pdfpagewidth paperwidth conferenceinfo maketitle ADT
-%  LocalWords:  copyrightyear copyrightdata nnnn ToDo copyrightdoi
+%  LocalWords:  copyrightyear copyrightdata nnnn ToDo copyrightdoi np
 %  LocalWords:  nnnnnnn publicationrights authorinfo evaluators epsf
-%  LocalWords:  llparenthesis rrparenthesis mathscr textpi textrho
+%  LocalWords:  llparenthesis rrparenthesis mathscr textpi textrho TT
 %  LocalWords:  DeclareTextCommandDefault textlambda textGamma citep
 %  LocalWords:  textiota textdelta textchi textXi textxi textSigma
 %  LocalWords:  textmu textalpha subsubsection bibliographystyle eps
@@ -1913,10 +1922,12 @@ and patience to uncover.
 %  LocalWords:  LINQ Definitional svenningsson scalalms Hoare Sam's
 %  LocalWords:  Aho datatypes tagless scalability embeddings Untyped
 %  LocalWords:  MartinLof RelatedWork inferrable axelsson Dybjer's
-%  LocalWords:  instantiations svensson Mejerlinq sujeeth Walid's
+%  LocalWords:  instantiations svensson Mejerlinq sujeeth Walid's Mii
 %  LocalWords:  representable versa presheaf residualisation Girard's
-%  LocalWords:  HOAS
-%  LocalWords:  datatype Nikola
-%  LocalWords:  Filinsky evaluator combiningJournal Girard
-%  LocalWords:  Landin Altenkirch's residualised composable
-%  LocalWords:  contravariance liftings
+%  LocalWords:  HOAS csquotes Synr inferl nearrow nwarrow textbeta
+%  LocalWords:  datatype Nikola textgamma texteta MeijerLINQ hoas Löf
+%  LocalWords:  Filinski evaluator combiningJournal Girard arity
+%  LocalWords:  Landin Altenkirch's residualised composable Atkey
+%  LocalWords:  contravariance liftings multicolumn overlining Dyvbig
+%  LocalWords:  applicative PossibleValue memoization Sheard metaml
+%  LocalWords:  Nielson leissa DybjerF displayquote Ptolomeic
