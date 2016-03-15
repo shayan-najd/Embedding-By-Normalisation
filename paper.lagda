@@ -59,6 +59,8 @@
 %format ΞT     = "Ξ_T"
 %format ΣT     = "Σ_T"
 %format ΓT     = "Γ_T"
+%format ΣV     = "Σ_V"
+%format ΓV     = "Γ_V"
 %format Synr   = "\text{Syn}_r"
 %format ⟨⟩r     = "⟨⟩_r"
 %format →r     = "→_r"
@@ -84,6 +86,13 @@
 %format infer3 (a) (b) (c) (d) = "\infer{"d"}{"a"\ \ \ "b"\ \ \ "c"}"
 %format over (a) = "\overline{"a"}"
 %format Mii  = "Mᵢ"
+%format Vₜ   = "\underline{V}"
+%format Wₜ   = "\underline{W}"
+%format justₜ = "\underline{\text{just}}"
+%format nothingₜ = "\underline{\text{nothing}}"
+%format maybeₜ = "\underline{\text{maybe}}"
+%format Maybeₜ = "\underline{\text{Maybe}}"
+%format <$>ₜ   = "\underline{⟨\$⟩}"
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % latex macros
@@ -92,6 +101,7 @@
 \DeclareUnicodeCharacter{8343}{\ensuremath{_l}}
 \DeclareUnicodeCharacter{8345}{\ensuremath{_n}}
 \DeclareUnicodeCharacter{8337}{\ensuremath{_e}}
+\DeclareUnicodeCharacter{8347}{\ensuremath{_s}}
 \DeclareUnicodeCharacter{8348}{\ensuremath{_t}}
 \DeclareUnicodeCharacter{7522}{\ensuremath{_i}}
 \DeclareUnicodeCharacter{7525}{\ensuremath{_v}}
@@ -413,9 +423,9 @@ The contributions of this paper are as follows:
       primitives and operations on them, by using EBN and exploiting
       the correspondence to simple online partial evaluation
       techniques (Section \ref{sec:Smart})
-\item To show how to employ language features in Agda, Haskell, and
-      OCaml for implementing EBN
-      (Section \ref{sec:Implementation})
+% \item To show how to employ language features in Agda, Haskell, and
+%      OCaml for implementing EBN
+% (Section \ref{sec:Implementation})
 \item To show how EBN relates to some of the related existing
       techniques, and highlighting some interesting insights when
       observing such techniques through EBN lens
@@ -434,8 +444,8 @@ familiar with functional programming.
 When inferrable from context, some unnecessary implementation details,
 such as type instantiations or overloading of constants, are
 intentionally left out of the code for brevity.
-As mentioned, the implementation concerns are addressed separately, in
-Section \ref{sec:Implementation}.
+As mentioned, the implementation concerns are addressed separately.
+Code and definitions presented in this paper are implemented in Agda.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% NBE
@@ -1180,7 +1190,7 @@ The grammar of the terms in the object language is also standard
 \begin{spec}
 x ∈ Γ (set of variables)
 ξ ∈ Ξ (set of literals)
-c ∈ Σ (signature of primitives)
+c ∈ Σ (set of signature of primitives (name × arity))
 L,M,N ∈ Syn ::= ξₜ  | c Mᵢ | ⟨⟩ₜ | x | λₜ x →ₜ N | L @ₜ M
                     | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
 \end{spec}
@@ -1296,22 +1306,22 @@ function is as follows:
 \begin{spec}
 ⟦_⟧ : Syn ΓT A → ⟦ ΣT ⟧ → ⟦ ΓT ⟧ → ⟦ A ⟧
 
-⟦ ξₜ         ⟧ Σᵥ Γᵥ  = ξₜ
-⟦ c Mᵢ       ⟧ Σᵥ Γᵥ  = Σᵥ c ⟦ Mᵢ ⟧
-⟦ ⟨⟩ₜ        ⟧ Σᵥ Γᵥ  = ⟨⟩
-⟦ x          ⟧ Σᵥ Γᵥ  = Γᵥ x
-⟦ λₜ x →ₜ N  ⟧ Σᵥ Γᵥ  = λ y → ⟦ N ⟧ Σᵥ (Γᵥ, x ↦ y)
-⟦ L @ₜ M     ⟧ Σᵥ Γᵥ  = (⟦ L ⟧ Σᵥ Γᵥ) (⟦ M ⟧ Σᵥ Γᵥ)
-⟦ (M ,ₜ N)   ⟧ Σᵥ Γᵥ  = (⟦ M ⟧ Σᵥ Γᵥ , ⟦ N ⟧ Σᵥ Γᵥ)
-⟦ π₁ₜ L      ⟧ Σᵥ Γᵥ  = π₁ (⟦ L ⟧ Σᵥ Γᵥ)
-⟦ π₂ₜ L      ⟧ Σᵥ Γᵥ  = π₂ (⟦ L ⟧ Σᵥ Γᵥ)
+⟦ ξₜ         ⟧ ΣV ΓV  = ξₜ
+⟦ c Mᵢ       ⟧ ΣV ΓV  = ΣV c ⟦ Mᵢ ⟧
+⟦ ⟨⟩ₜ        ⟧ ΣV ΓV  = ⟨⟩
+⟦ x          ⟧ ΣV ΓV  = ΓV x
+⟦ λₜ x →ₜ N  ⟧ ΣV ΓV  = λ y → ⟦ N ⟧ ΣV (ΓV, x ↦ y)
+⟦ L @ₜ M     ⟧ ΣV ΓV  = (⟦ L ⟧ ΣV ΓV) (⟦ M ⟧ ΣV ΓV)
+⟦ (M ,ₜ N)   ⟧ ΣV ΓV  = (⟦ M ⟧ ΣV ΓV , ⟦ N ⟧ ΣV ΓV)
+⟦ π₁ₜ L      ⟧ ΣV ΓV  = π₁ (⟦ L ⟧ ΣV ΓV)
+⟦ π₂ₜ L      ⟧ ΣV ΓV  = π₂ (⟦ L ⟧ ΣV ΓV)
 \end{spec}
 
 Apart from the expression to be evaluated, the evaluation function takes two
 extra arguments: the environment of semantic values corresponding to
-each primitive operator (variable |Σᵥ| of type |⟦ ΣT ⟧|),
+each primitive operator (variable |ΣV| of type |⟦ ΣT ⟧|),
 and the environment of semantic values corresponding to each free
-variable (variable |Γᵥ| of type |⟦ ΓT ⟧|).  At the
+variable (variable |ΓV| of type |⟦ ΓT ⟧|).  At the
 type-level, |ΣT| denotes the typing environment for the primitives,
 and |ΓT| denotes the typing environment for free variables.  Following
 the convention, the semantic bracket notation is overloaded, and
@@ -1462,19 +1472,19 @@ domain uses monadic functions. All of the cases from the evaluator Section
 \begin{spec}
 ⟦_⟧ : Syn ΓT A → ⟦ ΣT ⟧ → ⟦ ΓT ⟧ → ⟦ A ⟧
 
-⟦ ξₜ         ⟧ Σᵥ Γᵥ  = ⦇ ξₜ ⦈
-⟦ c Mᵢ       ⟧ Σᵥ Γᵥ  = Σᵥ c ⟦ Mᵢ ⟧
-⟦ ⟨⟩ₜ        ⟧ Σᵥ Γᵥ  = ⦇ ⟨⟩ ⦈
-⟦ x          ⟧ Σᵥ Γᵥ  = Γᵥ x
-⟦ λₜ x →ₜ N  ⟧ Σᵥ Γᵥ  = ⦇ λ y → ⟦ N ⟧ Σᵥ (Γᵥ, x ↦ ⦇ y ⦈) ⦈
-⟦ L @ₜ M     ⟧ Σᵥ Γᵥ  = join ⦇ (⟦ L ⟧ Σᵥ Γᵥ) (⟦ M ⟧ Σᵥ Γᵥ) ⦈
-⟦ (M ,ₜ N)   ⟧ Σᵥ Γᵥ  = ⦇ (⟦ M ⟧ Σᵥ Γᵥ , ⟦ N ⟧ Σᵥ Γᵥ) ⦈
-⟦ π₁ₜ L      ⟧ Σᵥ Γᵥ  = ⦇ π₁ (⟦ L ⟧ Σᵥ Γᵥ) ⦈
-⟦ π₂ₜ L      ⟧ Σᵥ Γᵥ  = ⦇ π₂ (⟦ L ⟧ Σᵥ Γᵥ) ⦈
-⟦ ι₁ₜ M      ⟧ Σᵥ Γᵥ  = ⦇ ι₁ (⟦ M ⟧ Σᵥ Γᵥ) ⦈
-⟦ ι₂ₜ N      ⟧ Σᵥ Γᵥ  = ⦇ ι₂ (⟦ N ⟧ Σᵥ Γᵥ) ⦈
-⟦ δₜ L M N   ⟧ Σᵥ Γᵥ  = join ⦇ δ (⟦ L ⟧ Σᵥ Γᵥ)  (⟦ M ⟧ Σᵥ Γᵥ)
-                                                (⟦ N ⟧ Σᵥ Γᵥ) ⦈
+⟦ ξₜ         ⟧ ΣV ΓV  = ⦇ ξₜ ⦈
+⟦ c Mᵢ       ⟧ ΣV ΓV  = ΣV c ⟦ Mᵢ ⟧
+⟦ ⟨⟩ₜ        ⟧ ΣV ΓV  = ⦇ ⟨⟩ ⦈
+⟦ x          ⟧ ΣV ΓV  = ΓV x
+⟦ λₜ x →ₜ N  ⟧ ΣV ΓV  = ⦇ λ y → ⟦ N ⟧ ΣV (ΓV, x ↦ ⦇ y ⦈) ⦈
+⟦ L @ₜ M     ⟧ ΣV ΓV  = join ⦇ (⟦ L ⟧ ΣV ΓV) (⟦ M ⟧ ΣV ΓV) ⦈
+⟦ (M ,ₜ N)   ⟧ ΣV ΓV  = ⦇ (⟦ M ⟧ ΣV ΓV , ⟦ N ⟧ ΣV ΓV) ⦈
+⟦ π₁ₜ L      ⟧ ΣV ΓV  = ⦇ π₁ (⟦ L ⟧ ΣV ΓV) ⦈
+⟦ π₂ₜ L      ⟧ ΣV ΓV  = ⦇ π₂ (⟦ L ⟧ ΣV ΓV) ⦈
+⟦ ι₁ₜ M      ⟧ ΣV ΓV  = ⦇ ι₁ (⟦ M ⟧ ΣV ΓV) ⦈
+⟦ ι₂ₜ N      ⟧ ΣV ΓV  = ⦇ ι₂ (⟦ N ⟧ ΣV ΓV) ⦈
+⟦ δₜ L M N   ⟧ ΣV ΓV  = join ⦇ δ (⟦ L ⟧ ΣV ΓV)  (⟦ M ⟧ ΣV ΓV)
+                                                (⟦ N ⟧ ΣV ΓV) ⦈
 \end{spec}
 For clarity of presentation, applicative bracket notation
 \citep{Applicative} is used in above (denoted as |⦇ ... ⦈| .
@@ -1590,14 +1600,19 @@ before, or the corresponding values in the semantic domain:
 \end{spec}
 \begin{spec}
 ...
-⟦ ξₜ ⟧ Σᵥ Γᵥ  = ⦇ (ι₂ ξ) ⦈
+⟦ ξₜ ⟧ ΣV ΓV  = ⦇ (ι₂ ξ) ⦈
 \end{spec}
 
 This rather simple change has a practically significant impact:
-primitive operations defined in |Σᵥ|, can now pattern match on their
+primitive operations defined in |ΣV|, can now pattern match on their
 input of base type, and provide optimised versions based on the
 available values. This is demonstrated in the example presented in
-Section \ref{sec:Example}.
+Section \ref{sec:Example}. For clarity, the following datatype can be
+used instead of plain sums:
+\begin{spec}
+data PossibleValue χ  =  Exp (𝔼 χ)
+                      |  Val (ΞT χ)
+\end{spec}
 
 \subsubsection{Reification}
 \label{sec:Smart:Reification}
@@ -1637,8 +1652,11 @@ strong sums \citep{NBE-Sum,Extensional}.
 
 \subsection{An Example}
 \label{sec:Example}
+As an example, consider the "hello world" of program generation, the
+power function:
 
 \begin{spec}
+power : ℤ → Syn (ℚₜ →ₜ ℚₜ)
 power n = λₜ x →ₜ
   if n < 0       then
     ifₜ x ==ₜ q0ₜ
@@ -1653,48 +1671,130 @@ power n = λₜ x →ₜ
     x *ₜ (power (n - 1) @ₜ x)
 \end{spec}
 
+It takes two arguments and raises the second to the power of the first
+argument. Following the convention (e.g., see \citet{QDSL}), it is
+written in the ``staged" style: |power| is a meta-function in the host
+language that provided integer host value |n| produces object terms of
+the type |ℚₜ →ₜ ℚₜ|. For pedagogical purposes, we avoid techniques
+that further optimise this function but obscure its presentation.
+
+Following the parametric model proposed in this section, for defining
+the syntax one only needs to provide the following:
+
+\begin{description}
+\item [Base Types], which includes type rational numbers
+\begin{spec}
+X = {ℚₜ}
+\end{spec}
+\item [Literals], which includes literals of rational numbers
+\begin{spec}
+ΞT  = {ℚₜ ↦ ℚ}
+\end{spec}
+\item [Primitives], which includes equality, multiplication, and division
+                    operations on rational numbers
+\begin{spec}
+Σ = {  ==ₜ ↦ 2,
+       *ₜ  ↦ 2,
+       /ₜ  ↦ 2}
+
+ΣT  = {  ==ₜ  : {ℚₜ , ℚₜ} ↦ Boolₜ ,
+         *ₜ   : {ℚₜ , ℚₜ} ↦ ℚₜ ,
+         /ₜ   : {ℚₜ , ℚₜ} ↦ ℚₜ }
+
+ΣV : ⦇ ΣT ⦈
+ΣV  = ⦇ {
+         (Val V)  ==ᵥ  (Val W) = ⦇ V == W ⦈
+         (Val V)  ==ᵥ  (Exp N) = ↑ Boolᵣ (Vₜ ==ₜ N)
+         (Exp M)  ==ᵥ  (Val W) = ↑ Boolᵣ (M  ==ₜ Wₜ)
+         (Exp M)  ==ᵥ  (Exp N) = ↑ Boolᵣ (M  ==ₜ N),
+
+         (Val V)  *ᵥ   (Val W) = ⦇ Val (V * W) ⦈
+         (Val 1)  *ᵥ   (Exp N) = ⦇ Exp N ⦈
+         (Val V)  *ᵥ   (Exp N) = ⦇ Exp (Vₜ *ₜ N) ⦈
+         (Exp M)  *ᵥ   (Val 1) = ⦇ Exp M ⦈
+         (Exp M)  *ᵥ   (Val W) = ⦇ Exp (M *ₜ Wₜ) ⦈
+         (Exp M)  *ᵥ   (Exp N) = ⦇ Exp (M *ₜ N) ⦈,
+
+         (Val V)  /ᵥ   (Val W) = ⦇ Val (V / W) ⦈
+         (Val V)  /ᵥ   (Exp N) = ⦇ Exp (Vₜ /ₜ N) ⦈
+         (Exp M)  /ᵥ   (Val 1) = ⦇ Exp M ⦈
+         (Exp M)  /ᵥ   (Val W) = ⦇ Exp (M /ₜ Wₜ) ⦈
+         (Exp M)  /ᵥ   (Exp N) = ⦇ Exp (M /ₜ N) ⦈ } ⦈
+\end{spec}
+\end{description}
+
+Above relies on the definition of boolean values defined as a sum of unit types:
 \begin{spec}
 Boolₜ   = ⟨⟩ₜ +ₜ ⟨⟩ₜ
 falseₜ  = ι₁ₜ ⟨⟩ₜ
 trueₜ   = ι₂ₜ ⟨⟩ₜ
 ifₜ  L thenₜ M elseₜ N = δₜ L (λₜ x →ₜ N) (λₜ y →ₜ M)
+
+Boolᵣ   = ⟨⟩ᵣ +ᵣ ⟨⟩ᵣ
 \end{spec}
+
+Running |norm (power -6)| results in the following code:
+\begin{spec}
+(λₜ x₀ →ₜ  ifₜ (x₀ ==ₜ q0ₜ)
+           thenₜ q0ₜ
+           elseₜ (-1ₜ /ₜ (  (x₀ *ₜ (x₀ *ₜ x₀)) *ₜ
+                            (x₀ *ₜ (x₀ *ₜ x₀)))))
+\end{spec}
+
+Notice that primitives in |ΣV| are smart. They are defined by pattern
+matching on the inputs, and produce optimised terms based on the
+available inputs. For instance, multiplication of a syntactic term |M|
+by one, simplifies to |M|. Without such smart primitives, running
+|norm (power -6)| results in the following code:
 
 \begin{spec}
-Ξ  = {ℚₜ ↦ ℚ}
-Σᵥ  = {  ==ₜ  : {ℚₜ , ℚₜ} ↦ Boolₜ ,
-         *ₜ   : {ℚₜ , ℚₜ} ↦ ℚₜ ,
-         /ₜ   : {ℚₜ , ℚₜ} ↦ ℚₜ }
+(λₜ x₀ →ₜ  ifₜ (x₀ ==ₜ q0ₜ)
+           thenₜ q0ₜ
+           elseₜ (-1ₜ /ₜ (  (x₀ *ₜ ((x₀ *ₜ q1ₜ) *ₜ (x₀ *ₜ q1ₜ))) *ₜ
+                            (x₀ *ₜ ((x₀ *ₜ q1ₜ) *ₜ (x₀ *ₜ q1ₜ)))))
 \end{spec}
 
+To demonstrate normalisation of sum types, a simple form of
+abstraction is considered: handling corner-cases. The definition of
+|Power| is split into two parts. One alters definition of |Power| to
+return |nothing| of |Maybe| type, instead of |0| when division by zero
+happens, and another replaces |nothing| by |0|:
+\begin{spec}
+power' : ℤ → Syn (ℚₜ →ₜ (Maybeₜ ℚₜ))
+power' n = λₜ x →ₜ
+  if n < 0        then
+    ifₜ x ==ₜ q0ₜ
+    thenₜ  nothingₜ
+    elseₜ  (  (λₜ y →ₜ -1ₜ /ₜ y)
+              <$>ₜ (power' (- n) @ₜ x))
+  else if n == 0  then
+    justₜ q1ₜ
+  else if even n  then
+    (  (λₜ y →ₜ y *ₜ y)
+       <$>ₜ (power' (n / 2) @ₜ x))
+  else
+    (  (λₜ y →ₜ x *ₜ y)
+       <$>ₜ (power' (n - 1) @ₜ x))
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Implementation
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Implementation}
-\label{sec:Implementation}
+power'' : ℤ → Syn (ℚₜ →ₜ ℚₜ)
+power'' n = λₜ x →ₜ maybeₜ (λₜ z →ₜ z) q0ₜ (power' n @ₜ x)
+\end{spec}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Agda
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Agda}
-\label{sec:Agda}
+Above relies on the definition of |Maybe| values of rational numbers
+defined as a sum type:
+\begin{spec}
+Maybeₜ        = ℚₜ +ₜ ⟨⟩ₜ
+justₜ x       = ι₁ₜ x
+nothingₜ      = ι₂ₜ ⟨⟩ₜ
+maybeₜ M N L  = δₜ L (λₜ x →ₜ M @ₜ x) (λₜ y →ₜ N)
+L <$>ₜ M      = maybeₜ (λₜ x →ₜ justₜ (L @ₜ x)) nothingₜ M
+\end{spec}
 
-% mention type function problem and need for relation
-% mention HOAS
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Haskell
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Haskell and Overloading}
-\label{sec:Haskell}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% OCaml
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{OCaml and Effects}
-\label{sec:OCaml}
-
+Running |norm (power'' -6)| results in exactly the same value as |norm
+(power -6)|. Normalisation removes the unnecessary code in |power''|,
+and makes it behave as if no additional layer of abstraction has been
+introduced in the first place; as demonstrated, normalisation in EBN
+achieves abstraction-without-guilt, even for sum types.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Related Work
