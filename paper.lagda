@@ -774,7 +774,7 @@ EDSLs and embedding techniques that are proven successful in practice,
 go beyond traditional sole reuse of syntactic machinery such as parser
 and type-checker, and employ the evaluation mechanism of the host
 language to optimise the DSL terms
-\citep{axelsson2010feldspar,svensson2011obsidian,rompf2012lightweight,
+\citep{FELDSPAR,svensson2011obsidian,rompf2012lightweight,
 Mainland:2010}.
 
 Briefly put, what these techniques provide is
@@ -1843,7 +1843,7 @@ which contains two methods for encoding terms in the host language and
 reifying terms respectively.
 
 Examples of DSLs which use this style of embedding are Feldspar
-\citep{axelsson2010feldspar}, Obsidian \citep{svensson2011obsidian}
+\citep{FELDSPAR}, Obsidian \citep{svensson2011obsidian}
 and Nikola \citep{Mainland:2010}.
 
 
