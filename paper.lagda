@@ -1176,7 +1176,7 @@ constraint on the type of host terms.
 The grammar of types in the object language is standard:
 \begin{spec}
 χ ∈ X (set of base types)
-A,B ∈ Typeₜ::= χ | ⟨⟩ₜ | A →ₜ B | A ×ₜ B
+A,B ∈ Typeₜ ::= χ | ⟨⟩ₜ | A →ₜ B | A ×ₜ B
 \end{spec}
 
 It is parametric over a set of base types. Besides base types, it
