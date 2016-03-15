@@ -1752,74 +1752,82 @@ achieves abstraction-without-guilt, even for sum types.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion \& Related Work}
 \label{sec:RelatedWork}
+As with any other paper describing correspondence between two areas,
+this paper has introduced the main body of the related works, while
+explaining the related concepts. Focus of this section is to mention
+key related areas, besides NBE, and where EBN stands in comparison.
 
-% capture essence of Feldspar
-% todo: NBE
-
-% todo: mention Feldspar here
-
-% todo: mention offline PE here
-% todo: mention online PE here
-
-% todo: mention the two impossibilities:
-%       (a) sum types
-%       (b) primitives
-
-\todo{}{Mention Filinsky}
-\todo{}{Mention Danvy's other related work}
-\todo{}{Mention Danvy's online partial evaluator}
-\todo{}{Mention Gill's CACM}
-\todo{}{Mention Feldspar again}
-\todo{}{Mention LMS}
-\todo{}{Mention There is similarity between smart primitives and the one of LMS}
-\todo{}{Mention Sam's PhD}
-\todo{}{Mention Peter Dybjer's related works}
-\todo{}{Mention Altenkirch's related works}
-\todo{}{Mention Walid's related work}
-\todo{}{Mention Ziria}
-\todo{}{Go through PC members and makes sure to cite their related
-works, to avoid being snipped at}
-
-Like GPLs, DSLs can be implemented as a stand-alone language.  For a
-particular stand-alone DSL, one needs to design the language from
-scratch and implement all the required machinery, such as the ones for
-parsing, name resolution, type checking, interpretation, or
-compilation. Programs in stand-alone DSLs can be quite flexible in
-their syntax, and enjoy well-defined semantics.  However, implementing
-a new stand-alone language demands remarkable engineering effort.
-There are wide range of tools and frameworks available that automate
-parts of the implementation process \citep{spoofax}, yet still
-noticeable amount of effort is required to customise and integrate
-pieces.
-
-Furthermore, as with any other distinct language, stand-alone
-DSLs come with their own ecosystem, ranging from libraries to
-editors. It is often difficult to integrate programs written in
-different languages, and reuse the ecosystem of one for
-another. Object-relational impedance mismatch \citep{?}, and
-SQL injection security attacks \cite{?} are well-known instances of
-such difficulties, where SQL queries, as stand-alone DSL programs, are
-integrated with programs in mainstream GPLs.
-
-
+\subsection{Normalised EDSLs}
 The work by \citet{svenningsson:combiningJournal} is perhaps the most
-closely related to what is presented in this paper. They provide a
-way to embed languages which combines deep and shallow embeddings
-which allows DSLs to be normalised by using evaluation in the host
-language.  Phrased in the framework of Embedding by Normalisation,
-their methodology matches the form of embedding presented in section
-\ref{sec:Basic}. Hence, they can use host language functions and
-products for their DSL implementations. Though they cannot deal with
-arbitrary sum types, although they provide tricks for dealing with a
-restricted form of sum type, such as the |Maybe| type in the Haskell
-standard library. Their implementation in Haskell uses a type-class
-which contains two methods for encoding terms in the host language and
-reifying terms respectively.
-
+closely related to what is presented in this paper. They provide a way
+to embed languages which combines deep and shallow embeddings which
+allows DSLs to be normalised by using evaluation in the host language.
+Phrased in the framework of Embedding by Normalisation, their
+methodology matches the form of embedding presented in section
+\ref{sec:Basic}. They limit their system to a first-order fragment, to
+produce efficient and computationally predictable C code.  They can
+use host language functions and products for their DSL
+implementations. Though they cannot deal with arbitrary sum types,
+although they provide tricks for dealing with a restricted form of sum
+type, such as the |Maybe| type in the Haskell standard library. Their
+implementation in Haskell uses a type-class which contains two methods
+for converting from shallow embedding to deep embedding of terms and
+vice versa. The type-class and its intances corresponds to the
+reification function in EBN, where conversion from shallow to deep can
+be seen as reification function and conversion from deep to shallow as
+reflection function.
 Examples of DSLs which use this style of embedding are Feldspar
 \citep{FELDSPAR}, Obsidian \citep{svensson2011obsidian}
 and Nikola \citep{Mainland:2010}.
 
+Other important related works, are series of successful EDSLs
+implemented in Scala using LMS \citep{scalalms,rompf2012lightweight}.
+They use evaluation mechanism of the host language for optimising
+DSLs.  Their system is based on the of staging DSLs (e.g., see
+\citet{metaml}), and they do so by a smart type-directed approach
+utilising virtualisation (e.g., see \citet{rompf2013scala}). Rompf has
+characterised the essence of LMS, as an approach based on the
+two-level lambda calculi (e.g., see \citep{2005}).  As explored by
+\citet{TDPE}, NBE and the two-level calculi are related.  One
+interesting future work is to exploit the relation to compare EBN with
+the technique underlying LMS.
+
+There are also a large body works on embedding specific DSLs in
+Haskell, that use the evaluation mechanism of Haskell, though not
+explicitly, to optimise embedded terms.
+
+\citet{Gill:CACM} provides a general overview of embedding techniques
+in Haskell, and a crisp explanation of the reification problems
+addressed in this paper. One possible explanation of why reification
+for sum types or primitives appeared difficult (if not impossible), is
+that DSL designers presumed semantic domain to be a simple sub-set of
+the host language without continuations or lifted base types. As EBN
+reveals, to be able to reify terms involving sums or primitives, one
+needs to settle for an alternative semantic domain.
+
+\subsection{Partial Evaluation}
+
+As mentioned in Section \ref{sec:Richer}, Danvy's Type-Directed
+Partial Evaluation \citep{TDPE} and its extensions are central to the
+solutions discussed in this paper.  Partial evaluation comes in two
+flavours: offline and online.  Section \ref{sec:Sums} basically
+describes an offline partial evaluator, and Section \ref{sec:Smart}
+describes an online partial evaluator, though in a limited form.
+For a more practical use of online partial evaluation in embedding, see
+\citet{leissa2015shallow}.
+\citet{DybjerF00,Filinski} characterise the relation between partial
+evaluation and NBE.
+
+\subsection{Stand-Alone DSLs}
+DSLs can be also be implemented as a stand-alone language.  In theory,
+for a stand-alone DSL one needs to implemented all the required
+machinery, and they do not integrate easily with other
+languages. However, there are wide range of tools and frameworks
+available that automate parts of the implementation process (e.g., see
+\citep{spoofax}). While obviously EBN does not apply to stand-alone
+language, the original NBE techniques can definitely be used as a way
+to write normalisers for stand-alone DSLs. In theory, it is even
+possible to implement tools to automate part of the process.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Conclusion
