@@ -1845,7 +1845,10 @@ This paper characterises the correspondence, and puts it into practice,
 by an approach dubbed as Embedding-By-Normalisation (EBN). Then, the
 paper employs EBN to clarify some of the basic concepts in the
 practical embedding techniques, concepts such as code extraction
-(reification) and normalisation.
+(reification) and normalisation. The clarification offered by EBN helped
+to solve the problem of extracting object code from embedded programs
+involving sum types, such as conditional expressions, and primitives,
+such as literals and operations on them.
 
 One final observation of this paper might be that there is science and
 beauty at the core of the embedding techniques, but it demands rigour
