@@ -23,10 +23,13 @@
 \usepackage{ucs}
 \usepackage[utf8x]{inputenc}
 % \usepackage{listings}
-
+\usepackage{csquotes}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % lhs2TeX macros
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%format []  = "[]"
+%format [c|  = "[c|"
+%format |]   = "|]"
 %format ⟨⟩ₜ  = "\underline{⟨⟩}"
 %format ×ₜ  = "\underline{×}"
 %format +ₜ  = "\underline{+}"
@@ -235,7 +238,6 @@ type-directed partial evaluation, TDPE
 Less is more sometimes. Compared to General-Purpose Languages (GPLs)
 like C, Java, or Haskell; Domain-Specific Languages (DSLs) like SQL,
 VHDL, or HTML are smaller and simpler.
-
 Unlike GPLs, DSLs are designed ground up to describe programs used in
 a specific domain, e.g., SQL for database queries, VHDL for electronic
 circuits, and HTML for web pages. DSLs are a powerful engineering
@@ -244,37 +246,17 @@ providing a set of primitives in the language. Such primitives are
 often referred to as domain-specific constructs. For instance, SELECT
 statement is a domain-specific construct in SQL.
 
-Like GPLs, DSLs can be implemented as a stand-alone language.  For a
-particular stand-alone DSL, one needs to design the language from
-scratch and implement all the required machinery, such as the ones for
-parsing, name resolution, type checking, interpretation, or
-compilation. Programs in stand-alone DSLs can be quite flexible in
-their syntax, and enjoy well-defined semantics.  However, implementing
-a new stand-alone language demands remarkable engineering effort.
-There are wide range of tools and frameworks available that automate
-parts of the implementation process \citep{spoofax}, yet still
-noticeable amount of effort is required to customise and integrate
-pieces.
-
-Furthermore, as with any other distinct language, stand-alone
-DSLs come with their own ecosystem, ranging from libraries to
-editors. It is often difficult to integrate programs written in
-different languages, and reuse the ecosystem of one for
-another. Object-relational impedance mismatch \citep{?}, and
-SQL injection security attacks \cite{?} are well-known instances of
-such difficulties, where SQL queries, as stand-alone DSL programs, are
-integrated with programs in mainstream GPLs.
-
 Unlike GPLs, DSLs can often, thanks to their simplicity, be
 implemented by embedding them in an existing host GPL. Embedding is
 referred to a diverse set of techniques for implementing DSL terms, by
 first encoding them as terms in a host language, and then defining
 their semantics using the encoded terms. Semantics of DSL terms may be
-defined inside the host language by interpreting them in the host
-language's runtime system, or outside the host language by compiling
-code and passing it to an external system.
+defined entirely inside the host language by interpreting them in the
+host language's runtime system, or partly outside the host language by
+compiling code and passing it to an external system.
 
-Unlike stand-alone DSLs, embedded DSLs can reuse some of the existing
+% Unlike stand-alone DSLs, embedded
+Embedded DSLs can reuse some of the existing
 machinery implemented for their host language; for a particular
 Embedded DSL (EDSL), one does not need to implement all the required
 machinery.  For instance, by using quotations
@@ -302,71 +284,48 @@ defining syntax and semantic of DSLs; more or less, syntax and
 semantic of EDSLs often follow the ones of the host language.  There
 are variety of smart and useful techniques to partially liberate EDSLs
 from such restrictions (e.g., see \citet{QDSL, Definitional,
-svenningsson:combining, Syntactic, scalalms}). However, the genius of
-these techniques in one hand, and the subtle nature of embedding
-process in the other, often causes complications in practice. A key
-cause of such complications is lack of formality, both in the
-programming interface provided by EDSLs, and in techniques used
-for embedding them.
+svenningsson:combining, Syntactic, scalalms}).
 
 Unlike stand-alone languages that are often accompanied by a set of
-formal descriptions, EDSLs often possess no formal descriptions. Due
-to subtleties caused by embedding, EDSLs are often presented
-informally by actual code in a mainstream host language; it is
-difficult to distinguish an EDSL from the the host language, as the
-boundary between an EDSL and its host language is not entirely clear.
+formal descriptions, EDSLs are often presented by actual code in a
+mainstream host language. Also, the embedding techniques themselves
+are described in terms of a unique set of language features they
+employ.  For instance in Haskell, deep embedding technique is when
+datatypes in host are used for representing the syntax of EDSLs, and
+functions (programs in general) over the datatypes are used for
+defining semantics; or, final tagless embedding \citep{Tagless} is
+when type-classes are used to define an interface representing syntax,
+and instances of the type-classes are used for defining semantics.
+
 Since often embedding techniques take smart use of techniques and
 stacks of unconventional features available in the host language,
-descriptions by actual code appear cryptic.  Such informal
-descriptions makes EDSL hard to learn, not only for domain experts,
-whom traditionally are assumed to be unfamiliar with the host
-language, but also for the host language experts unfamiliar with the
-domain. Whole is nothing without all its parts, and whole is greater
-than the sum its parts.
+descriptions by actual code sometimes appear cryptic. It becomes difficult
+to distinguish an EDSL from the the host language, as the boundary
+between an EDSL and its host language would not be entirely clear.
+Implementation-based descriptions make EDSL rather
+difficult to learn, not only for domain experts, whom traditionally
+are assumed to be unfamiliar with the host language, but also for the
+host language experts unfamiliar with the domain. Whole is nothing
+without all its parts, and whole is greater than the sum its parts.
 
+Implementation-based descriptions make embedding techniques rather
+difficult to learn as well: techniques vary greatly from one host
+language to another, and even in a host language it is difficult to
+compare techniques. As a result, existing techniques are hard to
+scale. For instance, once one moves from embedding simpler DSLs to
+DSLs with richer computational content, it becomes harder for
+embedding to stay close to the intended syntax and semantic in one
+hand, and reuse the host machinery in the other.
+Would it not be convenient to have a more formal and
+implementation-independent description of EDSLs and embedding
+techniques? This paper is taking a few steps toward this goal.
 
-% As it may not come surprising to the reader, increasing number of
-% papers are being published in peer-reviewed conferences (at the time
-% of writing this paper), key subjects of which are solely introducing
-% (informally) a new particular EDSL.  It is notoriously difficult to
-% compare these EDSLs with each others and draw conclusive results.
-% Regarding similar problems with GPLs, Sir Tony Hoare once suggested
-% \citep{?} introducing new features rather than new languages.
-% It is possible to do so in GPLs, thanks to formal theory.
-
-Unlike stand-alone languages whose implementations often follow a set
-of well-known general principles (see \citet{Aho}), implementations
-of EDSLs are less principled and techniques vary greatly from one host
-language to another. Even for one particular host language, there are
-many different approaches to embedding, that often are characterised
-based on a unique set of language features they rely on.
-For instance in Haskell,
-deep embedding technique is when datatypes in host are used for
-representing the syntax of EDSLs, and functions (programs in general)
-over the datatypes for semantics;
-quoted embedding, which is a specific form of deep embedding, is when
-a form of quotations is used to represent syntax, and functions over
-the unquoted representation (often normalised) for semantics;
-shallow embedding is when an interface formed by a set of functions is
-used to represent the syntax, and implementation of the functions as
-semantics;
-final tagless embedding \citep{Tagless}, which is a specific form of
-shallow embedding, is when type-classes are used to define interface
-representing syntax, and instances of the type-classes for semantics.
-
-One key issue with this lack of a principled approach to
-embedding is scalability of existing solutions. Once one moves from
-embedding simpler DSLs to DSLs with richer computational content, it
-becomes harder for embedding to stay close to the intended syntax and
-semantic in one hand, and reuse the host machinery in the other.
-
-% todo: forward-reference to a section with
-
-The kind of principles this paper is aiming for is the ones of
-mathematical nature: abstract, simple, and insightful. These are the
-kind of principles that have been guiding design of functional
-programs since their dawn. One may argue these principles are
-discovered, as opposed to being invented \cite{Wadler-2015}.
+The kind of principles and descriptions this paper is aiming for is
+the ones of mathematical nature: abstract, insightful, and
+simple. These are the kind of principles that have been guiding design
+of functional programs since their dawn. One may argue these
+principles are the ones that are discovered, as opposed to being
+invented \cite{Wadler-2015}.
 
 For instance, \citet[p. 513]{Tagless} observes that final
 tagless embeddings are semantic algebras and form fold-like
@@ -380,72 +339,64 @@ descriptions (e.g., via categorical semantics), hence establishing
 correspondence between embedding and folds enables borrowing ideas
 from other related fields.
 
-In pursuit of a formal foundation for practical embedding techniques,
-this paper proposes Embedding-By-Normalisation, EBN for short, as a
-principled and systematic approach to embedding. EBN is based on a
-direct correspondence between embedding techniques in practice and
+In pursuit of a formal and implementation-independent description of
+practical embedding techniques, this paper proposes
+Embedding-By-Normalisation, EBN for short, as a principled approach to
+study and structure embedding. EBN is based on a direct correspondence
+between embedding techniques in practice and
 Normalisation-By-Evaluation \citep{MartinLof,Berger} (NBE) techniques
-in theory.  NBE is a well-studied
-approach (e.g., see \citet{NBE-Cat,NBE-Sum,NBE-Untyped,Lindley05})
-in proof theory and programming semantics, commonly used for deriving
-canonical form of terms with respect to an equational theory.
-Decomposing embedding techniques into the key structures in
-NBE is liberating: embedding techniques can be studied independent of
-language features. NBE enjoys clear mathematical and formal
-description, hence establishing correspondence between embedding and
-NBE enables borrowing ideas from other related fields.  For instance,
-this paper shows how to use the NBE technique Type-Directed Partial
-Evaluation (TDPE)\citep{TDPE} to extract object code from host terms
-involving sums types, such as conditional expressions, and primitives,
-such as literals and operations on them. Although, there may exist
-various smart practical solutions to the mentioned code extraction
-problem; at the time of writing this paper, the process of code
-extraction for sum types and primitives is considered an open
-theoretical problem in EDSL community (see \citet{Gill:CACM}).
-% todo: refer the related section
+in theory.  NBE is a well-studied approach (e.g., see
+\citet{NBE-Cat,NBE-Sum,NBE-Untyped,Lindley05}) in proof theory and
+programming semantics, commonly used for deriving canonical form of
+terms with respect to an equational theory.  Decomposing embedding
+techniques into the key structures in NBE is liberating: embedding
+techniques can be studied independent of language features and
+implementations. NBE enjoys clear mathematical and formal description,
+hence establishing correspondence between embedding and NBE enables
+borrowing ideas from other related fields.  For instance, this paper
+shows how to use the NBE technique Type-Directed Partial Evaluation
+(TDPE)\citep{TDPE} to extract object code from host terms involving
+sums types, such as conditional expressions, and primitives, such as
+literals and operations on them. Although, there may exist various
+smart practical solutions to the mentioned code extraction problem; at
+the time of writing this paper, the process of code extraction for sum
+types and primitives is considered an open theoretical problem in EDSL
+community (see \citet{Gill:CACM}).
 
 The contributions of this paper are as follows:
 \begin{itemize}
 \item To characterise the correspondence between
       Normalisation-By-Evaluation (NBE) and embedding techniques
       (Section \ref{sec:NBE} and \ref{sec:EBN})
-\item To introduce Embedding-By-Normalisation (EBN) as a systematic
-      and principled approach to embedding inspired by the
+\item To introduce Embedding-By-Normalisation (EBN) as a principled
+      approach to to study and structure embedding inspired by the
       correspondence to NBE (Section \ref{sec:NBE} and \ref{sec:EBN})
-\item To show how to systematically embed different variants of
-      simply-typed lambda calculus by using EBN (Section \ref{sec:Basic}
-      and Section \ref{sec:Primitives})
+\item To propose a simple parametric model capturing a large and
+      popular class of EDSLs, and introducing a series of EBN
+      techniques for this model (Section \ref{sec:Type-Constrained})
 \item To show how to extract code from embedded terms involving sum
-      types, such as conditional expressions, by using EBN and
-      exploiting the correspondence to Danvy's NBE technique for
-      offline partial evaluation (Section \ref{sec:Sums})
+      types, such as conditional expressions, as a by-product of EBN
+      for above model involving sum types (Section \ref{sec:Sums})
 \item To show how to extract code from embedded terms involving
-      primitives and operations on them, by using EBN and exploiting
-      the correspondence to simple online partial evaluation
-      techniques (Section \ref{sec:Smart})
-% \item To show how to employ language features in Agda, Haskell, and
-%      OCaml for implementing EBN
-% (Section \ref{sec:Implementation})
+      primitive values and operations, as a by-product of EBN
+      for above model involving primitives (Section \ref{sec:Smart})
 \item To show how EBN relates to some of the related existing
       techniques, and highlighting some interesting insights when
       observing such techniques through EBN lens
       (Section \ref{sec:RelatedWork})
 \end{itemize}
 
-% capture essence of Feldspar
-% generic account by Σ and Ξ
-
-To steer clear from the mentioned informality prevalent in EDSL
-literature, code in the main body of this paper is presented using
-type theory, as implemented in the proof assistant Agda
-\citep{Agda}. Only a minimal set of language features in Agda is
-used, hoping for the presentation to remain accessible to the readers
-familiar with functional programming.
-When inferrable from context, some unnecessary implementation details,
-such as type instantiations or overloading of constants, are
-intentionally left out of the code for brevity.
-As mentioned, the implementation concerns are addressed separately.
-Code and definitions presented in this paper are implemented in Agda.
+To stay formal and implementation-independent, the descriptions and
+code in the main body of this paper is presented using type theory,
+following a syntax similar to the one in the proof assistant Agda
+\citep{Agda}.  Only a minimal set of language features is used, hoping
+for the presentation to remain accessible to the readers familiar with
+functional programming.  When inferrable from context, some
+unnecessary implementation details, such as type instantiations or
+overloading of constants, are intentionally left out of the code for
+brevity.  The implementation concerns are addressed separately
+throughout the paper.  Code and definitions presented in this paper
+are implemented in Agda, and are available as supporting material.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% NBE
@@ -1802,6 +1753,7 @@ achieves abstraction-without-guilt, even for sum types.
 \section{Discussion \& Related Work}
 \label{sec:RelatedWork}
 
+% capture essence of Feldspar
 % todo: NBE
 
 % todo: mention Feldspar here
@@ -1828,6 +1780,28 @@ achieves abstraction-without-guilt, even for sum types.
 \todo{}{Go through PC members and makes sure to cite their related
 works, to avoid being snipped at}
 
+Like GPLs, DSLs can be implemented as a stand-alone language.  For a
+particular stand-alone DSL, one needs to design the language from
+scratch and implement all the required machinery, such as the ones for
+parsing, name resolution, type checking, interpretation, or
+compilation. Programs in stand-alone DSLs can be quite flexible in
+their syntax, and enjoy well-defined semantics.  However, implementing
+a new stand-alone language demands remarkable engineering effort.
+There are wide range of tools and frameworks available that automate
+parts of the implementation process \citep{spoofax}, yet still
+noticeable amount of effort is required to customise and integrate
+pieces.
+
+Furthermore, as with any other distinct language, stand-alone
+DSLs come with their own ecosystem, ranging from libraries to
+editors. It is often difficult to integrate programs written in
+different languages, and reuse the ecosystem of one for
+another. Object-relational impedance mismatch \citep{?}, and
+SQL injection security attacks \cite{?} are well-known instances of
+such difficulties, where SQL queries, as stand-alone DSL programs, are
+integrated with programs in mainstream GPLs.
+
+
 The work by \citet{svenningsson:combiningJournal} is perhaps the most
 closely related to what is presented in this paper. They provide a
 way to embed languages which combines deep and shallow embeddings
@@ -1852,11 +1826,30 @@ and Nikola \citep{Mainland:2010}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 \label{sec:conclusion}
+Girard, starts the first chapter of his popular book "Proofs and
+Types" \citep{Girard} by the following paragraph:
+\begin{displayquote}
+Theoretical Computing is not yet a science. Many basic concepts have not been
+clarified, and current work in the area obeys a kind of “wedding cake” paradigm:
+for instance language design is reminiscent of Ptolomeic astronomy — forever
+in need of further corrections. There are, however, some limited topics such as
+complexity theory and denotational semantics which are relatively free from this
+criticism.
+\end{displayquote}
 
-% This paper is to free embedding from Girard's wedding cake dilemma.
-% Show the diagram of correspondence
-% Mention Compositional evaluation = shallow embedding
-%
+This paper shows that theoretical Normalisation-By-Evaluation (NBE)
+techniques, commonly used in denotational semantics, correspond to
+popular embedding techniques, commonly used in programming practice.
+
+This paper characterises the correspondence, and puts it into practice,
+by an approach dubbed as Embedding-By-Normalisation (EBN). Then, the
+paper employs EBN to clarify some of the basic concepts in the
+practical embedding techniques, concepts such as code extraction
+(reification) and normalisation.
+
+One final observation of this paper might be that there is science and
+beauty at the core of the embedding techniques, but it demands rigour
+and patience to uncover.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Acknowledgements
