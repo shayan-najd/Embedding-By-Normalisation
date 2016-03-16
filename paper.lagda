@@ -333,7 +333,9 @@ Embedding-By-Normalisation, EBN for short, as a principled approach to
 study and structure embedding. EBN is based on a direct correspondence
 between embedding techniques in practice and
 Normalisation-By-Evaluation \citep{MartinLof,Berger} (NBE) techniques
-in theory.  NBE is a well-studied approach (e.g., see
+in theory.
+
+NBE is a well-studied approach (e.g., see
 \citet{NBE-Cat,NBE-Sum,NBE-Untyped,Lindley05}) in proof theory and
 programming semantics, commonly used for deriving canonical form of
 terms with respect to an equational theory.  Decomposing embedding
