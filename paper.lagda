@@ -236,27 +236,15 @@ type-directed partial evaluation, TDPE
 \label{sec:introduction}
 % \subsection{The Problem: Understanding Embedding}
 % \subsubsection{Domain-Specific Languages: Powerful, yet Simple}
-Less is more sometimes. Compared to General-Purpose Languages (GPLs)
-like C, Java, or Haskell; Domain-Specific Languages (DSLs) like SQL,
-VHDL, or HTML are smaller and simpler.
+Less is more sometimes. Compared to General-Purpose Languages (GPLs),
+Domain-Specific Languages (DSLs) are smaller and simpler.
 Unlike GPLs, DSLs are designed ground up to describe programs used in
-a specific domain, e.g., SQL for database queries, VHDL for electronic
-circuits, and HTML for web pages. DSLs are a powerful engineering
+a specific domain. DSLs are a powerful engineering
 tool: DSLs abstract over domain-specific concepts and operations by
-providing a set of primitives in the language. Such primitives are
-often referred to as domain-specific constructs. For instance, SELECT
-statement is a domain-specific construct in SQL.
+providing a set of primitives in the language.
 
-Unlike GPLs, DSLs can often, thanks to their simplicity, be
-implemented by embedding them in an existing host GPL. Embedding is
-referred to a diverse set of techniques for implementing DSL terms, by
-first encoding them as terms in a host language, and then defining
-their semantics using the encoded terms. Semantics of DSL terms may be
-defined entirely inside the host language by interpreting them in the
-host language's runtime system, or partly outside the host language by
-compiling code and passing it to an external system.
-
-% Unlike stand-alone DSLs, embedded
+\emph{Embedding} a DSL in a host GPL is by now well established as a family
+of techniques for simplifying its implementation.
 Embedded DSLs can reuse some of the existing
 machinery implemented for their host language; for a particular
 Embedded DSL (EDSL), one does not need to implement all the required
@@ -266,7 +254,7 @@ virtualisation of constructs \citep{ad-hoc,rompf2013scala}, or normal
 techniques for modular programming \citep{1ML}, there is no
 need for implementing a parser; by using higher-order abstract syntax
 and piggybacking on module system of host , there is no need to
-implement a name-resolver; and, by using mechanism similar to
+implement a name-resolver; and, by using mechanisms such as
 Generalised Algebraic Data Types (GADTs) \citep{GADTs}, there is no
 need to implement a type-checker.
 
@@ -286,21 +274,9 @@ semantic of EDSLs often follow the ones of the host language.  There
 are variety of smart and useful techniques to partially liberate EDSLs
 from such restrictions (e.g., see \citet{QDSL, Definitional,
 svenningsson:combining, Syntactic, scalalms}).
-
-Unlike stand-alone languages that are often accompanied by a set of
-formal descriptions, EDSLs are often presented by actual code in a
-mainstream host language. Also, the embedding techniques themselves
-are described in terms of a unique set of language features they
-employ.  For instance in Haskell, deep embedding technique is when
-datatypes in host are used for representing the syntax of EDSLs, and
-functions (programs in general) over the datatypes are used for
-defining semantics; or, final tagless embedding \citep{Tagless} is
-when type-classes are used to define an interface representing syntax,
-and instances of the type-classes are used for defining semantics.
-
-Since often embedding techniques take smart use of techniques and
+However, employing clever embedding techniques and
 stacks of unconventional features available in the host language,
-descriptions by actual code sometimes appear cryptic. It becomes difficult
+can lead to cryptic code sometimes. It becomes difficult
 to distinguish an EDSL from the the host language, as the boundary
 between an EDSL and its host language would not be entirely clear.
 Implementation-based descriptions make EDSL rather
@@ -309,14 +285,26 @@ are assumed to be unfamiliar with the host language, but also for the
 host language experts unfamiliar with the domain. Whole is nothing
 without all its parts, and whole is greater than the sum its parts.
 
+
+Unlike stand-alone languages that are often accompanied by a set of
+formal descriptions, EDSLs are often presented by actual code in a
+mainstream host language. Also, the embedding techniques themselves
+are described in terms of a unique set of language features they
+employ.  For instance in Haskell, a deep embedding means
+datatypes in the host language are used for representing the syntax of EDSLs, and
+functions (programs in general) over the datatypes are used for
+defining semantics; or, in a final tagless embedding \citep{Tagless}
+type-classes are used to define an interface representing syntax,
+and instances of the type-classes are used for defining semantics.
+
 Implementation-based descriptions make embedding techniques rather
 difficult to learn as well: techniques vary greatly from one host
 language to another, and even in a host language it is difficult to
 compare techniques. As a result, existing techniques are hard to
 scale. For instance, once one moves from embedding simpler DSLs to
 DSLs with richer computational content, it becomes harder for
-embedding to stay close to the intended syntax and semantic in one
-hand, and reuse the host machinery in the other.
+embedding to stay close to the intended syntax and semantic on one
+hand, and reuse the host machinery on the other.
 Would it not be convenient to have a more formal and
 implementation-independent description of EDSLs and embedding
 techniques? This paper is taking a few steps toward this goal.
