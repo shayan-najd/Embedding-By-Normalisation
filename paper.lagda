@@ -329,19 +329,18 @@ programming semantics, commonly used for deriving canonical form of
 terms with respect to an equational theory.  Decomposing embedding
 techniques into the key structures in NBE is liberating: embedding
 techniques can be studied independent of language features and
-implementations.
-
-Our new connection between NBE and EDSLs allows for transferring
-results from one field to the other, thereby strengthening both. In
-this paper we
-show how to use the NBE technique Type-Directed Partial Evaluation
-(TDPE)\citep{TDPE} to extract object code from host terms involving
-sums types, such as conditional expressions, and primitives, such as
-literals and operations on them. Although, there may exist various
-smart practical solutions to the mentioned code extraction problem; at
-the time of writing this paper, the process of code extraction for sum
-types and primitives is considered an open theoretical problem in the EDSL
-community (see \citet{Gill:CACM}).
+implementations. NBE enjoys clear mathematical and formal description,
+and the connection between NBE and EDSLs allows for transferring
+results from one field to the other, thereby strengthening both.  For
+instance, in this paper we show how to use the NBE technique
+Type-Directed Partial Evaluation (TDPE)\citep{TDPE} to extract object
+code from host terms involving sums types, such as conditional
+expressions, and primitives, such as literals and operations on
+them. Although, there may exist various smart practical solutions to
+the mentioned code extraction problem; at the time of writing this
+paper, the process of code extraction for sum types and primitives is
+considered an open theoretical problem in the EDSL community (see
+\citet{Gill:CACM}).
 
 The contributions of this paper are as follows:
 \begin{itemize}
@@ -376,7 +375,8 @@ unnecessary implementation details, such as type instantiations or
 overloading of constants, are intentionally left out of the code for
 brevity.  The implementation concerns are addressed separately
 throughout the paper.  Code and definitions presented in this paper
-are implemented in Agda, and are available as supporting material.
+are implemented in Agda, and are available at
+\url{https://github.com/shayan-najd/Embedding-By-Normalisation}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% NBE
@@ -1260,7 +1260,7 @@ function is as follows:
 ⟦ c Mᵢ       ⟧ ΣV ΓV  = ΣV c ⟦ Mᵢ ⟧
 ⟦ ⟨⟩ₜ        ⟧ ΣV ΓV  = ⟨⟩
 ⟦ x          ⟧ ΣV ΓV  = ΓV x
-⟦ λₜ x →ₜ N  ⟧ ΣV ΓV  = λ y → ⟦ N ⟧ ΣV (ΓV, x ↦ y)
+⟦ λₜ x →ₜ N  ⟧ ΣV ΓV  = λ y → ⟦ N ⟧ ΣV (ΓV , x ↦ y)
 ⟦ L @ₜ M     ⟧ ΣV ΓV  = (⟦ L ⟧ ΣV ΓV) (⟦ M ⟧ ΣV ΓV)
 ⟦ (M ,ₜ N)   ⟧ ΣV ΓV  = (⟦ M ⟧ ΣV ΓV , ⟦ N ⟧ ΣV ΓV)
 ⟦ fstₜ L     ⟧ ΣV ΓV  = fst (⟦ L ⟧ ΣV ΓV)
@@ -1424,7 +1424,7 @@ domain uses monadic functions. All of the cases from the evaluator Section
 ⟦ c Mᵢ        ⟧ ΣV ΓV  = ΣV c ⟦ Mᵢ ⟧
 ⟦ ⟨⟩ₜ         ⟧ ΣV ΓV  = ⦇ ⟨⟩ ⦈
 ⟦ x           ⟧ ΣV ΓV  = ΓV x
-⟦ λₜ x →ₜ N   ⟧ ΣV ΓV  = ⦇ λ y → ⟦ N ⟧ ΣV (ΓV, x ↦ ⦇ y ⦈) ⦈
+⟦ λₜ x →ₜ N   ⟧ ΣV ΓV  = ⦇ λ y → ⟦ N ⟧ ΣV (ΓV , x ↦ ⦇ y ⦈) ⦈
 ⟦ L @ₜ M      ⟧ ΣV ΓV  = join ⦇ (⟦ L ⟧ ΣV ΓV) (⟦ M ⟧ ΣV ΓV) ⦈
 ⟦ (M ,ₜ N)    ⟧ ΣV ΓV  = ⦇ (⟦ M ⟧ ΣV ΓV , ⟦ N ⟧ ΣV ΓV) ⦈
 ⟦ fstₜ L      ⟧ ΣV ΓV  = ⦇ fst (⟦ L ⟧ ΣV ΓV) ⦈
@@ -1748,7 +1748,8 @@ achieves abstraction-without-guilt, even for sum types.
 
 Besides the implementation in Agda, examples and the corresponding EBN
 technique in this subsection is implemented in Haskell and is
-available as supporting material.
+available at
+\url{https://github.com/shayan-najd/Embedding-By-Normalisation/blob/master/Power.hs}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Related Work
