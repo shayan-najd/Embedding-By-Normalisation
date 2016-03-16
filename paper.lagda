@@ -342,16 +342,18 @@ programming semantics, commonly used for deriving canonical form of
 terms with respect to an equational theory.  Decomposing embedding
 techniques into the key structures in NBE is liberating: embedding
 techniques can be studied independent of language features and
-implementations. NBE enjoys clear mathematical and formal description,
-hence establishing correspondence between embedding and NBE enables
-borrowing ideas from other related fields.  For instance, this paper
-shows how to use the NBE technique Type-Directed Partial Evaluation
+implementations.
+
+Our new connection between NBE and EDSLs allows for transferring
+results from one field to the other, thereby strengthening both. In
+this paper we
+show how to use the NBE technique Type-Directed Partial Evaluation
 (TDPE)\citep{TDPE} to extract object code from host terms involving
 sums types, such as conditional expressions, and primitives, such as
 literals and operations on them. Although, there may exist various
 smart practical solutions to the mentioned code extraction problem; at
 the time of writing this paper, the process of code extraction for sum
-types and primitives is considered an open theoretical problem in EDSL
+types and primitives is considered an open theoretical problem in the EDSL
 community (see \citet{Gill:CACM}).
 
 The contributions of this paper are as follows:
