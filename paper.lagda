@@ -37,12 +37,12 @@
 %format →ₜ  = "\underline{→}"
 %format @ₜ  = "\underline{@}"
 %format ,ₜ  = "\underline{,}"
-%format π₁ₜ = "\underline{π₁}"
-%format π₂ₜ = "\underline{π₂}"
+%format fstₜ = "\underline{fst}"
+%format sndₜ = "\underline{snd}"
 %format ξₜ  = "\underline{ξ}"
-%format ι₁ₜ = "\underline{ι₁}"
-%format ι₂ₜ = "\underline{ι₂}"
-%format δₜ  = "\underline{δ}"
+%format inlₜ = "\underline{inl}"
+%format inrₜ = "\underline{inr}"
+%format caseₜ  = "\underline{case}"
 %format Mᵢ  = "\overline{M}"
 %format ==  = "=="
 %format ==ₜ = "\underline{==}"
@@ -1143,7 +1143,7 @@ x ∈ Γ (set of variables)
 ξ ∈ Ξ (set of literals)
 c ∈ Σ (set of signature of primitives)
 L,M,N ∈ Syn ::= ξₜ  | c Mᵢ | ⟨⟩ₜ | x | λₜ x →ₜ N | L @ₜ M
-                    | (M ,ₜ N) | π₁ₜ L | π₂ₜ L
+                    | (M ,ₜ N) | fstₜ L | sndₜ L
 \end{spec}
 
 The language, referred to as |Syn|, is parametric over a set of
@@ -1171,9 +1171,9 @@ The typing rules are the expected ones:
 &
 |infer2 (ΓT ⊢ M : A) (ΓT ⊢ N : B) (ΓT ⊢ (M ,ₜ N) : A ×ₜ B)|
 \\~\\
-|infer1 (ΓT ⊢ L : A ×ₜ B) (ΓT ⊢ π₁ₜ L : A)|
+|infer1 (ΓT ⊢ L : A ×ₜ B) (ΓT ⊢ fstₜ L : A)|
 &
-|infer1 (ΓT ⊢ L : A ×ₜ B) (ΓT ⊢ π₂ₜ L : B)|
+|infer1 (ΓT ⊢ L : A ×ₜ B) (ΓT ⊢ sndₜ L : B)|
 \\~\\
 \end{tabular}
 
@@ -1276,8 +1276,8 @@ function is as follows:
 ⟦ λₜ x →ₜ N  ⟧ ΣV ΓV  = λ y → ⟦ N ⟧ ΣV (ΓV, x ↦ y)
 ⟦ L @ₜ M     ⟧ ΣV ΓV  = (⟦ L ⟧ ΣV ΓV) (⟦ M ⟧ ΣV ΓV)
 ⟦ (M ,ₜ N)   ⟧ ΣV ΓV  = (⟦ M ⟧ ΣV ΓV , ⟦ N ⟧ ΣV ΓV)
-⟦ π₁ₜ L      ⟧ ΣV ΓV  = π₁ (⟦ L ⟧ ΣV ΓV)
-⟦ π₂ₜ L      ⟧ ΣV ΓV  = π₂ (⟦ L ⟧ ΣV ΓV)
+⟦ fstₜ L      ⟧ ΣV ΓV  = fst (⟦ L ⟧ ΣV ΓV)
+⟦ sndₜ L      ⟧ ΣV ΓV  = snd (⟦ L ⟧ ΣV ΓV)
 \end{spec}
 
 Apart from the input expression, the evaluation function takes two
@@ -1301,7 +1301,7 @@ semantics:
 ↓ Synᵣ      V  = V
 ↓ ⟨⟩ᵣ       V  = ⟨⟩ₜ
 ↓ (a →ᵣ b)  V  = λₜ x →ₜ ↓ b (V (↑ a x ))
-↓ (a ×ᵣ b)  V  = (↓ a (π₁ V) ,ₜ ↓ b (π₂ V))
+↓ (a ×ᵣ b)  V  = (↓ a (fst V) ,ₜ ↓ b (snd V))
 \end{spec}
 \begin{spec}
 ↑ : α ∼ A → Syn A → α
@@ -1309,7 +1309,7 @@ semantics:
 ↑ Synᵣ      M  = M
 ↑ ⟨⟩ᵣ       M  = ⟨⟩
 ↑ (a →ᵣ b)  M  = λ x → ↑ b (M @ₜ (↓ a x))
-↑ (a ×ᵣ b)  M  = (↑ a (π₁ₜ M) , ↑ b (π₂ₜ M))
+↑ (a ×ᵣ b)  M  = (↑ a (fstₜ M) , ↑ b (sndₜ M))
 \end{spec}
 
 Above definition is similar to some classic NBE algorithms such as
@@ -1340,25 +1340,25 @@ extended as follows:
 A,B ::= ... | A +ₜ B
 \end{spec}
 \begin{spec}
-L,M,N ::=  ... | ι₁ₜ M | ι₂ₜ N | δₜ L M N
+L,M,N ::=  ... | inrₜ M | inrₜ N | caseₜ L M N
 \end{spec}
 \begin{tabular}{@@{}cc@@{}}
 \\
 ...
 \\~\\
-|infer1 (ΓT ⊢ M : A) (ΓT ⊢ ι₁ₜ M : A +ₜ B)|
+|infer1 (ΓT ⊢ M : A) (ΓT ⊢ inlₜ M : A +ₜ B)|
 &
-|infer1 (ΓT ⊢ N : B) (ΓT ⊢ ι₂ₜ N : A +ₜ B)|
+|infer1 (ΓT ⊢ N : B) (ΓT ⊢ inrₜ N : A +ₜ B)|
 \\~\\
 \multicolumn{2}{c}{
-|infer3 (ΓT ⊢ L : A +ₜ B) (ΓT ⊢ M : A →ₜ C) (ΓT ⊢ N : B →ₜ C) (ΓT ⊢ δₜ L M N : C)|}
+|infer3 (ΓT ⊢ L : A +ₜ B) (ΓT ⊢ M : A →ₜ C) (ΓT ⊢ N : B →ₜ C) (ΓT ⊢ caseₜ L M N : C)|}
 \\~\\
 \end{tabular}
 
 
 The extensions are standard: sum types, left injection, right
 injection, and case expression. To simplify the presentation, branches
-of the case expression |δₜ L M N| (i.e., M and N) are standard terms
+of the case expression |caseₜ L M N| (i.e., M and N) are standard terms
 of function type, as opposed to a specific built-in language
 constructs with bindings.  It follows Alonzo Church's original idea
 that all variable bindings in syntax can be done via bindings in
@@ -1433,19 +1433,20 @@ domain uses monadic functions. All of the cases from the evaluator Section
 \begin{spec}
 ⟦_⟧ : Syn ΓT A → ⟦ ΣT ⟧ → ⟦ ΓT ⟧ → ⟦ A ⟧
 
-⟦ ξₜ         ⟧ ΣV ΓV  = ⦇ ξₜ ⦈
-⟦ c Mᵢ       ⟧ ΣV ΓV  = ΣV c ⟦ Mᵢ ⟧
-⟦ ⟨⟩ₜ        ⟧ ΣV ΓV  = ⦇ ⟨⟩ ⦈
-⟦ x          ⟧ ΣV ΓV  = ΓV x
-⟦ λₜ x →ₜ N  ⟧ ΣV ΓV  = ⦇ λ y → ⟦ N ⟧ ΣV (ΓV, x ↦ ⦇ y ⦈) ⦈
-⟦ L @ₜ M     ⟧ ΣV ΓV  = join ⦇ (⟦ L ⟧ ΣV ΓV) (⟦ M ⟧ ΣV ΓV) ⦈
-⟦ (M ,ₜ N)   ⟧ ΣV ΓV  = ⦇ (⟦ M ⟧ ΣV ΓV , ⟦ N ⟧ ΣV ΓV) ⦈
-⟦ π₁ₜ L      ⟧ ΣV ΓV  = ⦇ π₁ (⟦ L ⟧ ΣV ΓV) ⦈
-⟦ π₂ₜ L      ⟧ ΣV ΓV  = ⦇ π₂ (⟦ L ⟧ ΣV ΓV) ⦈
-⟦ ι₁ₜ M      ⟧ ΣV ΓV  = ⦇ ι₁ (⟦ M ⟧ ΣV ΓV) ⦈
-⟦ ι₂ₜ N      ⟧ ΣV ΓV  = ⦇ ι₂ (⟦ N ⟧ ΣV ΓV) ⦈
-⟦ δₜ L M N   ⟧ ΣV ΓV  = join ⦇ δ (⟦ L ⟧ ΣV ΓV)  (⟦ M ⟧ ΣV ΓV)
-                                                (⟦ N ⟧ ΣV ΓV) ⦈
+⟦ ξₜ          ⟧ ΣV ΓV  = ⦇ ξₜ ⦈
+⟦ c Mᵢ        ⟧ ΣV ΓV  = ΣV c ⟦ Mᵢ ⟧
+⟦ ⟨⟩ₜ         ⟧ ΣV ΓV  = ⦇ ⟨⟩ ⦈
+⟦ x           ⟧ ΣV ΓV  = ΓV x
+⟦ λₜ x →ₜ N   ⟧ ΣV ΓV  = ⦇ λ y → ⟦ N ⟧ ΣV (ΓV, x ↦ ⦇ y ⦈) ⦈
+⟦ L @ₜ M      ⟧ ΣV ΓV  = join ⦇ (⟦ L ⟧ ΣV ΓV) (⟦ M ⟧ ΣV ΓV) ⦈
+⟦ (M ,ₜ N)    ⟧ ΣV ΓV  = ⦇ (⟦ M ⟧ ΣV ΓV , ⟦ N ⟧ ΣV ΓV) ⦈
+⟦ fstₜ L       ⟧ ΣV ΓV  = ⦇ fst (⟦ L ⟧ ΣV ΓV) ⦈
+⟦ sndₜ L       ⟧ ΣV ΓV  = ⦇ fst (⟦ L ⟧ ΣV ΓV) ⦈
+⟦ inlₜ M      ⟧ ΣV ΓV  = ⦇ inl (⟦ M ⟧ ΣV ΓV) ⦈
+⟦ inrₜ N      ⟧ ΣV ΓV  = ⦇ inr (⟦ N ⟧ ΣV ΓV) ⦈
+⟦ caseₜ L M N  ⟧ ΣV ΓV  = join ⦇ case  (⟦ L ⟧ ΣV ΓV)
+                                       (⟦ M ⟧ ΣV ΓV)
+                                       (⟦ N ⟧ ΣV ΓV) ⦈
 \end{spec}
 For clarity of presentation, applicative bracket notation
 \citep{Applicative} is used in above (denoted as |⦇ ... ⦈| .
@@ -1470,8 +1471,8 @@ To adopt Danvy's solution, the Reification process of
 \begin{spec}
 ...
 ↓ (a →ᵣ b)  V  = λ x → reset ⦇ ↓ b (join ⦇ V (↑ a x) ⦈) ⦈
-↓ (a +ᵣ b)  V  = δ V  (λ x → ι₁ₜ (↓ a x))
-                      (λ y → ι₂ₜ (↓ b y))
+↓ (a +ᵣ b)  V  = case V  (λ x → inlₜ (↓ a x))
+                        (λ y → inrₜ (↓ b y))
 \end{spec}
 \begin{spec}
 ↑ : α ∼ A → Syn A ↝ α
@@ -1479,10 +1480,10 @@ To adopt Danvy's solution, the Reification process of
 ↑ Synᵣ      M  = ⦇ M ⦈
 ↑ ⟨⟩ᵣ       M  = ⦇ ⟨⟩ ⦈
 ↑ (a →ᵣ b)  M  = ⦇ λ x → ↑ b (M @ₜ (↓ a x)) ⦈
-↑ (a ×ᵣ b)  M  = ⦇ (↑ a (π₁ₜ M) , ↑ b (π₂ₜ M)) ⦈
+↑ (a ×ᵣ b)  M  = ⦇ (↑ a (fstₜ M) , ↑ b (sndₜ M)) ⦈
 ↑ (a +ᵣ b)  M  =  shift  (λ k →
-                  δₜ M   (λ x → reset ⦇ (k ∘ ι₁) (↑ a x) ⦈)
-                         (λ y → reset ⦇ (k ∘ ι₂) (↑ b y) ⦈))
+                  caseₜ M   (λ x → reset ⦇ (k ∘ inl) (↑ a x) ⦈)
+                            (λ y → reset ⦇ (k ∘ inr) (↑ b y) ⦈))
 \end{spec}
 
 Except for the necessary monadic liftings, the nontrivial change is
@@ -1493,7 +1494,7 @@ of sum type, produces a syntactic term, and then uses this
 continuation for constructing the syntactic continuations needed for
 destructing |M|. Reader interested in more details, may try to follow
 above algorithm step-by-step to reify the semantic term |λ x → ⟨⟩ₜ| of
-the type |(Syn ⟨⟩ₜ + Syn ⟨⟩ₜ) → Syn ⟨⟩ₜ|, or the term |λ x → π₁ x| of
+the type |(Syn ⟨⟩ₜ + Syn ⟨⟩ₜ) → Syn ⟨⟩ₜ|, or the term |λ x → fst x| of
 the same type, and consult \citet{TDPE}, if needed.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1561,7 +1562,7 @@ before, or the corresponding values in the semantic domain:
 \end{spec}
 \begin{spec}
 ...
-⟦ ξₜ ⟧ ΣV ΓV  = ⦇ (ι₂ ξ) ⦈
+⟦ ξₜ ⟧ ΣV ΓV  = ⦇ (inr ξ) ⦈
 \end{spec}
 
 This rather simple change has a practically significant impact:
@@ -1687,9 +1688,9 @@ X = {ℚₜ}
 Above relies on the definition of Boolean values defined as a sum of unit types:
 \begin{spec}
 Boolₜ   = ⟨⟩ₜ +ₜ ⟨⟩ₜ
-falseₜ  = ι₁ₜ ⟨⟩ₜ
-trueₜ   = ι₂ₜ ⟨⟩ₜ
-ifₜ  L thenₜ M elseₜ N = δₜ L (λₜ x →ₜ N) (λₜ y →ₜ M)
+falseₜ  = inlₜ ⟨⟩ₜ
+trueₜ   = inrₜ ⟨⟩ₜ
+ifₜ  L thenₜ M elseₜ N = caseₜ L (λₜ x →ₜ N) (λₜ y →ₜ M)
 
 Boolᵣ   = ⟨⟩ᵣ +ᵣ ⟨⟩ᵣ
 \end{spec}
@@ -1745,9 +1746,9 @@ Above relies on the definition of |Maybe| values of rational numbers
 defined as a sum type:
 \begin{spec}
 Maybeₜ        = ℚₜ +ₜ ⟨⟩ₜ
-justₜ x       = ι₁ₜ x
-nothingₜ      = ι₂ₜ ⟨⟩ₜ
-maybeₜ M N L  = δₜ L (λₜ x →ₜ M @ₜ x) (λₜ y →ₜ N)
+justₜ x       = inlₜ x
+nothingₜ      = inrₜ ⟨⟩ₜ
+maybeₜ M N L  = caseₜ L (λₜ x →ₜ M @ₜ x) (λₜ y →ₜ N)
 L <$>ₜ M      = maybeₜ (λₜ x →ₜ justₜ (L @ₜ x)) nothingₜ M
 \end{spec}
 
