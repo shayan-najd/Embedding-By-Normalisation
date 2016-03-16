@@ -37,12 +37,12 @@
 %format →ₜ  = "\underline{→}"
 %format @ₜ  = "\underline{@}"
 %format ,ₜ  = "\underline{,}"
-%format fstₜ = "\underline{fst}"
-%format sndₜ = "\underline{snd}"
+%format fstₜ = "\underline{\Varid{fst}}"
+%format sndₜ = "\underline{\Varid{snd}}"
 %format ξₜ  = "\underline{ξ}"
-%format inlₜ = "\underline{inl}"
-%format inrₜ = "\underline{inr}"
-%format caseₜ  = "\underline{case}"
+%format inlₜ = "\underline{\Varid{inl}}"
+%format inrₜ = "\underline{\Varid{inr}}"
+%format caseₜ  = "\underline{\Varid{case}}"
 %format Mᵢ  = "\overline{M}"
 %format ==  = "=="
 %format ==ₜ = "\underline{==}"
@@ -1276,8 +1276,8 @@ function is as follows:
 ⟦ λₜ x →ₜ N  ⟧ ΣV ΓV  = λ y → ⟦ N ⟧ ΣV (ΓV, x ↦ y)
 ⟦ L @ₜ M     ⟧ ΣV ΓV  = (⟦ L ⟧ ΣV ΓV) (⟦ M ⟧ ΣV ΓV)
 ⟦ (M ,ₜ N)   ⟧ ΣV ΓV  = (⟦ M ⟧ ΣV ΓV , ⟦ N ⟧ ΣV ΓV)
-⟦ fstₜ L      ⟧ ΣV ΓV  = fst (⟦ L ⟧ ΣV ΓV)
-⟦ sndₜ L      ⟧ ΣV ΓV  = snd (⟦ L ⟧ ΣV ΓV)
+⟦ fstₜ L     ⟧ ΣV ΓV  = fst (⟦ L ⟧ ΣV ΓV)
+⟦ sndₜ L     ⟧ ΣV ΓV  = snd (⟦ L ⟧ ΣV ΓV)
 \end{spec}
 
 Apart from the input expression, the evaluation function takes two
@@ -1440,8 +1440,8 @@ domain uses monadic functions. All of the cases from the evaluator Section
 ⟦ λₜ x →ₜ N   ⟧ ΣV ΓV  = ⦇ λ y → ⟦ N ⟧ ΣV (ΓV, x ↦ ⦇ y ⦈) ⦈
 ⟦ L @ₜ M      ⟧ ΣV ΓV  = join ⦇ (⟦ L ⟧ ΣV ΓV) (⟦ M ⟧ ΣV ΓV) ⦈
 ⟦ (M ,ₜ N)    ⟧ ΣV ΓV  = ⦇ (⟦ M ⟧ ΣV ΓV , ⟦ N ⟧ ΣV ΓV) ⦈
-⟦ fstₜ L       ⟧ ΣV ΓV  = ⦇ fst (⟦ L ⟧ ΣV ΓV) ⦈
-⟦ sndₜ L       ⟧ ΣV ΓV  = ⦇ fst (⟦ L ⟧ ΣV ΓV) ⦈
+⟦ fstₜ L      ⟧ ΣV ΓV  = ⦇ fst (⟦ L ⟧ ΣV ΓV) ⦈
+⟦ sndₜ L      ⟧ ΣV ΓV  = ⦇ fst (⟦ L ⟧ ΣV ΓV) ⦈
 ⟦ inlₜ M      ⟧ ΣV ΓV  = ⦇ inl (⟦ M ⟧ ΣV ΓV) ⦈
 ⟦ inrₜ N      ⟧ ΣV ΓV  = ⦇ inr (⟦ N ⟧ ΣV ΓV) ⦈
 ⟦ caseₜ L M N  ⟧ ΣV ΓV  = join ⦇ case  (⟦ L ⟧ ΣV ΓV)
