@@ -235,16 +235,12 @@ type-directed partial evaluation, TDPE
 \label{sec:introduction}
 % \subsection{The Problem: Understanding Embedding}
 % \subsubsection{Domain-Specific Languages: Powerful, yet Simple}
-Less is more sometimes. Compared to General-Purpose Languages (GPLs)
-like C, Java, or Haskell; Domain-Specific Languages (DSLs) like SQL,
-VHDL, or HTML are smaller and simpler.
+Less is more sometimes. Compared to General-Purpose Languages (GPLs),
+Domain-Specific Languages (DSLs) are smaller and simpler.
 Unlike GPLs, DSLs are designed ground up to describe programs used in
-a specific domain, e.g., SQL for database queries, VHDL for electronic
-circuits, and HTML for web pages. DSLs are a powerful engineering
+a specific domain. DSLs are a powerful engineering
 tool: DSLs abstract over domain-specific concepts and operations by
-providing a set of primitives in the language. Such primitives are
-often referred to as domain-specific constructs. For instance, SELECT
-statement is a domain-specific construct in SQL.
+providing a set of primitives in the language.
 
 Unlike GPLs, DSLs can often, thanks to their simplicity, be
 implemented by embedding them in an existing host GPL. Embedding is
