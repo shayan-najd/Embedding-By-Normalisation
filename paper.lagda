@@ -242,16 +242,8 @@ a specific domain. DSLs are a powerful engineering
 tool: DSLs abstract over domain-specific concepts and operations by
 providing a set of primitives in the language.
 
-Unlike GPLs, DSLs can often, thanks to their simplicity, be
-implemented by embedding them in an existing host GPL. Embedding is
-referred to a diverse set of techniques for implementing DSL terms, by
-first encoding them as terms in a host language, and then defining
-their semantics using the encoded terms. Semantics of DSL terms may be
-defined entirely inside the host language by interpreting them in the
-host language's runtime system, or partly outside the host language by
-compiling code and passing it to an external system.
-
-% Unlike stand-alone DSLs, embedded
+\emph{Embedding} a DSL in a host GPL is by now well established as a family
+of techniques for simplifying its implementation.
 Embedded DSLs can reuse some of the existing
 machinery implemented for their host language; for a particular
 Embedded DSL (EDSL), one does not need to implement all the required
@@ -261,7 +253,7 @@ virtualisation of constructs \citep{ad-hoc,rompf2013scala}, or normal
 techniques for modular programming \citep{1ML}, there is no
 need for implementing a parser; by using higher-order abstract syntax
 and piggybacking on module system of host , there is no need to
-implement a name-resolver; and, by using mechanism similar to
+implement a name-resolver; and, by using mechanisms such as
 Generalised Algebraic Data Types (GADTs) \citep{GADTs}, there is no
 need to implement a type-checker.
 
