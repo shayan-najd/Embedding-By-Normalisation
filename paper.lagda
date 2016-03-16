@@ -1472,7 +1472,7 @@ To adopt Danvy's solution, the Reification process of
 ...
 ↓ (a →ᵣ b)  V  = λ x → reset ⦇ ↓ b (join ⦇ V (↑ a x) ⦈) ⦈
 ↓ (a +ᵣ b)  V  = case V  (λ x → inlₜ (↓ a x))
-                        (λ y → inrₜ (↓ b y))
+                         (λ y → inrₜ (↓ b y))
 \end{spec}
 \begin{spec}
 ↑ : α ∼ A → Syn A ↝ α
