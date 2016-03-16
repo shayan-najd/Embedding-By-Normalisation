@@ -1,0 +1,10 @@
+The following relates sections in the paper with folders in this directory:
+Section 2.1    ~   Agda/Chars/
+Section 2.1.1  ~   Agda/Chars/List/
+Section 2.1.2  ~   Agda/Chars/Hughes/
+Section 4.1    ~   Agda/TDPE/Primitives/
+Section 4.2    ~   Agda/TDPE/Sums/
+Section 4.3    ~   Agda/TDPE/Smart/
+Section 4.5    ~   Agda/Examples/Power.agda
+
+An example implementation of 4.5 in Haskell can be found in "Power.hs".
