@@ -273,7 +273,7 @@ defining syntax and semantic of DSLs; more or less, syntax and
 semantic of EDSLs often follow the ones of the host language.  There
 are variety of smart and useful techniques to partially liberate EDSLs
 from such restrictions (e.g., see \citet{QDSL, Definitional,
-svenningsson:combining, Syntactic, scalalms}).
+svenningsson:combiningJournal, Syntactic, scalalms}).
 However, employing clever embedding techniques and
 stacks of unconventional features available in the host language,
 can lead to cryptic code sometimes. It becomes difficult
