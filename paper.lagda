@@ -1750,6 +1750,10 @@ and makes it behave as if no additional layer of abstraction has been
 introduced in the first place; as demonstrated, normalisation in EBN
 achieves abstraction-without-guilt, even for sum types.
 
+Besides the implementation in Agda, examples and the corresponding EBN
+technique in this subsection is implemented in Haskell and is
+available as supporting material.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Related Work
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
