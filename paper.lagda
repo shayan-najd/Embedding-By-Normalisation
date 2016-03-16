@@ -273,6 +273,17 @@ semantic of EDSLs often follow the ones of the host language.  There
 are variety of smart and useful techniques to partially liberate EDSLs
 from such restrictions (e.g., see \citet{QDSL, Definitional,
 svenningsson:combining, Syntactic, scalalms}).
+However, employing clever embedding techniques and
+stacks of unconventional features available in the host language,
+can lead to cryptic code sometimes. It becomes difficult
+to distinguish an EDSL from the the host language, as the boundary
+between an EDSL and its host language would not be entirely clear.
+Implementation-based descriptions make EDSL rather
+difficult to learn, not only for domain experts, whom traditionally
+are assumed to be unfamiliar with the host language, but also for the
+host language experts unfamiliar with the domain. Whole is nothing
+without all its parts, and whole is greater than the sum its parts.
+
 
 Unlike stand-alone languages that are often accompanied by a set of
 formal descriptions, EDSLs are often presented by actual code in a
@@ -285,25 +296,14 @@ defining semantics; or, in a final tagless embedding \citep{Tagless}
 type-classes are used to define an interface representing syntax,
 and instances of the type-classes are used for defining semantics.
 
-Since often embedding techniques take smart use of techniques and
-stacks of unconventional features available in the host language,
-descriptions by actual code sometimes appear cryptic. It becomes difficult
-to distinguish an EDSL from the the host language, as the boundary
-between an EDSL and its host language would not be entirely clear.
-Implementation-based descriptions make EDSL rather
-difficult to learn, not only for domain experts, whom traditionally
-are assumed to be unfamiliar with the host language, but also for the
-host language experts unfamiliar with the domain. Whole is nothing
-without all its parts, and whole is greater than the sum its parts.
-
 Implementation-based descriptions make embedding techniques rather
 difficult to learn as well: techniques vary greatly from one host
 language to another, and even in a host language it is difficult to
 compare techniques. As a result, existing techniques are hard to
 scale. For instance, once one moves from embedding simpler DSLs to
 DSLs with richer computational content, it becomes harder for
-embedding to stay close to the intended syntax and semantic in one
-hand, and reuse the host machinery in the other.
+embedding to stay close to the intended syntax and semantic on one
+hand, and reuse the host machinery on the other.
 Would it not be convenient to have a more formal and
 implementation-independent description of EDSLs and embedding
 techniques? This paper is taking a few steps toward this goal.
