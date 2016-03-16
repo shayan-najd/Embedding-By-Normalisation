@@ -12,8 +12,7 @@
 \usepackage{stmaryrd}
 \usepackage[
   hidelinks,
-%  pdfauthor={Shayan Najd,Sam Lindley,Josef Svenningsson,Philip Wadler},
-  pdfauthor={Removed,Removed,Removed,Removed},
+  pdfauthor={Shayan Najd,Sam Lindley,Josef Svenningsson,Philip Wadler},
   pdftitle={Embedding By Normalisation},
   pagebackref=true,pdftex,backref=none]{hyperref}
 \usepackage{graphicx}
@@ -159,31 +158,19 @@
 %% \subtitle{Domain-Specific Languages With Character}
 %% \subtitle{Domain-Specific Languages With Semantics}
 %% \subtitle{Domain-Specific Languages That You Understand}
-\authorinfo{Removed}
-           {For}
-           {Double-Blind Review}
-\authorinfo{Removed}
-           {Removed}
-           {Removed}
-\authorinfo{Removed}
-           {Removed}
-           {Removed}
-\authorinfo{Removed}
-           {Removed}
-           {Removed}
-%% \authorinfo{Shayan Najd}
-%%           {LFCS,\\ The University of Edinburgh}
-%%           {sh.najd@@ed.ac.uk}
-%% \authorinfo{Sam Lindley}
-%%           {LFCS,\\ The University of Edinburgh}
-%%           {sam.lindley@@ed.ac.uk}
-%% \authorinfo{Josef Svenningsson}
-%%           {Functional Programming Group,
-%%            Chalmers University of Technology}
-%%           {josefs@@chalmers.se}
-%% \authorinfo{Philip Wadler}
-%%           {LFCS,\\ The University of Edinburgh}
-%%           {wadler@@inf.ed.ac.uk}
+\authorinfo{Shayan Najd}
+           {LFCS,\\ The University of Edinburgh}
+           {sh.najd@@ed.ac.uk}
+\authorinfo{Sam Lindley}
+           {LFCS,\\ The University of Edinburgh}
+           {sam.lindley@@ed.ac.uk}
+\authorinfo{Josef Svenningsson}
+           {Functional Programming Group,
+            Chalmers University of Technology}
+           {josefs@@chalmers.se}
+\authorinfo{Philip Wadler}
+           {LFCS,\\ The University of Edinburgh}
+           {wadler@@inf.ed.ac.uk}
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1881,11 +1868,10 @@ and patience to uncover.
 % Acknowledgements
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph*{Acknowledgements}
-**Removed for the review process**
-% Najd was funded by a Google Europe Fellowship in Programming
-% Technology. Svenningsson was funded by the Swedish Foundation for
-% Strategic Research under grant RawFP. Lindley and Wadler were funded
-% by EPSRC Grant EP/K034413/1.
+Najd was funded by a Google Europe Fellowship in Programming
+Technology. Svenningsson was funded by the Swedish Foundation for
+Strategic Research under grant RawFP. Lindley and Wadler were funded
+by EPSRC Grant EP/K034413/1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
