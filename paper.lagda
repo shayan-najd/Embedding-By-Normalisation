@@ -111,7 +111,10 @@
 \DeclareUnicodeCharacter{10631}{\ensuremath{\llparenthesis}}
 \DeclareUnicodeCharacter{10632}{\ensuremath{\rrparenthesis}}
 \DeclareUnicodeCharacter{8599}{\ensuremath{\nearrow}}
-\DeclareUnicodeCharacter{8598} {\ensuremath{\nwarrow}}
+\DeclareUnicodeCharacter{8598}{\ensuremath{\nwarrow}}
+\DeclareUnicodeCharacter{8614}{\ensuremath{\mapsto}}
+\DeclareUnicodeCharacter{8657}{\ensuremath{\Uparrow}}
+
 % \DeclareUnicodeCharacter{120793}{\ensuremath{\mathscr{a}}}
 \DeclareTextCommandDefault\textpi{\ensuremath{\pi}}
 \DeclareTextCommandDefault\textlambda{\ensuremath{\lambda}}
