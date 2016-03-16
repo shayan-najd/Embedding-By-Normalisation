@@ -1441,7 +1441,7 @@ domain uses monadic functions. All of the cases from the evaluator Section
 ⟦ L @ₜ M      ⟧ ΣV ΓV  = join ⦇ (⟦ L ⟧ ΣV ΓV) (⟦ M ⟧ ΣV ΓV) ⦈
 ⟦ (M ,ₜ N)    ⟧ ΣV ΓV  = ⦇ (⟦ M ⟧ ΣV ΓV , ⟦ N ⟧ ΣV ΓV) ⦈
 ⟦ fstₜ L      ⟧ ΣV ΓV  = ⦇ fst (⟦ L ⟧ ΣV ΓV) ⦈
-⟦ sndₜ L      ⟧ ΣV ΓV  = ⦇ fst (⟦ L ⟧ ΣV ΓV) ⦈
+⟦ sndₜ L      ⟧ ΣV ΓV  = ⦇ snd (⟦ L ⟧ ΣV ΓV) ⦈
 ⟦ inlₜ M      ⟧ ΣV ΓV  = ⦇ inl (⟦ M ⟧ ΣV ΓV) ⦈
 ⟦ inrₜ N      ⟧ ΣV ΓV  = ⦇ inr (⟦ N ⟧ ΣV ΓV) ⦈
 ⟦ caseₜ L M N  ⟧ ΣV ΓV  = join ⦇ case  (⟦ L ⟧ ΣV ΓV)
