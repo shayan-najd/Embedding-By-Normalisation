@@ -711,6 +711,13 @@ Next section puts this observation to work for EDSLs.
 \section{Embedding-By-Normalisation}
 \label{sec:EBN}
 
+Embedding is referred to a diverse set of techniques for implementing DSL terms, by
+first encoding them as terms in a host language, and then defining
+their semantics using the encoded terms. Semantics of DSL terms may be
+defined entirely inside the host language by interpreting them in the
+host language's runtime system, or partly outside the host language by
+compiling code and passing it to an external system.
+
 The key selling points for embedding DSLs are to reuse the machinery
 available for a host language, from parser to type checker, and to
 integrate with its ecosystem, from editors to run-time system.
