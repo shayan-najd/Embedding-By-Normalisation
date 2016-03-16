@@ -96,6 +96,7 @@
 %format maybeₜ = "\underline{\text{maybe}}"
 %format Maybeₜ = "\underline{\text{Maybe}}"
 %format <$>ₜ   = "\underline{⟨\$⟩}"
+%format Maybeℚₜ = "\underline{\text{Maybeℚ}}"
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % latex macros
@@ -1558,7 +1559,7 @@ except that here base types can be either residual syntactic terms, as
 before, or the corresponding values in the semantic domain:
 \begin{spec}
 ...
-⟦ χ       ⟧ =  𝔼 χ + ΞT χ
+⟦ χ       ⟧ =  Syn χ + ΞT χ
 \end{spec}
 \begin{spec}
 ...
@@ -1572,7 +1573,7 @@ available values. This is demonstrated in the example presented in
 Section \ref{sec:Example}. For clarity, the following datatype can be
 used instead of plain sums:
 \begin{spec}
-data PossibleValue χ  =  Exp (𝔼 χ)
+data PossibleValue χ  =  Exp (Syn χ)
                       |  Val (ΞT χ)
 \end{spec}
 
@@ -1669,14 +1670,14 @@ X = {ℚₜ}
          (Val V)  ==ᵥ  (Exp N)  = ↑ Boolᵣ (Vₜ ==ₜ N)
          (Exp M)  ==ᵥ  (Val W)  = ↑ Boolᵣ (M  ==ₜ Wₜ)
          (Exp M)  ==ᵥ  (Exp N)  = ↑ Boolᵣ (M  ==ₜ N),
-			        
+
          (Val V)  *ᵥ   (Val W)  = ⦇ Val (V * W) ⦈
          (Val 1)  *ᵥ   (Exp N)  = ⦇ Exp N ⦈
          (Val V)  *ᵥ   (Exp N)  = ⦇ Exp (Vₜ *ₜ N) ⦈
          (Exp M)  *ᵥ   (Val 1)  = ⦇ Exp M ⦈
          (Exp M)  *ᵥ   (Val W)  = ⦇ Exp (M *ₜ Wₜ) ⦈
          (Exp M)  *ᵥ   (Exp N)  = ⦇ Exp (M *ₜ N) ⦈,
-			        
+
          (Val V)  /ᵥ   (Val W)  = ⦇ Val (V / W) ⦈
          (Val V)  /ᵥ   (Exp N)  = ⦇ Exp (Vₜ /ₜ N) ⦈
          (Exp M)  /ᵥ   (Val 1)  = ⦇ Exp M ⦈
@@ -1721,8 +1722,9 @@ abstraction is considered: handling corner-cases. The definition of
 |Power| is split into two parts. One alters definition of |Power| to
 return |nothing| of |Maybe| type  instead of |0| when division by zero
 happens, and another replaces |nothing| by |0|:
+
 \begin{spec}
-power' : ℤ → Syn (ℚₜ →ₜ (Maybeₜ ℚₜ))
+power' : ℤ → Syn (ℚₜ →ₜ Maybeℚₜ)
 power' n = λₜ x →ₜ
   if n < 0        then
     ifₜ x ==ₜ q0ₜ
@@ -1745,7 +1747,7 @@ power'' n = λₜ x →ₜ maybeₜ (λₜ z →ₜ z) q0ₜ (power' n @ₜ x)
 Above relies on the definition of |Maybe| values of rational numbers
 defined as a sum type:
 \begin{spec}
-Maybeₜ        = ℚₜ +ₜ ⟨⟩ₜ
+Maybeℚₜ       = ℚₜ +ₜ ⟨⟩ₜ
 justₜ x       = inlₜ x
 nothingₜ      = inrₜ ⟨⟩ₜ
 maybeₜ M N L  = caseₜ L (λₜ x →ₜ M @ₜ x) (λₜ y →ₜ N)
