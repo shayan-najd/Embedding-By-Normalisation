@@ -278,11 +278,11 @@ Unlike stand-alone languages that are often accompanied by a set of
 formal descriptions, EDSLs are often presented by actual code in a
 mainstream host language. Also, the embedding techniques themselves
 are described in terms of a unique set of language features they
-employ.  For instance in Haskell, deep embedding technique is when
-datatypes in host are used for representing the syntax of EDSLs, and
+employ.  For instance in Haskell, a deep embedding means
+datatypes in the host language are used for representing the syntax of EDSLs, and
 functions (programs in general) over the datatypes are used for
-defining semantics; or, final tagless embedding \citep{Tagless} is
-when type-classes are used to define an interface representing syntax,
+defining semantics; or, in a final tagless embedding \citep{Tagless}
+type-classes are used to define an interface representing syntax,
 and instances of the type-classes are used for defining semantics.
 
 Since often embedding techniques take smart use of techniques and
