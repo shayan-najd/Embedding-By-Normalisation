@@ -1665,23 +1665,23 @@ X = {ℚₜ}
 
 ΣV : ⦇ ΣT ⦈
 ΣV  = ⦇ {
-         (Val V)  ==ᵥ  (Val W) = ⦇ V == W ⦈
-         (Val V)  ==ᵥ  (Exp N) = ↑ Boolᵣ (Vₜ ==ₜ N)
-         (Exp M)  ==ᵥ  (Val W) = ↑ Boolᵣ (M  ==ₜ Wₜ)
-         (Exp M)  ==ᵥ  (Exp N) = ↑ Boolᵣ (M  ==ₜ N),
-
-         (Val V)  *ᵥ   (Val W) = ⦇ Val (V * W) ⦈
-         (Val 1)  *ᵥ   (Exp N) = ⦇ Exp N ⦈
-         (Val V)  *ᵥ   (Exp N) = ⦇ Exp (Vₜ *ₜ N) ⦈
-         (Exp M)  *ᵥ   (Val 1) = ⦇ Exp M ⦈
-         (Exp M)  *ᵥ   (Val W) = ⦇ Exp (M *ₜ Wₜ) ⦈
-         (Exp M)  *ᵥ   (Exp N) = ⦇ Exp (M *ₜ N) ⦈,
-
-         (Val V)  /ᵥ   (Val W) = ⦇ Val (V / W) ⦈
-         (Val V)  /ᵥ   (Exp N) = ⦇ Exp (Vₜ /ₜ N) ⦈
-         (Exp M)  /ᵥ   (Val 1) = ⦇ Exp M ⦈
-         (Exp M)  /ᵥ   (Val W) = ⦇ Exp (M /ₜ Wₜ) ⦈
-         (Exp M)  /ᵥ   (Exp N) = ⦇ Exp (M /ₜ N) ⦈ } ⦈
+         (Val V)  ==ᵥ  (Val W)  = ⦇ V == W ⦈
+         (Val V)  ==ᵥ  (Exp N)  = ↑ Boolᵣ (Vₜ ==ₜ N)
+         (Exp M)  ==ᵥ  (Val W)  = ↑ Boolᵣ (M  ==ₜ Wₜ)
+         (Exp M)  ==ᵥ  (Exp N)  = ↑ Boolᵣ (M  ==ₜ N),
+			        
+         (Val V)  *ᵥ   (Val W)  = ⦇ Val (V * W) ⦈
+         (Val 1)  *ᵥ   (Exp N)  = ⦇ Exp N ⦈
+         (Val V)  *ᵥ   (Exp N)  = ⦇ Exp (Vₜ *ₜ N) ⦈
+         (Exp M)  *ᵥ   (Val 1)  = ⦇ Exp M ⦈
+         (Exp M)  *ᵥ   (Val W)  = ⦇ Exp (M *ₜ Wₜ) ⦈
+         (Exp M)  *ᵥ   (Exp N)  = ⦇ Exp (M *ₜ N) ⦈,
+			        
+         (Val V)  /ᵥ   (Val W)  = ⦇ Val (V / W) ⦈
+         (Val V)  /ᵥ   (Exp N)  = ⦇ Exp (Vₜ /ₜ N) ⦈
+         (Exp M)  /ᵥ   (Val 1)  = ⦇ Exp M ⦈
+         (Exp M)  /ᵥ   (Val W)  = ⦇ Exp (M /ₜ Wₜ) ⦈
+         (Exp M)  /ᵥ   (Exp N)  = ⦇ Exp (M /ₜ N) ⦈ } ⦈
 \end{spec}
 \end{description}
 
