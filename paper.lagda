@@ -50,32 +50,32 @@
 %format q0ₜ    = "\underline{0}"
 %format q1ₜ    = "\underline{1}"
 %format -1ₜ    = "\underline{-1}"
-%format ifₜ    = "\underline{\text{if}}"
-%format thenₜ  = "\underline{\text{then}}"
-%format elseₜ  = "\underline{\text{else}}"
-%format trueₜ  = "\underline{\text{true}}"
-%format falseₜ = "\underline{\text{false}}"
+%format ifₜ    = "\underline{\Varid{if}}"
+%format thenₜ  = "\underline{\Varid{then}}"
+%format elseₜ  = "\underline{\Varid{else}}"
+%format trueₜ  = "\underline{\Varid{true}}"
+%format falseₜ = "\underline{\Varid{false}}"
 %format ℚₜ     = "\underline{ℚ}"
-%format Boolₜ  = "\underline{\text{Bool}}"
+%format Boolₜ  = "\underline{\Varid{Bool}}"
 %format αₜ     = "\underline{α}"
 %format ΞT     = "Ξ_T"
 %format ΣT     = "Σ_T"
 %format ΓT     = "Γ_T"
 %format ΣV     = "Σ_V"
 %format ΓV     = "Γ_V"
-%format Synr   = "\text{Syn}_r"
+%format Synr   = "\Varid{Syn}_r"
 %format ⟨⟩r     = "⟨⟩_r"
 %format →r     = "→_r"
 %format ×r     = "×_r"
 %format +r     = "+_r"
-%format Typeₜ = "\underline{\text{Type}}"
-%format epsf  = "eps_f"
-%format chrf = "chr_f"
+%format Typeₜ = "\underline{\Varid{Type}}"
+%format epsf  = "\Varid{eps}_f"
+%format chrf = "\Varid{chr}_f"
 %format ∙f   = "∙_f"
-%format Epsd  = "Eps_d"
-%format Chrd = "Chr_d"
+%format Epsd  = "\Varid{Eps}_d"
+%format Chrd = "\Varid{Chr}_d"
 %format ∙d   = "∙_d"
-%format Charsd = "Chars_d"
+%format Charsd = "\Varid{Chars}_d"
 %format do = "\textbf{\text{do}}"
 %format ∼np  = "∼^{¬p}"
 %format ∼p  = "∼^p"
@@ -90,12 +90,14 @@
 %format Mii  = "Mᵢ"
 %format Vₜ   = "\underline{V}"
 %format Wₜ   = "\underline{W}"
-%format justₜ = "\underline{\text{just}}"
-%format nothingₜ = "\underline{\text{nothing}}"
-%format maybeₜ = "\underline{\text{maybe}}"
-%format Maybeₜ = "\underline{\text{Maybe}}"
+%format justₜ = "\underline{\Varid{just}}"
+%format nothingₜ = "\underline{\Varid{nothing}}"
+%format maybeₜ = "\underline{\Varid{maybe}}"
+%format Maybeₜ = "\underline{\Varid{Maybe}}"
 %format <$>ₜ   = "\underline{⟨\$⟩}"
-%format Maybeℚₜ = "\underline{\text{Maybeℚ}}"
+%format Maybeℚₜ = "\underline{\Varid{Maybeℚ}}"
+%format class    = "\textbf{class}"
+%format instance = "\textbf{instance}"
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % latex macros
@@ -273,7 +275,7 @@ Implementation-based descriptions make EDSL rather
 difficult to learn, not only for domain experts, whom traditionally
 are assumed to be unfamiliar with the host language, but also for the
 host language experts unfamiliar with the domain. Whole is nothing
-without all its parts, and whole is greater than the sum its parts.
+without all its parts, and whole is greater than the sum of its parts.
 
 
 Unlike stand-alone languages that are often accompanied by a set of
@@ -351,7 +353,7 @@ The contributions of this paper are as follows:
       Normalisation-By-Evaluation (NBE) and embedding techniques
       (Section \ref{sec:NBE} and \ref{sec:EBN})
 \item To introduce Embedding-By-Normalisation (EBN) as a principled
-      approach to to study and structure embedding inspired by the
+      approach to study and structure embedding inspired by the
       correspondence to NBE (Section \ref{sec:NBE} and \ref{sec:EBN})
 \item To propose a simple parametric model capturing a large and
       popular class of EDSLs, and introducing a series of EBN
@@ -387,9 +389,9 @@ are implemented in Agda, and are available at
 \section{Normalisation-By-Evaluation}
 \label{sec:NBE}
 Normalisation-by-Evaluation (NBE) is the process of deriving canonical
-form of terms with respect to an equational theory.The process of
+form of terms with respect to an equational theory. The process of
 deriving canonical forms is often referred to as normalisation, where
-the canonical forms are refereed to as normal forms. NBE dates back to
+the canonical forms are referred to as normal forms. NBE dates back to
 \citet{MartinLof}, where he used a similar technique, although not by
 its current name, for normalising terms in type theory.
 \citet{Berger} introduced NBE as an efficient normalisation technique.
@@ -517,7 +519,7 @@ free monoids, i.e., congruence over the following equations:
  (L ∙ M) ∙ N  =  L ∙ (M ∙ N)
 \end{spec}
 \end{center}
-NBE provides a normalisation process to derive a Canonical form for
+NBE provides a normalisation process to derive a canonical form for
 the terms with respect to above equational theory. If two terms
 represent the same string, they have an identical canonical form.
 For instance, the two example terms above normalise to the following
@@ -546,7 +548,7 @@ for defining a NBE algorithm is defining an evaluation function:
 ⟦_⟧ : Chars → List Char
 
 ⟦ ε₀     ⟧ = []
-⟦ Chr n  ⟧ = [ n ]
+⟦ Chr c  ⟧ = [ c ]
 ⟦ M ∙ N  ⟧ = ⟦ M ⟧ ++ ⟦ N ⟧
 \end{spec}
 
@@ -611,7 +613,7 @@ Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ ε₀))
 \subsubsection{Functions as Semantic}
 \label{sec:CharsHughes}
 The syntactic domain given to be the Chars language, and semantic
-domain now chosen to be functions over syntactic domain itself, the next step
+domain now chosen to be functions over the syntactic domain itself, the next step
 for defining a NBE algorithm is defining an evaluation function:
 
 \begin{spec}
@@ -643,7 +645,7 @@ The next step is to define a reification process:
 \end{spec}
 
 Reification defined above is very simple: it applies semantic
-function to empty string.
+functions to an empty string.
 For example, the function
 \begin{spec}
 λ N → Chr 'N' ∙ (Chr 'B' ∙ (Chr 'E' ∙ N))
@@ -792,18 +794,18 @@ L,M,N ∈ Chars ::= ε₀ | Chr c | M ∙ N
 |ε₀|    is encoded as the host (nullary) function |epsf = []| \\
 |Chr c| is encoded as the host function |chrf c = [ c ]| \\
 |M ∙ N| is encoded as the host function |M ∙f N = M ++ N|
-\item \emph{code extraction} is a function from list values
+\item \emph{Code extraction} is a function from list values
 to the datatype (of the $\__d$ indexed constructors) representing
 the extracted code
 \begin{spec}
 ↓ []        = Epsd
-↓ (c ∷ cs)  = Chrd c ∙d (reify cs)
+↓ (c ∷ cs)  = Chrd c ∙d (↓ cs)
 \end{spec}
 \end{itemize}
 
 Users of Chars EDSL write their programs using $\__f$ indexed
 functions, and the extracted code, the $\__d$ indexed data, is passed
-to back-end of the Chars EDSL.  A simple example of such back-end
+to the back-end of the Chars EDSL.  A simple example of such back-end
 would be a function that takes the code and prints the denoted string:
 
 \begin{spec}
@@ -849,9 +851,9 @@ EBN builds a bridge between theory and practice: theoretical solutions
 in NBE can be used to solve practical problems in embedding, and vice
 versa.
 
-There are can be different approaches to perform embedding-by-normalisation.
+There can be different approaches to perform embedding-by-normalisation.
 For instance, provided a back-end to process input code represented as data,
-embedding-by-normalisation follows the steps below:
+embedding-by-normalisation may follow the steps below:
 \begin{enumerate}
 \item The abstract syntax of the code expected by the back-end
       is identified. Such abstract syntax corresponds to the grammar of
@@ -893,8 +895,8 @@ In EBN, when encoding of object terms follows
 shallow embedding, the four components of EBN are as follows:
 \begin{description}
 \item [Syntactic Domain] is an interface formed by a set of functions
-                        (or values) in the host
-\item [Semantic Domain] is the result type of above interface
+                        (or values) in the host.
+\item [Semantic Domain] is the result type of above interface.
 \item [Evaluation] is the overall evaluation of the implementation of
                    the above interface in the host. In this setting,
                    EBN's evaluation process is also required to be
@@ -924,23 +926,18 @@ the four components of EBN are as follows:
 \begin{description}
                         %or  a set of type-classes?
 \item [Syntactic Domain] is a type-class (or a similar machinery such as modules)
-                        defining syntax in final tagless style
+                        defining syntax in final tagless style.
 \item [Semantic Domain] is the type that the syntax type-class is
-                        instantiated with
+                        instantiated with.
 \item [Evaluation] is the implementation of an instance of syntax type class.
                    In this setting, EBN's evaluation process is also required
                    to be compositional. An instance of syntax type-class is
-                   an algebra for folds over the syntactic language
+                   an algebra for folds over the syntactic language.
 \item [Reification] is a mapping from host values of the semantic
                     domain type to data that implements a subset of
                     syntactic domain interface, i.e., the subset that
                     corresponds to the grammar of normal forms.
 \end{description}
-
-%{
-
-%format class    = "\textbf{class}"
-%format instance = "\textbf{instance}"
 
 For instance, the following is the four components in EBN of Chars
  language with final tagless encoding:
@@ -953,7 +950,7 @@ class CharsLike chars where
   (∙f)  : chars → chars → chars
 \end{spec}
 
-\item \emph{Semantic domain} is the type |List Char| in a functional language with type-classes
+\item \emph{Semantic domain} is the type |List Char| in a functional language with type-classes.
 \item \emph{Evaluation} is the following type-class instance:
 \begin{spec}
 instance CharsLike (List Char) where
@@ -967,15 +964,13 @@ reify : List Char → Charsd
 reify []         = Epsd
 reify (c :: cs)  = Chrd c ∙d (reify cs)
 \end{spec}
-where code is defined as the following algebraic datatype
+where code is defined as the following algebraic datatype.
 \begin{spec}
 data Charsd  =  Epsd
              |  Chrd c
              |  Charsd ∙d Charsd
 \end{spec}
 \end{itemize}
-
-%}
 
 \subsubsection{Deep Embedding}
 \label{sec:EBN:Deep}
@@ -987,14 +982,13 @@ In EBN, when encoding of object terms follows deep embedding,
 the four components of EBN are as follows:
 
 \begin{description}
-\item [Syntactic Domain] is a datatype
-\item [Semantic Domain] is a type that the syntax datatype is transformed to
-\item [Evaluation] is a function from syntax datatype to semantic domain
+\item [Syntactic Domain] is a datatype.
+\item [Semantic Domain] is a type that the syntax datatype is transformed to.
+\item [Evaluation] is a function from syntax datatype to semantic domain.
 \item [Reification] is a mapping from host values of the semantic
-                    domain type to a datatype describing normal forms
+                    domain type to a datatype describing normal forms.
 \end{description}
 
-%{
 For instance, the following is the four components in EBN of Chars
  language with deep encoding:
 \begin{itemize}
@@ -1005,7 +999,7 @@ data Charsd  =  Epsd
              |  Charsd ∙d Charsd
 \end{spec}
 \item \emph{Semantic domain} is the type |List Char| in a functional language
-                             with algebraic datatypes
+                             with algebraic datatypes.
 \item \emph{Evaluation} is the following function:
 \begin{spec}
 eval : Charsd → List Char
@@ -1013,15 +1007,13 @@ eval  Epsd      = []
 eval  (Chrd c)  = [ c ]
 eval  (m ∙d n)  = m ++ n
 \end{spec}
-\item \emph{Reification} is the following function
+\item \emph{Reification} is the following function:
 \begin{spec}
 reify : List Char → Charsd
 reify []        = Epsd
 reify (c ∷ cs)  = Chrd c ∙d (reify cs)
 \end{spec}
 \end{itemize}
-
-%}
 
 \subsubsection{Quoted Embedding}
 \label{sec:EBN:Quoted}
@@ -1043,7 +1035,6 @@ the four components of EBN are as follows:
                     domain type to a datatype describing normal forms
 \end{description}
 
-%{
 For instance, the following is the four components in EBN of Chars
  language with quoted encoding:
 \begin{itemize}
@@ -1063,18 +1054,16 @@ where |$| denotes anti-quotation \citep{mainland-quoted}.
 \begin{spec}
 reify : List Char → Charsd
 reify []        = [c| ε₀ |]
-reify (c ∷ cs)  = [c| Chr $c ∙ $(reify cs) |]
+reify (c ∷ cs)  = [c| Chr $c ∙  $(reify cs) |]
 \end{spec}
 \end{itemize}
-%}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Type-Constrained Host as Semantic Domain
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Embedding-By-Normalisation, Generically}
 \label{sec:Type-Constrained}
-
-% \todo{}{Think of a better section title}
 
 Back in 1966, Landin in his landmark paper "The Next 700 Programming Languages"
 \citep{Landin1966} argues
@@ -1229,7 +1218,7 @@ Sem A = ∀ (α : Type) → α ∼ A ⇒ α
 \end{tabular}
 
 That is, a term of type |A| in the semantic domain is any host term
-whose type respects the |∼| relation. The relation |∼| states that (a)
+whose type respects the |∼ A| relation. The relation |∼| states that (a)
 semantic terms of unit, function, and product type correspond to host
 terms of similar type, (b) a syntactic term encoded in the host
 directly correspond to a semantic term of the same type.
