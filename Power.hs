@@ -169,24 +169,18 @@ divv (Exp m) (Exp n) = return (Exp (div m n))
 
 newtype WEval trm a = WEval {runWEval :: Cnt trm (Eval trm a)}
 instance Trm trm => Trm (WEval trm) where
-  unt       = WEval (pure ())
   rat r     = WEval (pure (Val r))
-  eql m n   = WEval (do m' <- runWEval m
-                        n' <- runWEval n
-                        eqlv m' n')
-  mul m n   = WEval (do m' <- runWEval m
-                        n' <- runWEval n
-                        mulv m' n')
-  div m n   = WEval (do m' <- runWEval m
-                        n' <- runWEval n
-                        divv m' n')
-  abs n     = WEval (pure (runWEval . n . WEval . pure))
+  eql m n   = WEval (join (eqlv <$> (runWEval m) <*> (runWEval n)))
+  mul m n   = WEval (join (mulv <$> (runWEval m) <*> (runWEval n)))
+  div m n   = WEval (join (divv <$> (runWEval m) <*> (runWEval n)))
+  unt       = WEval (pure ())
+  abs n     = WEval (pure (\ x -> runWEval (n (WEval (pure x)))))
   app l m   = WEval (join (($) <$> (runWEval l) <*> (runWEval m)))
-  prd m n   = WEval ((,)   <$> runWEval m <*> runWEval n)
-  pi1 l     = WEval (fst   <$> runWEval l)
-  pi2 l     = WEval (snd   <$> runWEval l)
-  inl m     = WEval (Left  <$> runWEval m)
-  inr n     = WEval (Right <$> runWEval n)
+  prd m n   = WEval ((,)   <$> (runWEval m) <*> (runWEval n))
+  pi1 l     = WEval (fst   <$> (runWEval l))
+  pi2 l     = WEval (snd   <$> (runWEval l))
+  inl m     = WEval (Left  <$> (runWEval m))
+  inr n     = WEval (Right <$> (runWEval n))
   cas l m n = WEval (join (caseEither <$> (runWEval l)
                            <*> (runWEval m) <*> (runWEval n)))
 
@@ -221,8 +215,8 @@ reflect OneT       l = return ()
 reflect (ArrT a b) l = return (\ x -> reflect b (app l (reify a x)))
 reflect (PrdT a b) l = ((,)) <$> (reflect a (pi1 l)) <*> (reflect b (pi2 l))
 reflect (SumT a b) l = shift (\ k -> cas l
-                              (abs (\ x -> reset ((k . Left)  <$> reflect a x)))
-                              (abs (\ y -> reset ((k . Right) <$> reflect b y))))
+                             (abs (\ x -> reset ((k . Left)  <$> (reflect a x))))
+                             (abs (\ y -> reset ((k . Right) <$> (reflect b y)))))
 
 -- end
 ------
@@ -277,7 +271,6 @@ power n = abs (\ x ->
   else
     x `mul` (power (n - 1) `app` x))
 
-
 power' :: Integer -> Syn (Rational -> MaybeT Rational)
 power' n = abs (\ x ->
   if n < 0       then
@@ -290,8 +283,9 @@ power' n = abs (\ x ->
   else if even n then
     ((abs (\ y -> y `mul` y))
       <$$> (power' (P.div n  2) `app` x))
-  else ((abs (\ y -> x `mul` y))
-         <$$> (power' (n - 1) `app` x)))
+  else
+    ((abs (\ y -> x `mul` y))
+      <$$> (power' (n - 1) `app` x)))
 
 power'' :: Integer -> Syn (Rational -> Rational)
 power'' n = abs (\ x -> maybeT (abs (\ z -> z)) (rat 0) (power' n `app` x))
