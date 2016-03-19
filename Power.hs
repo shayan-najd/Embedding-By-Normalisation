@@ -17,39 +17,10 @@ import Control.Monad
 import Data.Typeable
 import Prelude hiding (abs,div)
 import qualified Prelude as P
+import Control.Monad.State
 
 caseEither :: Either a b -> (a -> c) -> (b -> c) -> c
 caseEither l m n = either m n l
-
--- Continuation Monad
----------------------
--- begin
-
-data Cnt c b where
-  Cnt :: (forall a. Typeable a => (b -> c a) -> c a) -> Cnt c b
-
-runCnt :: Cnt c b -> (forall a. Typeable a => (b -> c a) -> c a)
-runCnt (Cnt k) = k
-
-shift :: (forall a. Typeable a => (b -> c a) -> c a) -> Cnt c b
-shift k = Cnt k
-
-reset :: Typeable c => Cnt trm (trm c) -> trm c
-reset m = runCnt m id
-
-instance Monad (Cnt trm) where
-  return x = Cnt (\ k -> k x)
-  m >>= f  = Cnt (\ k -> runCnt m (\ x -> runCnt (f x) k))
-
-instance Functor (Cnt trm) where
-  fmap  = liftA
-
-instance Applicative (Cnt trm) where
-  pure  = return
-  (<*>) = ap
-
--- end
-------
 
 -- Syntax
 ---------
@@ -257,6 +228,11 @@ norm m = reset (reify inferRel <$> (eval m))
 -- end
 ------
 
+-- An Example
+-----------------
+-- begin
+
+
 power :: Integer -> Syn (Rational -> Rational)
 power n = abs (\ x ->
   if n < 0       then
@@ -289,3 +265,90 @@ power' n = abs (\ x ->
 
 power'' :: Integer -> Syn (Rational -> Rational)
 power'' n = abs (\ x -> maybeT (abs (\ z -> z)) (rat 0) (power' n `app` x))
+
+
+ex1 :: String
+ex1 = showTrm (norm (power (-6)))
+
+ex2 :: String
+ex2 = showTrm (norm (power'' (-6)))
+
+test :: Bool
+test = ex1 == ex2
+
+-- end
+------
+
+-- Show Instance
+----------------
+-- begin
+
+newName :: State Int String
+newName = do i <- get
+             put (i + 1)
+             return ("x" ++ show i)
+
+newtype WPPr a = WPPr {runWPPr:: State Int String}
+
+str1 :: String -> String -> String
+str1 op x     = op ++" ("++x++")"
+
+str2 :: String -> String -> String -> String
+str2 op x y   = op ++" ("++x++") ("++y++")"
+
+str3 :: String -> String -> String -> String -> String
+str3 op x y z = op ++" ("++x++") ("++y++") ("++z++")"
+
+instance Trm WPPr where
+  rat r     = WPPr (pure (show (fromRational r :: Float)))
+  eql m n   = WPPr (str2 "eql" <$> (runWPPr m) <*> (runWPPr n))
+  mul m n   = WPPr (str2 "mul" <$> (runWPPr m) <*> (runWPPr n))
+  div m n   = WPPr (str2 "div" <$> (runWPPr m) <*> (runWPPr n))
+  unt       = WPPr (pure "unt")
+  abs n     = WPPr (do x <- newName
+                       z <- runWPPr (n (WPPr (pure x)))
+                       return ("\\ "++ x ++" -> "++ z))
+  app l m   = WPPr (str2 "app" <$> (runWPPr l) <*> (runWPPr m))
+  prd m n   = WPPr (str2 "prd" <$> (runWPPr m) <*> (runWPPr n))
+  pi1 l     = WPPr (str1 "fst" <$> (runWPPr l))
+  pi2 l     = WPPr (str1 "snd" <$> (runWPPr l))
+  inl m     = WPPr (str1 "inl" <$> (runWPPr m))
+  inr n     = WPPr (str1 "inr" <$> (runWPPr n))
+  cas l m n = WPPr (str3 "cas" <$> (runWPPr l)
+                    <*> (runWPPr m) <*> (runWPPr n))
+
+showTrm :: Syn a -> String
+showTrm m = evalState (runWPPr m) 0
+
+-- end
+------
+
+-- Continuation Monad
+---------------------
+-- begin
+
+data Cnt c b where
+  Cnt :: (forall a. Typeable a => (b -> c a) -> c a) -> Cnt c b
+
+runCnt :: Cnt c b -> (forall a. Typeable a => (b -> c a) -> c a)
+runCnt (Cnt k) = k
+
+shift :: (forall a. Typeable a => (b -> c a) -> c a) -> Cnt c b
+shift k = Cnt k
+
+reset :: Typeable c => Cnt trm (trm c) -> trm c
+reset m = runCnt m id
+
+instance Monad (Cnt trm) where
+  return x = Cnt (\ k -> k x)
+  m >>= f  = Cnt (\ k -> runCnt m (\ x -> runCnt (f x) k))
+
+instance Functor (Cnt trm) where
+  fmap  = liftA
+
+instance Applicative (Cnt trm) where
+  pure  = return
+  (<*>) = ap
+
+-- end
+------
