@@ -1,0 +1,1517 @@
+// @string{aplas="Asian Programming Languages Symposium (APLAS)"}
+// @string{concur="CONCUR"}
+// @string{cpp="Certified Programs and Proofs (CPP)"}
+// @string{csl="Computer Science Logic (CSL)"}
+// @string{dls="Dynamic Languages Symposium (DLS)"}
+// @string{dbpl="Database Programming Languages (DBPL)"}
+// @string{ecoop="European Conference on Object-Oriented Programming (ECOOP)"}
+// @string{esop="European Symposium on Programming (ESOP)"}
+// @string{eurosys="European Conference on Computer Systems (EuroSys)"}
+// @string{flops="Functional and Logic Programming (FLOPS)"}
+// @string{fossacs="Foundations of Software Science and Computation (FoSSaCS)"}
+// @string{gpce="Generative Programming: Concepts and Experiences (GPCE)"}
+// @string{fpca="Functional Programming Languages and Computer Architecture (FPCA)"}
+// @string{haskell="Haskell Symposium"}
+// @string{hlcl="High-Level Concurrent Languages (HLCL)"}
+// @string{icalp="International Colloquium on Automata, Languages and Programming (ICALP)"}
+// @string{ice="Interaction and Concurrency Experience (ICE)"}
+// @string{icfp="International Conference on Functional Programming (ICFP)"}
+// @string{icse="International Conference on Software Engineering (ICSE)"}
+// @string{ifip="International Federation for Information Processing World Computer Congress (IFIP)"}
+// @string{ifl="Implementation of Functional Languages (IFL)"}
+// @string{ilps="International Logic Programming Symposium (ILPS)"}
+// @string{lics="Logic in Computer Science (LICS)"}
+// @string{mfcs="Mathematical Foundations of Computer Science (MFCS)"}
+// @string{ml="ML Workshop"}
+// @string{oopsla="Object-Oriented Programming: Systems, Languages, and Applications (OOPSLA)"}
+// @string{parle="Parallel Architectures and Languages Europe (PARLE)"}
+// @string{pepm="Partial Evaluation meets Program Manipulation (PEPM)"}
+// @string{pldi="Programming Language Design and Implementation (PLDI)"}
+// @string{plpv="Programming Languages meets Program Verification (PLPV)"}
+// @string{pods="Principles of Database Systems (PODS)"}
+// @string{popl="Principles of Programming Languages (POPL)"}
+// @string{ppdp="Principles and Practice of Declarative Programming (PPDP)"}
+// @string{scheme="Scheme Workshop"}
+// @string{stop="Script-to-Program Evolution (STOP)"}
+// @string{tfp="Trends in Functional Programming (TFP)"}
+// @string{tlca="Typed Lambda Calculi and Applications (TLCA)"}
+// @string{tldi="Types in Language Design and Implementation (TLDI)"}
+// @string{acta="Acta Informatica"}
+// @string{compsurv="Computing Surveys"}
+// @string{entcs="Electronic Notes in Theoretical Computer Science"}
+// @string{hosc="Higher-Order and Symbolic Computation"}
+// @string{iandc="Information and Computation"}
+// @string{jacm="Journal of the ACM"}
+// @string{jcss="Journal of Computer and Systems Science"}
+// @string{jfp="Journal of Functional Programming"}
+// @string{jsl="Journal of Symbolic Logic"}
+// @string{lispsc="Lisp and Symbolic Computation"}
+// @string{lncs="Lecture Notes in Computer Science"}
+// @string{mscs="Mathematical Structures in Computer Science"}
+// @string{tcs="Theoretical Computer Science"}
+// @string{toplas="Transactions on Programming Languages and Systems"}
+
+@string{aplas="APLAS"}
+@string{concur="CONCUR"}
+@string{cpp="CPP"}
+@string{csl="CSL"}
+@string{dls="DLS"}
+@string{dbpl="DBPL"}
+@string{ecoop="ECOOP"}
+@string{esop="ESOP"}
+@string{eurosys="EuroSys"}
+@string{flops="FLOPS"}
+@string{fossacs="FoSSaCS"}
+@string{gpce="GPCE"}
+@string{fpca="FPCA"}
+@string{haskell="Haskell"}
+@string{hlcl="HLCL"}
+@string{icalp="ICALP"}
+@string{ice="ICE"}
+@string{icfp="ICFP"}
+@string{icse="ICSE"}
+@string{ifip="IFIP"}
+@string{ifl="IFL"}
+@string{ilps="ILPS"}
+@string{lics="LICS"}
+@string{mfcs="MFCS"}
+@string{ml="ML"}
+@string{oopsla="OOPSLA"}
+@string{parle="PARLE"}
+@string{pepm="PEPM"}
+@string{pldi="PLDI"}
+@string{plpv="PLPV"}
+@string{pods="PODS"}
+@string{popl="POPL"}
+@string{ppdp="PPDP"}
+@string{scheme="Scheme"}
+@string{sigmod="SIGMOD"}
+@string{stop="STOP"}
+@string{tfp="TFP"}
+@string{tlca="TLCA"}
+@string{tldi="TLDI"}
+@String{memocode="MEMOCODE"}
+@string{acta="Acta Informatica"}
+@string{cacm="CACM"}
+@string{compsurv="Computing Surveys"}
+@string{entcs="ENTCS"}
+@string{hosc="HOSC"}
+@string{iandc="Inf. Comput."}
+@string{jacm="JACM"}
+@string{jcss="JCSS"}
+@string{jfp="JFP"}
+@string{jsl="J. Symb. Logic"}
+@string{lispsc="Lisp and Symbolic Computation"}
+@string{lncs="LNCS"}
+@string{mscs="MSCS"}
+@string{tcs="TCS"}
+@string{toplas="TOPLAS"}
+@string{damp="DAMP"}
+@string{appsem="APPSEM"}
+@string{scp="SCP"}
+@string{asian="ASIAN"}
+@string{tecs="TECS"}
+@string{ngc="New Generation Computing"}
+
+@inproceedings{rompf2013scala,
+  author    = {Tiark Rompf and
+               Nada Amin and
+               Adriaan Moors and
+               Philipp Haller and
+               Martin Odersky},
+  title     = {{Scala-Virtualized}: linguistic reuse for deep embeddings},
+  booktitle = hosc,
+  year      = {2013},
+  publisher = {Springer}
+}
+
+@inproceedings{DybjerF00,
+  author    = {Dybjer, P. and Filinski, A.},
+  title     = {Normalization and Partial Evaluation},
+  booktitle = appsem,
+  year      = {2000},
+  publisher = {Springer}
+}
+
+@inproceedings{Danvy96,
+  author    = {Danvy, O.},
+  title     = {Type-Directed Partial Evaluation},
+  booktitle = popl,
+  year      = {1996},
+  publisher = {ACM}
+}
+
+@inproceedings{a-normal-form,
+  author    = {Cormac Flanagan and
+               Amr Sabry and
+               Bruce F. Duba and
+               Matthias Felleisen},
+  title     = {The essence of compiling with continuations},
+  booktitle = pldi,
+  year      = {1993},
+  publisher = {ACM}
+}
+
+@inproceedings{fsharplinq,
+  author    = {Syme, D.},
+  title     = {Leveraging {.NET} meta-programming components from {F\#}: integrated queries and interoperable heterogeneous execution},
+  booktitle = ml,
+  year      = {2006},
+  publisher = {ACM}
+}
+
+@inproceedings{csharplinq,
+  author    = {Meijer, E. and Beckman, B. and Bierman, G.},
+  title     = {{LINQ}: reconciling object, relations and {XML} in the {.NET} framework},
+  booktitle = sigmod,
+  year      = {2006},
+  publisher = {ACM}
+}
+
+@inproceedings{hoas,
+  author    = {Pfenning, F. and Elliott, C.},
+  title     = {Higher-order abstract syntax},
+  booktitle = pldi,
+  year      = {1988},
+  publisher = {ACM}
+}
+
+@inproceedings{type-families,
+  author    = {Manuel M. T. Chakravarty and
+               Gabriele Keller and
+               Simon L. Peyton Jones and
+               Simon Marlow},
+  title     = {Associated types with class},
+  booktitle = popl,
+  year      = {2005},
+  publisher = {ACM}
+}
+
+@inproceedings{mainland-quoted,
+  author    = {Mainland, G.},
+  title     = {Why it's nice to be quoted: quasiquoting for {Haskell}},
+  booktitle = haskell,
+  year      = {2007},
+  publisher = {ACM}
+}
+
+@inproceedings{scalalms,
+  author    = {Rompf, T. and Odersky, M.},
+  title     = {Lightweight modular staging: a pragmatic approach to runtime code generation and compiled {DSL}s},
+  booktitle = gpce,
+  year      = {2010},
+  publisher = {ACM}
+}
+
+@inproceedings{svenningsson:combining,
+  author    = {Svenningsson, J. and Axelsson, E.},
+  title     = {Combining Deep and Shallow Embedding for {EDSL}},
+  booktitle = tfp,
+  year      = {2012},
+  publisher = {Springer}
+}
+
+@article{svenningsson:combiningJournal,
+title = "Combining deep and shallow embedding of domain-specific languages ",
+journal = "Computer Languages, Systems \& Structures ",
+volume = "44, Part B",
+number = "",
+pages = "143 - 165",
+year = "2015",
+issn = "1477-8424",
+doi = "http://dx.doi.org/10.1016/j.cl.2015.07.003",
+url = "http://www.sciencedirect.com/science/article/pii/S1477842415000500",
+author = "Josef Svenningsson and Emil Axelsson"
+}
+
+@inproceedings{cheney:linq,
+  author    = {Cheney, J. and Lindley, S. and Wadler, P.},
+  title     = {A practical theory of language-integrated query},
+  booktitle = icfp,
+  year      = {2013},
+  publisher = {ACM}
+}
+
+@inproceedings{SculthorpeBGG13,
+  author    = {Neil Sculthorpe and
+               Jan Bracker and
+               George Giorgidze and
+               Andy Gill},
+  title     = {The constrained-monad problem},
+  booktitle = icfp,
+  year      = {2013},
+  publisher = {ACM}
+}
+
+@inproceedings{SvenningssonS13,
+  author    = {Svenningsson, J. and Svensson, B.},
+  title     = {Simple and compositional reification of monadic embedded languages},
+  booktitle = icfp,
+  year      = {2013},
+  publisher = {ACM}
+}
+
+@inproceedings{FELDSPAR,
+  author    = {Emil Axelsson and
+               Koen Claessen and
+               Gergely D{\'{e}}vai and
+               Zolt{\'{a}}n Horv{\'{a}}th and
+               Karin Keijzer and
+               Bo Lyckeg{\aa}rd and
+               Anders Persson and
+               Mary Sheeran and
+               Josef Svenningsson and
+               Andr{\'{a}}s Vajda},
+  title     = {{F}eldspar: {A} Domain Specific Language for Digital Signal Processing Algorithms},
+  booktitle = memocode,
+  year      = {2010},
+  publisher = {IEEE}
+}
+
+@inproceedings{ankner2013edsl,
+  author    = {Ankner, J. and Svenningsson, J.},
+  title     = {An {EDSL} approach to high performance {Haskell} programming},
+  booktitle = haskell,
+  year      = {2013},
+  publisher = {ACM}
+}
+
+@inproceedings{gill2009type,
+  author    = {Gill, A.},
+  title     = {Type-safe observable sharing in {Haskell}},
+  booktitle = haskell,
+  year      = {2009},
+  publisher = {ACM}
+}
+@inproceedings{spoofax,
+  author    = {Kats, L. and Visser, E.},
+  title     = {The Spoofax language workbench},
+  booktitle = oopsla,
+  year      = {2010},
+  publisher = {ACM}
+}
+
+@inproceedings{Davies-Pfenning-1996,
+  author    = {Davies, R. and Pfenning, F.},
+  title     = {A modal analysis of staged computation},
+  booktitle = popl,
+  year      = {1996},
+  publisher = {ACM}
+}
+
+@inproceedings{Wong-1993,
+  author    = {Wong, L.},
+  title     = {Normal forms and conservative properties for query languages
+               over collection types},
+  booktitle = pods,
+  year      = {1993},
+  publisher = {ACM}
+}
+
+@inproceedings{hughes1999restricted,
+  author    = {Hughes, J.},
+  title     = {Restricted data types in {Haskell}},
+  booktitle = haskell,
+  year      = {1999},
+  publisher = {ACM}
+}
+
+@inproceedings{claessen:push,
+  author    = {Claessen, K. and Sheeran, M. and Svensson, B.},
+  title     = {Expressive array constructs in an embedded {GPU} kernel programming language},
+  booktitle = damp,
+  year      = {2012},
+  publisher = {ACM}
+}
+
+@inproceedings{Lindley07,
+  author    = {Lindley, S.},
+  title     = {Extensional Rewriting with Sums},
+  booktitle = tlca,
+  year      = {2007},
+  publisher = {Springer}
+}
+
+@inproceedings{NIKOLA,
+ author     = {Mainland, G. and Morrisett, G.},
+ title      = {{{Nikola}: embedding compiled {GPU} functions in {Haskell}}},
+ booktitle  = haskell,
+ year       = {2010},
+ publisher  = {ACM}
+}
+
+@inproceedings{metahaskell,
+  author    = {Mainland, G.},
+  title     = {Explicitly heterogeneous metaprogramming with {M}eta{H}askell},
+  booktitle = icfp,
+  year      = {2012},
+  publisher = {ACM}
+}
+
+
+@inproceedings{LindleyC12,
+  author    = {Lindley, S. and Cheney, J.},
+  title     = {Row-based effect types for database integration},
+  booktitle = tldi,
+  year      = {2012},
+  publisher = {ACM}
+}
+
+@inproceedings{CheneyLRW14,
+  author    = {James Cheney and
+               Sam Lindley and
+               Gabriel Radanne and
+               Philip Wadler},
+  title     = {Effective quotation: relating approaches to language-integrated query},
+  booktitle = pepm,
+  year      = {2014},
+  publisher = {ACM}
+}
+// title     = {Effective quotation: relating approaches to language-integrated query},
+
+//  title     = {Query shredding: efficient relational evaluation of queries over nested
+//               multisets},
+
+@inproceedings{Cooper09,
+  author    = {Cooper, E.},
+  title     = {The Script-Writer's Dream},
+  booktitle = dbpl,
+  year      = {2009},
+  publisher = {ACM}
+}
+//  title     = {The Script-Writer's Dream: How to Write Great {SQL} in Your Own Language,
+//               and Be Sure It Will Succeed},
+
+
+@incollection{claessen1999observable,
+  author    = {Claessen, K. and Sands, D.},
+  title     = {Observable sharing for functional circuit description},
+  booktitle = asian,
+  year      = {1999},
+  publisher = {Springer}
+}
+
+@incollection{PerssonAS11,
+  author    = {Persson, A. and Axelsson, E. and Svenningsson, J.},
+  title     = {Generic Monadic Constructs for Embedded Languages},
+  booktitle = ifl,
+  year      = {2011},
+  publisher = {Springer}
+}
+
+@incollection{giorgidze2011embedding,
+  author    = {Giorgidze, G. and Nilsson, H.},
+  title     = {Embedding a functional hybrid modelling language in {Haskell}},
+  booktitle = ifl,
+  year      = {2011},
+  publisher = {Springer}
+}
+
+@incollection{stablenames,
+  author    = {Peyton Jones, S. and Marlow, S. and Elliott, C.},
+  title     = {Stretching the Storage Manager: Weak Pointers and Stable Names
+               in {Haskell}},
+  booktitle = ifl,
+  year      = {2000},
+  publisher = {Springer}
+}
+
+@incollection{svensson2011obsidian,
+  author    = {Svensson, J. and Sheeran, M. and Claessen, K.},
+  title     = {{Obsidian}: A Domain Specific Embedded Language for Parallel Programming of Graphics Processors},
+  booktitle = ifl,
+  year      = {2011},
+  publisher = {Springer}
+}
+
+@inproceedings{Mainland:2010,
+ author = {Mainland, Geoffrey and Morrisett, Greg},
+ title = {Nikola: Embedding Compiled GPU Functions in Haskell},
+ booktitle = {Proceedings of the Third ACM Haskell Symposium on Haskell},
+ series = {Haskell '10},
+ year = {2010},
+ isbn = {978-1-4503-0252-4},
+ location = {Baltimore, Maryland, USA},
+ pages = {67--78},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/1863523.1863533},
+ doi = {10.1145/1863523.1863533},
+ acmid = {1863533},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {cuda, gpu, meta programming},
+}
+
+
+@incollection{odonnell:sharing,
+  author    = {O'Donnell, J.},
+  title     = {Generating netlists from executable circuit specifications in a pure functional language},
+  booktitle = {Functional Programming, Glasgow},
+  year      = {1993},
+  publisher = {Springer}
+}
+
+@incollection{sujeeth2013composition,
+  author    = {Arvind K. Sujeeth and
+               Tiark Rompf and
+               Kevin J. Brown and
+               HyoukJoong Lee and
+               Hassan Chafi and
+               Victoria Popic and
+               Michael Wu and
+               Aleksandar Prokopec and
+               Vojin Jovanovic and
+               Martin Odersky and
+               Kunle Olukotun},
+  title     = {Composition and reuse with compiled domain-specific languages},
+  booktitle = ecoop,
+  year      = {2013},
+  publisher = {Springer}
+}
+
+@incollection{Howard-1980,
+  author    = {Howard, W.},
+  title     = {The formulae-as-types notion of construction},
+  booktitle = {To H. B. Curry},
+  year      = {1980},
+  publisher = {Academic Press}
+}
+//  booktitle = {To H.~B.~Curry:
+//               Essays on Combinatory Logic, Lambda Calculus, and Formalism},
+//  note      = {The original version was circulated privately in 1969.}
+
+@incollection{hudak1997domain,
+  author    = {Hudak, P.},
+  title     = {Domain-specific Languages},
+  booktitle = {Handbook of Programming Languages},
+  year      = {1997},
+  publisher = {MacMillan}
+}
+
+@article{call-by-need,
+  author    = {Maraist, J. and Odersky, M. and Wadler, P.},
+  title     = {The call-by-need lambda calculus},
+  journal   = jfp,
+  volume    = {8},
+  number    = {03},
+  year      = {1998},
+  publisher = {Cambridge University Press}
+}
+
+@article{ariola-call-by-need,
+  author    = {Ariola, Z. and Felleisen, M.},
+  title     = {The call-by-need lambda calculus},
+  journal   = jfp,
+  volume    = {7},
+  number    = {03},
+  year      = {1997},
+  publisher = {Cambridge University Press}
+}
+
+@article{Gentzen-1935,
+  author    = {Gentzen, G.},
+  title     = {Untersuchungen {\"u}ber das logische Schlie{\ss}en. I},
+  journal   = {Mathematische zeitschrift},
+  volume    = {39},
+  number    = {1},
+  year      = {1935},
+  publisher = {Springer}
+}
+
+@article{Bentley-1986,
+  author    = {Bentley, J.},
+  title     = {Programming pearls: {L}ittle languages},
+  journal   = cacm,
+  volume    = {29},
+  number    = {8},
+  year      = {1986},
+  publisher = {ACM}
+}
+
+@article{Gill:CACM,
+  author    = {Gill, A.},
+  title     = {Domain-specific Languages and Code Synthesis Using
+                  {Haskell}},
+  journal   = cacm,
+  volume    = {57},
+  number    = {6},
+  year      = {2014},
+  publisher = {ACM}
+}
+
+@article{McCarthy-1960,
+  author    = {McCarthy, J.},
+  title     = {Recursive functions of symbolic expressions and their computation by machine, {P}art {I}},
+  journal   = cacm,
+  volume    = {3},
+  number    = {4},
+  year      = {1960},
+  publisher = {ACM}
+}
+
+@article{Davies-Pfenning-2001,
+  author    = {Davies, R. and Pfenning, F.},
+  title     = {A modal analysis of staged computation},
+  journal   = jacm,
+  volume    = {48},
+  number    = {3},
+  year      = {2001},
+  publisher = {ACM}
+}
+
+@article{Wong-1996,
+  author    = {Wong, L.},
+  title     = {Normal Forms and Conservative Extension Properties for Query Languages
+               over Collection Types},
+  journal   = jcss,
+  volume    = {52},
+  number    = {3},
+  year      = {1996},
+  publisher = {Elsevier}
+}
+
+@article{Wadler-2015,
+  author    = {Wadler, P.},
+  title     = {Propositions as Types},
+  journal   = cacm,
+  year      = {2015},
+  publisher = {ACM}
+}
+
+@article{Moggi-1991,
+  author    = {Moggi, E.},
+  title     = {Notions of computation and monads},
+  journal   = iandc,
+  volume    = {93},
+  number    = {1},
+  year      = {1991},
+  publisher = {Elsevier}
+}
+
+@article{Beckmann01,
+  author    = {Beckmann, A.},
+  title     = {Exact Bounds for Lengths of Reductions in Typed lambda-Calculus},
+  journal   = jsl,
+  volume    = {66},
+  number    = {3},
+  year      = {2001},
+  publisher = {ASL}
+}
+
+@article{Delite,
+  author    = {Arvind K. Sujeeth and
+               Kevin J. Brown and
+               HyoukJoong Lee and
+               Tiark Rompf and
+               Hassan Chafi and
+               Martin Odersky and
+               Kunle Olukotun},
+  title     = {Delite: a compiler architecture for performance-oriented embedded domain-specific languages},
+  journal   = tecs,
+  volume    = {13},
+  number    = {4s},
+  year      = {2014},
+  publisher = {ACM}
+}
+
+@article{metaml,
+  author    = {Taha, W. and Sheard, T.},
+  title     = {{MetaML} and multi-stage programming with explicit annotations},
+  journal   = tcs,
+  volume    = {248},
+  number    = {1},
+  year      = {2000},
+  publisher = {Elsevier}
+}
+
+@article{EckhardtKPST07,
+  author    = {Eckhardt, Jason and Kaiabachev, Roumen and Pa{\v{s}}ali{\'c}, Emir and Swadi, Kedar and Taha, Walid},
+  title     = {Implicitly Heterogeneous Multi-Stage Programming},
+  journal   = ngc,
+  volume    = {25},
+  number    = {3},
+  year      = {2007},
+  publisher = {Springer}
+}
+
+@article{BondorfD91,
+  author    = {Bondorf, A. and Danvy, O.},
+  title     = {Automatic Autoprojection of Recursive Equations with Global Variables
+               and Abstract Data Types},
+  journal   = scp,
+  volume    = {16},
+  number    = {2},
+  year      = {1991},
+  publisher = {Elsevier}
+}
+
+@Misc{feldspar-github,
+  title     = {Feldspar Github repository},
+  author    = {Feldspar},
+  year      = 2015,
+  note      = {https://github.com/Feldspar/feldspar-language},
+}
+
+@book{jones1993partial,
+  author    = {Jones, N. and Gomard, C. and Sestoft, P.},
+  title     = {Partial evaluation and automatic program generation},
+  year      = {1993},
+  publisher = {Prentice Hall}
+}
+
+@book{Nielson-2005,
+  author    = {Nielson, F. and Nielson, H.},
+  title     = {Two-level functional languages},
+  year      = {1992},
+  publisher = {Cambridge University Press}
+}
+
+@book{Prawitz-1965,
+  author    = {Prawitz, D.},
+  title     = {Natural Deduction: A Proof-Theoretical Study},
+  year      = {1965},
+  publisher = {Almqvist and Wiksell}
+}
+
+@techreport{Hart-1963,
+  author      = {Hart, T.},
+  title       = {{MACRO} Definitions for {LISP}},
+  year        = {1963},
+  number      = {AIM-057},
+  institution = {MIT}
+}
+
+@techreport{HudakDSL,
+  author      = {Carlson, W. and Hudak, P. and Jones, M.},
+  title       = {An experiment using {Haskell} to prototype “geometric region servers” for Navy command and control},
+  year        = {1993},
+  number      = {1031},
+  institution = {Yale University}
+}
+
+@techreport{racket,
+  author      = {Flatt, M.},
+  title       = {Reference: Racket},
+  year        = {2010},
+  number      = {PLT-TR-2010-1},
+  institution = {PLT Inc.}
+}
+
+@phdthesis{rompf2012lightweight,
+  author = {Rompf, T.},
+  title  = {Lightweight Modular Staging and Embedded Compilers: Abstraction without Regret for High-Level High-Performance Programming},
+  year   = {2012},
+  school = {EPFL}
+}
+
+@phdthesis{Lindley05,
+  author = {Sam Lindley},
+  title  = {Normalisation by Evaluation in the Compilation of Typed Functional Programming Languages},
+  year   = {2005},
+  school = {University of Edinburgh}
+}
+
+@inproceedings{CheneyLW14,
+  author    = {James Cheney and
+               Sam Lindley and
+               Philip Wadler},
+  title     = {Query shredding: efficient relational evaluation of queries over nested
+               multisets},
+  booktitle = sigmod,
+  pages     = {1027--1038},
+  year      = {2014},
+  crossref  = {DBLP:conf/sigmod/2014},
+  DOIurl       = {http://doi.acm.org/10.1145/2588555.2612186},
+  DOIdoi       = {10.1145/2588555.2612186},
+  timestamp = {Sun, 22 Jun 2014 11:31:11 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/sigmod/CheneyLW14},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/sigmod/2014,
+  OPTeditor    = {Curtis E. Dyreson and
+               Feifei Li and
+               M. Tamer {\"{O}}zsu},
+  title     = {International Conference on Management of Data, {SIGMOD} 2014, Snowbird,
+               UT, USA, June 22-27, 2014},
+  publisher = {{ACM}},
+  year      = {2014},
+  url       = {http://dl.acm.org/citation.cfm?id=2588555},
+  OPTisbn   = {978-1-4503-2376-5},
+  timestamp = {Sun, 22 Jun 2014 11:31:11 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/sigmod/2014},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{SchoepeHS14,
+  author    = {Daniel Schoepe and
+               Daniel Hedin and
+               Andrei Sabelfeld},
+  title     = {{SeLINQ}: tracking information across application-database boundaries},
+  booktitle = icfp,
+  OPTpages     = {25--38},
+  year      = {2014},
+  crossref  = {DBLP:conf/icfp/2014},
+  OPTurl       = {http://doi.acm.org/10.1145/2628136.2628151},
+  OPTdoi       = {10.1145/2628136.2628151},
+  timestamp = {Thu, 20 Nov 2014 18:09:13 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/icfp/SchoepeHS14},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@inproceedings{SuzukiKK15,
+  author    = {Kenichi Suzuki and
+               Oleg Kiselyov and
+               Yukiyoshi Kameyama},
+  title     = {Finally, safely-extensible and efficient language integrated query},
+  booktitle = pepm,
+  year      = {2015},
+  publisher = {ACM}
+}
+
+@inproceedings{QDSL,
+  author    = {Shayan Najd and
+               Sam Lindley and
+               Josef Svenningsson and
+               Philip Wadler},
+  title     = {Everything old is new again: quoted domain-specific languages},
+  booktitle = {Proceedings of the 2016 {ACM} {SIGPLAN} Workshop on Partial Evaluation
+               and Program Manipulation, {PEPM} 2016, St. Petersburg, FL, USA, January
+               20 - 22, 2016},
+  pages     = {25--36},
+  year      = {2016},
+  crossref  = {DBLP:conf/pepm/2016},
+  url       = {http://doi.acm.org/10.1145/2847538.2847541},
+  doi       = {10.1145/2847538.2847541},
+  timestamp = {Fri, 08 Jan 2016 18:25:53 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/pepm/NajdLSW16},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{ad-hoc,
+  author    = {Philip Wadler and
+               Stephen Blott},
+  title     = {How to Make ad-hoc Polymorphism Less ad-hoc},
+  booktitle = {Conference Record of the Sixteenth Annual {ACM} Symposium on Principles
+               of Programming Languages, Austin, Texas, USA, January 11-13, 1989},
+  pages     = {60--76},
+  year      = {1989},
+  crossref  = {DBLP:conf/popl/1989},
+  url       = {http://doi.acm.org/10.1145/75277.75283},
+  doi       = {10.1145/75277.75283},
+  timestamp = {Mon, 21 May 2012 16:19:51 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/popl/WadlerB89},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/popl/1989,
+  title     = {Conference Record of the Sixteenth Annual {ACM} Symposium on Principles
+               of Programming Languages, Austin, Texas, USA, January 11-13, 1989},
+  publisher = {{ACM} Press},
+  year      = {1989},
+  url       = {http://dl.acm.org/citation.cfm?id=75277},
+  isbn      = {0-89791-294-2},
+  timestamp = {Mon, 21 May 2012 16:19:51 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/popl/1989},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/pepm/2016,
+  editor    = {Martin Erwig and
+               Tiark Rompf},
+  title     = {Proceedings of the 2016 {ACM} {SIGPLAN} Workshop on Partial Evaluation
+               and Program Manipulation, {PEPM} 2016, St. Petersburg, FL, USA, January
+               20 - 22, 2016},
+  publisher = {{ACM}},
+  year      = {2016},
+  url       = {http://dl.acm.org/citation.cfm?id=2847538},
+  isbn      = {978-1-4503-4097-7},
+  timestamp = {Fri, 08 Jan 2016 18:25:07 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/pepm/2016},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@inproceedings{1ML,
+  author    = {Andreas Rossberg},
+  title     = {1ML - core and modules united (F-ing first-class modules)},
+  booktitle = {Proceedings of the 20th {ACM} {SIGPLAN} International Conference on
+               Functional Programming, {ICFP} 2015, Vancouver, BC, Canada, September
+               1-3, 2015},
+  pages     = {35--47},
+  year      = {2015},
+  crossref  = {DBLP:conf/icfp/2015},
+  url       = {http://doi.acm.org/10.1145/2784731.2784738},
+  doi       = {10.1145/2784731.2784738},
+  timestamp = {Tue, 08 Sep 2015 09:24:11 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/icfp/Rossberg15},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/icfp/2015,
+  editor    = {Kathleen Fisher and
+               John H. Reppy},
+  title     = {Proceedings of the 20th {ACM} {SIGPLAN} International Conference on
+               Functional Programming, {ICFP} 2015, Vancouver, BC, Canada, September
+               1-3, 2015},
+  publisher = {{ACM}},
+  year      = {2015},
+  url       = {http://dl.acm.org/citation.cfm?id=2784731},
+  isbn      = {978-1-4503-3669-7},
+  timestamp = {Tue, 08 Sep 2015 09:21:43 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/icfp/2015},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@techreport{GADTs,
+  title={First-class phantom types},
+  author={Cheney, James and Hinze, Ralf},
+  year={2003},
+  institution={Cornell University}
+}
+
+@inproceedings{LINQ,
+  author    = {Erik Meijer and
+               Brian Beckman and
+               Gavin M. Bierman},
+  title     = {{LINQ:} reconciling object, relations and {XML} in the .NET framework},
+  booktitle = {Proceedings of the {ACM} {SIGMOD} International Conference on Management
+               of Data, Chicago, Illinois, USA, June 27-29, 2006},
+  pages     = {706},
+  year      = {2006},
+  crossref  = {DBLP:conf/sigmod/2006},
+  url       = {http://doi.acm.org/10.1145/1142473.1142552},
+  doi       = {10.1145/1142473.1142552},
+  timestamp = {Thu, 06 Jul 2006 14:01:55 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/sigmod/MeijerBB06},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/sigmod/2006,
+  editor    = {Surajit Chaudhuri and
+               Vagelis Hristidis and
+               Neoklis Polyzotis},
+  title     = {Proceedings of the {ACM} {SIGMOD} International Conference on Management
+               of Data, Chicago, Illinois, USA, June 27-29, 2006},
+  publisher = {{ACM}},
+  year      = {2006},
+  isbn      = {1-59593-256-9},
+  timestamp = {Thu, 06 Jul 2006 14:01:55 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/sigmod/2006},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+@article{Definitional,
+  author    = {John C. Reynolds},
+  title     = {Definitional Interpreters for Higher-Order Programming Languages},
+  journal   = {Higher-Order and Symbolic Computation},
+  volume    = {11},
+  number    = {4},
+  pages     = {363--397},
+  year      = {1998},
+  url       = {http://dx.doi.org/10.1023/A:1010027404223},
+  doi       = {10.1023/A:1010027404223},
+  timestamp = {Wed, 25 May 2011 16:33:10 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/lisp/Reynolds98a},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@inproceedings{Syntactic,
+  author    = {Emil Axelsson},
+  title     = {A generic abstract syntax model for embedded languages},
+  booktitle = {{ACM} {SIGPLAN} International Conference on Functional Programming,
+               ICFP'12, Copenhagen, Denmark, September 9-15, 2012},
+  pages     = {323--334},
+  year      = {2012},
+  crossref  = {DBLP:conf/icfp/2012},
+  url       = {http://doi.acm.org/10.1145/2364527.2364573},
+  doi       = {10.1145/2364527.2364573},
+  timestamp = {Fri, 07 Sep 2012 13:31:36 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/icfp/Axelsson12},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/icfp/2012,
+  editor    = {Peter Thiemann and
+               Robby Bruce Findler},
+  title     = {{ACM} {SIGPLAN} International Conference on Functional Programming,
+               ICFP'12, Copenhagen, Denmark, September 9-15, 2012},
+  publisher = {{ACM}},
+  year      = {2012},
+  url       = {http://dl.acm.org/citation.cfm?id=2364527},
+  isbn      = {978-1-4503-1054-3},
+  timestamp = {Fri, 07 Sep 2012 13:25:18 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/icfp/2012},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@book{Aho,
+  author    = {Alfred V. Aho and
+               Ravi Sethi and
+               Jeffrey D. Ullman},
+  title     = {Compilers: Principles, Techniques, and Tools},
+  publisher = {Addison-Wesley},
+  year      = {1986},
+  isbn      = {0-201-10088-6},
+  timestamp = {Wed, 04 Nov 2015 07:36:50 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/books/aw/AhoSU86},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{Tagless,
+  author    = {Jacques Carette and
+               Oleg Kiselyov and
+               Chung{-}chieh Shan},
+  title     = {Finally tagless, partially evaluated: Tagless staged interpreters
+               for simpler typed languages},
+  journal   = {J. Funct. Program.},
+  volume    = {19},
+  number    = {5},
+  pages     = {509--543},
+  year      = {2009},
+  url       = {http://dx.doi.org/10.1017/S0956796809007205},
+  doi       = {10.1017/S0956796809007205},
+  timestamp = {Mon, 21 Dec 2009 10:26:15 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/jfp/CaretteKS09},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{Gibbons,
+  author    = {Jeremy Gibbons and
+               Nicolas Wu},
+  title     = {Folding domain-specific languages: deep and shallow embeddings (functional
+               Pearl)},
+  booktitle = {Proceedings of the 19th {ACM} {SIGPLAN} international conference on
+               Functional programming, Gothenburg, Sweden, September 1-3, 2014},
+  pages     = {339--347},
+  year      = {2014},
+  crossref  = {DBLP:conf/icfp/2014},
+  url       = {http://doi.acm.org/10.1145/2628136.2628138},
+  doi       = {10.1145/2628136.2628138},
+  timestamp = {Thu, 20 Nov 2014 18:09:13 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/icfp/GibbonsW14},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{NBE-Sum,
+  author    = {Thorsten Altenkirch and
+               Peter Dybjer and
+               Martin Hofmann and
+               Philip J. Scott},
+  title     = {Normalization by Evaluation for Typed Lambda Calculus with Coproducts},
+  booktitle = {16th Annual {IEEE} Symposium on Logic in Computer Science, Boston,
+               Massachusetts, USA, June 16-19, 2001, Proceedings},
+  pages     = {303--310},
+  year      = {2001},
+  crossref  = {DBLP:conf/lics/2001},
+  url       = {http://dx.doi.org/10.1109/LICS.2001.932506},
+  doi       = {10.1109/LICS.2001.932506},
+  timestamp = {Sat, 22 Nov 2014 13:44:45 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/lics/AltenkirchDHS01},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@inproceedings{NBE-Cat,
+  author    = {Thorsten Altenkirch and
+               Martin Hofmann and
+               Thomas Streicher},
+  title     = {Categorical Reconstruction of a Reduction Free Normalization Proof},
+  booktitle = {Category Theory and Computer Science, 6th International Conference,
+               {CTCS} '95, Cambridge, UK, August 7-11, 1995, Proceedings},
+  pages     = {182--199},
+  year      = {1995},
+  crossref  = {DBLP:conf/ctcs/1995},
+  url       = {http://dx.doi.org/10.1007/3-540-60164-3_27},
+  doi       = {10.1007/3-540-60164-3_27},
+  timestamp = {Tue, 25 Aug 2015 14:46:18 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/ctcs/AltenkirchHS95},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/ctcs/1995,
+  editor    = {David H. Pitt and
+               David E. Rydeheard and
+               Peter T. Johnstone},
+  title     = {Category Theory and Computer Science, 6th International Conference,
+               {CTCS} '95, Cambridge, UK, August 7-11, 1995, Proceedings},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {953},
+  publisher = {Springer},
+  year      = {1995},
+  isbn      = {3-540-60164-3},
+  timestamp = {Tue, 25 Aug 2015 14:46:18 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/ctcs/1995},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{NBE-Untyped,
+  author    = {Peter Dybjer and
+               Denis Kuperberg},
+  title     = {Formal neighbourhoods, combinatory B{\"{o}}hm trees, and untyped
+               normalization by evaluation},
+  journal   = {Ann. Pure Appl. Logic},
+  volume    = {163},
+  number    = {2},
+  pages     = {122--131},
+  year      = {2012},
+  url       = {http://dx.doi.org/10.1016/j.apal.2011.06.021},
+  doi       = {10.1016/j.apal.2011.06.021},
+  timestamp = {Thu, 24 Nov 2011 14:12:04 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/apal/DybjerK12},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{Berger,
+  author    = {Ulrich Berger and
+               Helmut Schwichtenberg},
+  title     = {An Inverse of the Evaluation Functional for Typed lambda-calculus},
+  booktitle = {Proceedings of the Sixth Annual Symposium on Logic in Computer Science
+               {(LICS} '91), Amsterdam, The Netherlands, July 15-18, 1991},
+  pages     = {203--211},
+  year      = {1991},
+//crossref  = {DBLP:conf/lics/1991},
+  url       = {http://dx.doi.org/10.1109/LICS.1991.151645},
+  doi       = {10.1109/LICS.1991.151645},
+  timestamp = {Fri, 18 Sep 2015 13:51:52 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/lics/BergerS91},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{MartinLof,
+  title={of. An intuitionistic theory of types: Predicative part},
+  author={Martin L\"of, Per},
+  booktitle={Logic Colloquium},
+  volume={73},
+  pages={73},
+  year={1973}
+}
+
+@inproceedings{TDPE,
+  author    = {Olivier Danvy},
+  title     = {Type-Directed Partial Evaluation},
+  booktitle = {Conference Record of POPL'96: The 23rd {ACM} {SIGPLAN-SIGACT} Symposium
+               on Principles of Programming Languages, Papers Presented at the Symposium,
+               St. Petersburg Beach, Florida, USA, January 21-24, 1996},
+  pages     = {242--257},
+  year      = {1996},
+  crossref  = {DBLP:conf/popl/1996},
+  url       = {http://doi.acm.org/10.1145/237721.237784},
+  doi       = {10.1145/237721.237784},
+  timestamp = {Mon, 21 May 2012 16:19:51 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/popl/Danvy96},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/popl/1996,
+  editor    = {Hans{-}Juergen Boehm and
+               Guy L. Steele Jr.},
+  title     = {Conference Record of POPL'96: The 23rd {ACM} {SIGPLAN-SIGACT} Symposium
+               on Principles of Programming Languages, Papers Presented at the Symposium,
+               St. Petersburg Beach, Florida, USA, January 21-24, 1996},
+  publisher = {{ACM} Press},
+  year      = {1996},
+  url       = {http://dl.acm.org/citation.cfm?id=237721},
+  isbn      = {0-89791-769-3},
+  timestamp = {Mon, 21 May 2012 16:19:50 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/popl/1996},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@incollection{Agda,
+  title={Dependently typed programming in Agda},
+  author={Norell, Ulf},
+  booktitle={Advanced Functional Programming},
+  pages={230--266},
+  year={2009},
+  publisher={Springer}
+}
+
+@proceedings{DBLP:conf/icfp/2014,
+  editor    = {Johan Jeuring and
+               Manuel M. T. Chakravarty},
+  title     = {Proceedings of the 19th {ACM} {SIGPLAN} international conference on
+               Functional programming, Gothenburg, Sweden, September 1-3, 2014},
+  publisher = {{ACM}},
+  year      = {2014},
+  url       = {http://dl.acm.org/citation.cfm?id=2628136},
+  isbn      = {978-1-4503-2873-9},
+  timestamp = {Thu, 20 Nov 2014 18:05:13 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/icfp/2014},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/lics/2001,
+  title     = {16th Annual {IEEE} Symposium on Logic in Computer Science, Boston,
+               Massachusetts, USA, June 16-19, 2001, Proceedings},
+  publisher = {{IEEE} Computer Society},
+  year      = {2001},
+  url       = {http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=7424},
+  isbn      = {0-7695-1281-X},
+  timestamp = {Fri, 21 Nov 2014 14:08:56 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/lics/2001},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{hughes1986novel,
+  title={A novel representation of lists and its application to the function “reverse”},
+  author={Hughes, R John Muir},
+  journal={Information processing letters},
+  volume={22},
+  number={3},
+  pages={141--144},
+  year={1986},
+  publisher={Elsevier}
+}
+
+@article{Landin1966,
+  title={The next 700 programming languages},
+  author={Landin, Peter J},
+  journal={Communications of the ACM},
+  volume={9},
+  number={3},
+  pages={157--166},
+  year={1966},
+  publisher={ACM}
+}
+
+@article{Plotkin1975,
+  title={Call-by-name, call-by-value and the $\lambda$-calculus},
+  author={Plotkin, Gordon D.},
+  journal={Theoretical computer science},
+  volume={1},
+  number={2},
+  pages={125--159},
+  year={1975},
+  publisher={Elsevier}
+}
+
+@inproceedings{MeijerLINQ,
+ author = {Meijer, Erik and Beckman, Brian and Bierman, Gavin},
+ title = {LINQ: Reconciling Object, Relations and XML in the .NET Framework},
+ booktitle = {Proceedings of the 2006 ACM SIGMOD International Conference on Management of Data},
+ series = {SIGMOD '06},
+ year = {2006},
+ isbn = {1-59593-434-0},
+ location = {Chicago, IL, USA},
+ pages = {706--706},
+ numpages = {1},
+ url = {http://doi.acm.org/10.1145/1142473.1142552},
+ doi = {10.1145/1142473.1142552},
+ acmid = {1142552},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+}
+
+@inproceedings{Filinski,
+  author    = {Andrzej Filinski},
+  title     = {A Semantic Account of Type-Directed Partial Evaluation},
+  booktitle = {Principles and Practice of Declarative Programming, International
+               Conference PPDP'99, Paris, France, September 29 - October 1, 1999,
+               Proceedings},
+  pages     = {378--395},
+  year      = {1999},
+  crossref  = {DBLP:conf/ppdp/1999},
+  url       = {http://dx.doi.org/10.1007/10704567_23},
+  doi       = {10.1007/10704567_23},
+  timestamp = {Mon, 20 Jun 2011 17:30:37 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/ppdp/Filinski99},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/ppdp/1999,
+  editor    = {Gopalan Nadathur},
+  title     = {Principles and Practice of Declarative Programming, International
+               Conference PPDP'99, Paris, France, September 29 - October 1, 1999,
+               Proceedings},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {1702},
+  publisher = {Springer},
+  year      = {1999},
+  isbn      = {3-540-66540-4},
+  timestamp = {Mon, 13 Jan 2003 13:22:48 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/ppdp/1999},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{Delimited,
+  author    = {Olivier Danvy and
+               Andrzej Filinski},
+  title     = {Abstracting Control},
+  booktitle = {{LISP} and Functional Programming},
+  pages     = {151--160},
+  year      = {1990},
+  url       = {http://doi.acm.org/10.1145/91556.91622},
+  doi       = {10.1145/91556.91622},
+  timestamp = {Mon, 16 Dec 2002 13:20:27 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/lfp/DanvyF90},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+@article{Atkey,
+  title={Parameterised notions of computation},
+  author={Atkey, Robert},
+  journal={Journal of Functional Programming},
+  volume={19},
+  number={3-4},
+  pages={335--376},
+  year={2009},
+  publisher={Cambridge University Press}
+}
+
+@article{Dyvbig,
+  title={A monadic framework for delimited continuations},
+  author={Dyvbig, R Kent and Jones, Simon Peyton and Sabry, Amr},
+  journal={Journal of Functional Programming},
+  volume={17},
+  number={06},
+  pages={687--730},
+  year={2007},
+  publisher={Cambridge Univ Press}
+}
+@article{Wadler,
+  title={Monads and composable continuations},
+  author={Wadler, Philip},
+  journal={Lisp and Symbolic Computation},
+  volume={7},
+  number={1},
+  pages={39--55},
+  year={1994},
+  publisher={Springer}
+}
+
+@article{Applicative,
+  author    = {Conor McBride and
+               Ross Paterson},
+  title     = {Applicative programming with effects},
+  journal   = {J. Funct. Program.},
+  volume    = {18},
+  number    = {1},
+  pages     = {1--13},
+  year      = {2008},
+  url       = {http://dx.doi.org/10.1017/S0956796807006326},
+  doi       = {10.1017/S0956796807006326},
+  timestamp = {Fri, 19 Dec 2008 20:42:22 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/jfp/McbrideP08},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{Memoization,
+  author    = {Vincent Balat and
+               Olivier Danvy},
+  title     = {Memoization in Type-Directed Partial Evaluation},
+  booktitle = {Generative Programming and Component Engineering, {ACM} {SIGPLAN/SIGSOFT}
+               Conference, {GPCE} 2002, Pittsburgh, PA, USA, October 6-8, 2002, Proceedings},
+  pages     = {78--92},
+  year      = {2002},
+  crossref  = {DBLP:conf/gpce/2002},
+  url       = {http://dx.doi.org/10.1007/3-540-45821-2_5},
+  doi       = {10.1007/3-540-45821-2_5},
+  timestamp = {Mon, 04 Jul 2011 09:36:24 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/gpce/BalatD02},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/gpce/2002,
+  editor    = {Don S. Batory and
+               Charles Consel and
+               Walid Taha},
+  title     = {Generative Programming and Component Engineering, {ACM} {SIGPLAN/SIGSOFT}
+               Conference, {GPCE} 2002, Pittsburgh, PA, USA, October 6-8, 2002, Proceedings},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {2487},
+  publisher = {Springer},
+  year      = {2002},
+  isbn      = {3-540-44284-7},
+  timestamp = {Fri, 08 Nov 2002 07:54:24 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/gpce/2002},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{Pragmatics,
+  author    = {Olivier Danvy},
+  title     = {Pragmatics of Type-Directed Partial Evaluation},
+  booktitle = {Partial Evaluation, International Seminar, Dagstuhl Castle, Germany,
+               February 12-16, 1996, Selected Papers},
+  pages     = {73--94},
+  year      = {1996},
+  crossref  = {DBLP:conf/dagstuhl/1996pe},
+  url       = {http://dx.doi.org/10.1007/3-540-61580-6_5},
+  doi       = {10.1007/3-540-61580-6_5},
+  timestamp = {Fri, 24 Jun 2011 20:39:38 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/dagstuhl/Danvy96},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/dagstuhl/1996pe,
+  editor    = {Olivier Danvy and
+               Robert Gl{\"{u}}ck and
+               Peter Thiemann},
+  title     = {Partial Evaluation, International Seminar, Dagstuhl Castle, Germany,
+               February 12-16, 1996, Selected Papers},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {1110},
+  publisher = {Springer},
+  year      = {1996},
+  isbn      = {3-540-61580-6},
+  timestamp = {Wed, 10 Jul 2002 13:46:33 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/dagstuhl/1996pe},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{Online,
+  author    = {Olivier Danvy},
+  title     = {Online Type-Directed Partial Evaluation},
+  booktitle = {Fuji International Symposium on Functional and Logic Programming},
+  pages     = {271--295},
+  year      = {1998},
+  timestamp = {Thu, 03 Jan 2002 11:58:04 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/flops/Danvy98},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{NBE-F,
+  author    = {Thorsten Altenkirch and
+               Tarmo Uustalu},
+  title     = {Normalization by Evaluation for lambda\({}^{\mbox{-2}}\)},
+  booktitle = {Functional and Logic Programming, 7th International Symposium, {FLOPS}
+               2004, Nara, Japan, April 7-9, 2004, Proceedings},
+  pages     = {260--275},
+  year      = {2004},
+  crossref  = {DBLP:conf/flops/2004},
+  url       = {http://dx.doi.org/10.1007/978-3-540-24754-8_19},
+  doi       = {10.1007/978-3-540-24754-8_19},
+  timestamp = {Wed, 06 Jul 2011 21:22:25 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/flops/AltenkirchU04},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/flops/2004,
+  editor    = {Yukiyoshi Kameyama and
+               Peter J. Stuckey},
+  title     = {Functional and Logic Programming, 7th International Symposium, {FLOPS}
+               2004, Nara, Japan, April 7-9, 2004, Proceedings},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {2998},
+  publisher = {Springer},
+  year      = {2004},
+  isbn      = {3-540-21402-X},
+  timestamp = {Fri, 05 Mar 2004 12:02:39 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/flops/2004},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@article{NBE-TT,
+  author    = {Andreas Abel and
+               Klaus Aehlig and
+               Peter Dybjer},
+  title     = {Normalization by Evaluation for Martin-L{\"{o}}f Type Theory with
+               One Universe},
+  journal   = {Electr. Notes Theor. Comput. Sci.},
+  volume    = {173},
+  pages     = {17--39},
+  year      = {2007},
+  url       = {http://dx.doi.org/10.1016/j.entcs.2007.02.025},
+  doi       = {10.1016/j.entcs.2007.02.025},
+  timestamp = {Fri, 27 Sep 2013 20:12:09 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/entcs/AbelAD07},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@inproceedings{Extensional,
+  author    = {Vincent Balat and
+               Roberto Di Cosmo and
+               Marcelo P. Fiore},
+  title     = {Extensional normalisation and type-directed partial evaluation for
+               typed lambda calculus with sums},
+  booktitle = {Proceedings of the 31st {ACM} {SIGPLAN-SIGACT} Symposium on Principles
+               of Programming Languages, {POPL} 2004, Venice, Italy, January 14-16,
+               2004},
+  pages     = {64--76},
+  year      = {2004},
+  crossref  = {DBLP:conf/popl/2004},
+  url       = {http://doi.acm.org/10.1145/964001.964007},
+  doi       = {10.1145/964001.964007},
+  timestamp = {Tue, 22 May 2012 15:24:56 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/popl/BalatCF04},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/popl/2004,
+  editor    = {Neil D. Jones and
+               Xavier Leroy},
+  title     = {Proceedings of the 31st {ACM} {SIGPLAN-SIGACT} Symposium on Principles
+               of Programming Languages, {POPL} 2004, Venice, Italy, January 14-16,
+               2004},
+  publisher = {{ACM}},
+  year      = {2004},
+  url       = {http://dl.acm.org/citation.cfm?id=964001},
+  isbn      = {1-58113-729-X},
+  timestamp = {Tue, 22 May 2012 15:24:56 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/popl/2004},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@inproceedings{Sheard,
+  author    = {Tim Sheard},
+  title     = {A Type-directed, On-line, Partial Evaluator for a Polymorphic Language},
+  booktitle = {Proceedings of the {ACM} {SIGPLAN} Symposium on Partial Evaluation
+               and Semantics-Based Program Manipulation {(PEPM} '97), Amsterdam,
+               The Netherlands, June 12-13, 1997},
+  pages     = {22--35},
+  year      = {1997},
+  crossref  = {DBLP:conf/pepm/1997},
+  url       = {http://doi.acm.org/10.1145/258993.258999},
+  doi       = {10.1145/258993.258999},
+  timestamp = {Tue, 22 May 2012 15:24:56 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/pepm/Sheard97},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@proceedings{DBLP:conf/pepm/1997,
+  editor    = {John P. Gallagher and
+               Charles Consel and
+               A. Michael Berman},
+  title     = {Proceedings of the {ACM} {SIGPLAN} Symposium on Partial Evaluation
+               and Semantics-Based Program Manipulation {(PEPM} '97), Amsterdam,
+               The Netherlands, June 12-13, 1997},
+  publisher = {{ACM}},
+  year      = {1997},
+  url       = {http://dl.acm.org/citation.cfm?id=258993},
+  isbn      = {0-89791-917-3},
+  timestamp = {Tue, 22 May 2012 15:24:56 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/pepm/1997},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{accelerate,
+  title={Accelerating Haskell array codes with multicore GPUs},
+  author={Chakravarty, Manuel MT and Keller, Gabriele and Lee, Sean and McDonell, Trevor L and Grover, Vinod},
+  booktitle={Proceedings of the sixth workshop on Declarative aspects of multicore programming},
+  pages={3--14},
+  year={2011},
+  organization={ACM}
+}
+
+@book{Girard,
+  title={Proofs and Types},
+  author={Girard, J.Y. and Lafont, Y. and Taylor, P.},
+  isbn={9780521371810},
+  lccn={gb89006177},
+  series={Cambridge Tracts in Theoretical Computer Science},
+  url={https://books.google.co.uk/books?id=6JOEQgAACAAJ},
+  year={1989},
+  publisher={Cambridge University Press}
+}
+
+@inproceedings{leissa2015shallow,
+  title={Shallow embedding of DSLs via online partial evaluation},
+  author={Lei{\ss}a, Roland and Boesche, Klaas and Hack, Sebastian and Membarth, Richard and Slusallek, Philipp},
+  booktitle={Proceedings of the 2015 ACM SIGPLAN International Conference on Generative Programming: Concepts and Experiences},
+  pages={11--20},
+  year={2015},
+  organization={ACM}
+}
